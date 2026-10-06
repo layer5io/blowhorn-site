@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blowhorn by Layer5</title>
+    <meta name="description" content="Blowhorn is Layer5's automated megaphone for communities: one message in, loud reach across every profile you run.">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./"><img src="assets/blowhorn-lockup.svg" alt="Blowhorn" width="210" height="48"></a>
+      <nav aria-label="Primary">
+        <a href="#download">Download</a>
+        <a href="https://layer5.io">Layer5</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">From Layer5, the makers of Meshery</p>
+        <h1>One message in. Loud reach everywhere.</h1>
+        <p class="lede">Blowhorn runs many social profiles at once and broadcasts, reposts, and amplifies your community&rsquo;s posts across X, LinkedIn, Bluesky, Mastodon, Slack, Discord, and more.</p>
+        <p><a class="button" href="#download">Download for macOS</a></p>
+      </section>
+
+      <section id="download" class="download" aria-labelledby="download-title">
+        <h2 id="download-title">Download</h2>
+        <div id="download-status" class="download-card" data-repo="layer5io/blowhorn-site" data-asset="Blowhorn-mac.dmg">
+          <p class="muted">No public build yet. The first signed and notarized macOS release will appear here.</p>
+          <p><a href="https://github.com/layer5io/blowhorn-site/releases">See all releases</a></p>
+        </div>
+        <p class="fine-print">Requires macOS and Google Chrome. Each download is listed with its SHA-256 checksum in <code>SHA256SUMS.txt</code> on the release page.</p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; Layer5, Inc. Blowhorn is a Layer5 product. <a href="https://github.com/layer5io/blowhorn-site">Site source</a></p>
+    </footer>
+
+    <script src="download.js" defer></script>
+  </body>
+</html>

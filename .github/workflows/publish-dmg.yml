@@ -1,0 +1,210 @@
+name: Publish DMG release
+
+# Publishes a Blowhorn macOS disk image as a GitHub Release asset on this public
+# repository. See docs/distribution.md for the full convention.
+#
+# Triggers:
+#   - Manual: Actions > Publish DMG release > Run workflow.
+#   - repository_dispatch (event type "publish-dmg") from the product repo's CI,
+#     with client_payload: {"version", "dmg_url", "arch", "draft",
+#     "require_notarized", "notes"}.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release tag, e.g. v1.0.0 or v1.1.0-beta.1 (a hyphen marks a prerelease)"
+        required: true
+        type: string
+      dmg_url:
+        description: "HTTPS URL of the built DMG to publish"
+        required: true
+        type: string
+      arch:
+        description: "Architecture in the asset name"
+        type: choice
+        options:
+          - universal
+          - arm64
+          - x64
+        default: universal
+      draft:
+        description: "Create the release as a draft (publish it by hand after review)"
+        type: boolean
+        default: true
+      require_notarized:
+        description: "Verify Apple signature and stapled notarization on macOS before publishing"
+        type: boolean
+        default: false
+      notes:
+        description: "Optional release notes (Markdown)"
+        type: string
+        default: ""
+  repository_dispatch:
+    types:
+      - publish-dmg
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-dmg
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    name: Fetch and validate DMG
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.resolve.outputs.version }}
+      prerelease: ${{ steps.resolve.outputs.prerelease }}
+      draft: ${{ steps.resolve.outputs.draft }}
+      require_notarized: ${{ steps.resolve.outputs.require_notarized }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve inputs
+        id: resolve
+        env:
+          IN_VERSION: ${{ github.event.inputs.version || github.event.client_payload.version }}
+          IN_URL: ${{ github.event.inputs.dmg_url || github.event.client_payload.dmg_url }}
+          IN_ARCH: ${{ github.event.inputs.arch || github.event.client_payload.arch }}
+          IN_DRAFT: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.draft || github.event.client_payload.draft }}
+          IN_NOTARIZED: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.require_notarized || github.event.client_payload.require_notarized }}
+          IN_NOTES: ${{ github.event.inputs.notes || github.event.client_payload.notes }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$IN_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::version must look like v1.2.3 or v1.2.3-beta.1 (got '$IN_VERSION')"
+            exit 1
+          fi
+          if [[ ! "$IN_URL" =~ ^https:// ]]; then
+            echo "::error::dmg_url must be an https:// URL"
+            exit 1
+          fi
+          arch="${IN_ARCH:-universal}"
+          case "$arch" in universal|arm64|x64) ;; *) echo "::error::arch must be universal, arm64, or x64"; exit 1 ;; esac
+          prerelease=false
+          [[ "$IN_VERSION" == *-* ]] && prerelease=true
+          draft=true
+          [[ "${IN_DRAFT,,}" == "false" ]] && draft=false
+          notarized=false
+          [[ "${IN_NOTARIZED,,}" == "true" ]] && notarized=true
+          {
+            echo "version=$IN_VERSION"
+            echo "arch=$arch"
+            echo "prerelease=$prerelease"
+            echo "draft=$draft"
+            echo "require_notarized=$notarized"
+          } >>"$GITHUB_OUTPUT"
+          printf '%s' "$IN_NOTES" >notes.md
+          echo "Publishing $IN_VERSION ($arch) draft=$draft prerelease=$prerelease require_notarized=$notarized"
+
+      - name: Download DMG
+        env:
+          DMG_URL: ${{ github.event.inputs.dmg_url || github.event.client_payload.dmg_url }}
+          # Optional. Only needed when dmg_url requires a bearer token (for
+          # example a GitHub API release-asset URL on a private repository).
+          DMG_SOURCE_TOKEN: ${{ secrets.DMG_SOURCE_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          args=(--fail --location --silent --show-error --retry 3 --output dist/source.dmg)
+          if [[ -n "${DMG_SOURCE_TOKEN:-}" ]]; then
+            args+=(--header "Authorization: Bearer $DMG_SOURCE_TOKEN" --header "Accept: application/octet-stream")
+          fi
+          curl "${args[@]}" "$DMG_URL"
+
+      - name: Validate and name assets
+        env:
+          VERSION: ${{ steps.resolve.outputs.version }}
+          ARCH: ${{ steps.resolve.outputs.arch }}
+        run: |
+          set -euo pipefail
+          .github/scripts/check-dmg.sh dist/source.dmg
+          versioned="Blowhorn-${VERSION#v}-mac-${ARCH}.dmg"
+          mv dist/source.dmg "dist/$versioned"
+          # Stable, version-less alias so /releases/latest/download/Blowhorn-mac.dmg
+          # always points at the newest published release.
+          cp "dist/$versioned" dist/Blowhorn-mac.dmg
+          (cd dist && sha256sum -- *.dmg >SHA256SUMS.txt && cat SHA256SUMS.txt)
+          mv notes.md dist/notes.md
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: blowhorn-dmg
+          path: dist/
+          retention-days: 7
+
+  verify-macos:
+    name: Verify signature and notarization
+    needs: fetch
+    if: needs.fetch.outputs.require_notarized == 'true'
+    runs-on: macos-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: blowhorn-dmg
+          path: dist
+
+      - name: Verify DMG
+        run: |
+          set -euo pipefail
+          for dmg in dist/Blowhorn-*-mac-*.dmg; do
+            hdiutil verify "$dmg"
+            codesign --verify --verbose=2 "$dmg"
+            spctl --assess --type open --context context:primary-signature --verbose=2 "$dmg"
+            xcrun stapler validate "$dmg"
+          done
+
+  publish:
+    name: Create GitHub Release
+    needs:
+      - fetch
+      - verify-macos
+    if: always() && needs.fetch.result == 'success' && (needs.verify-macos.result == 'success' || needs.verify-macos.result == 'skipped')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: blowhorn-dmg
+          path: dist
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.fetch.outputs.version }}
+          PRERELEASE: ${{ needs.fetch.outputs.prerelease }}
+          DRAFT: ${{ needs.fetch.outputs.draft }}
+        run: |
+          set -euo pipefail
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            echo "::error::release $VERSION already exists; refusing to overwrite"
+            exit 1
+          fi
+          versioned=(dist/Blowhorn-*-mac-*.dmg)
+          {
+            if [[ -s dist/notes.md ]]; then cat dist/notes.md; echo; echo; fi
+            echo "## Download"
+            echo
+            echo "- macOS: \`$(basename "${versioned[0]}")\`"
+            echo "- Always-latest link: https://github.com/${GH_REPO}/releases/latest/download/Blowhorn-mac.dmg"
+            echo
+            echo "## SHA-256"
+            echo
+            echo '```'
+            cat dist/SHA256SUMS.txt
+            echo '```'
+          } >release-notes.md
+          flags=(--title "Blowhorn ${VERSION}" --notes-file release-notes.md --target "${GITHUB_SHA}")
+          [[ "$DRAFT" == "true" ]] && flags+=(--draft)
+          if [[ "$PRERELEASE" == "true" ]]; then
+            flags+=(--prerelease --latest=false)
+          else
+            flags+=(--latest)
+          fi
+          gh release create "$VERSION" "${flags[@]}" dist/*.dmg dist/SHA256SUMS.txt
+          echo "### Release ${VERSION} created (draft=${DRAFT}, prerelease=${PRERELEASE})" >>"$GITHUB_STEP_SUMMARY"
