@@ -1,5 +1,51 @@
-# layer5-repo-template
-This repository is used as the boilerplate for consistency across all Layer5 repos.
+<p align="center"><img src="site/assets/blowhorn-lockup.svg" alt="Blowhorn" width="360"></p>
+
+# Blowhorn site and downloads
+
+This repository holds two things for **Blowhorn**, a Layer5 product:
+
+1. **The marketing site**, planned for [blowhorn.ai](https://blowhorn.ai) (the domain may not resolve yet). The source is a static site in [`site/`](site/), deployed with GitHub Pages.
+2. **Public downloads.** Signed and notarized macOS DMGs and other public artifacts are published as [GitHub Releases](https://github.com/layer5io/blowhorn-site/releases) on this repo. There are no public builds yet. Signed DMGs will arrive with the first release.
+
+Blowhorn is Layer5's automated megaphone for communities: one message in, broad reach across every social profile you run.
+
+## Download
+
+Once the first stable release is out, this link always points to the newest macOS build:
+
+```
+https://github.com/layer5io/blowhorn-site/releases/latest/download/Blowhorn-mac.dmg
+```
+
+Each release includes a `SHA256SUMS.txt` for verifying the download. The Chrome extension will ship through the Chrome Web Store (published with a [service account](https://developer.chrome.com/docs/webstore/service-accounts)), not from this repo.
+
+## Where things live
+
+| | |
+|---|---|
+| Product source, issues, and build pipeline | Private: [`leecalcote/blowhorn`](https://github.com/leecalcote/blowhorn) |
+| Marketing site source | [`site/`](site/) in this repo |
+| Release binaries | [Releases](https://github.com/layer5io/blowhorn-site/releases) on this repo |
+| How releases are published | [`docs/distribution.md`](docs/distribution.md) |
+
+Product questions and bugs belong in the product repo. Use this repo's issues for site content and download problems.
+
+## Working on the site
+
+The site is plain HTML and CSS with no build dependencies. You need `make`, Python 3, and Node.js (for `npx`).
+
+```bash
+make site-serve      # build into _site/ and serve at http://localhost:8080
+make site-check      # validate HTML and local links (same as CI)
+make workflow-check  # lint this repo's GitHub Actions workflows
+```
+
+### CI
+
+| Workflow | When | What it does |
+|---|---|---|
+| [`site.yml`](.github/workflows/site.yml) | Pull requests and pushes to `master` | Lints workflows, validates the site, and builds the Pages artifact. Deploys to Pages on `master` once Pages is enabled and the `PAGES_ENABLED` repo variable is `true`. |
+| [`publish-dmg.yml`](.github/workflows/publish-dmg.yml) | Manual, or `repository_dispatch` (`publish-dmg`) | Downloads a built DMG, validates it, optionally checks signing and notarization on macOS, then creates a release with versioned and always-latest assets and checksums. Creates a draft by default. |
 
 <div>&nbsp;</div>
 

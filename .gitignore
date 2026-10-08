@@ -16,3 +16,11 @@
 
 # IDEs
 .vscode/*
+
+# Blowhorn site build output and local tools
+_site/
+.bin/
+node_modules/
+
+# Never commit disk images; publish them as GitHub Release assets
+*.dmg
