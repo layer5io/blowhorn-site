@@ -12,7 +12,7 @@ Pages hosts only the marketing site and small static files.
 
 | What | Where |
 |------|-------|
-| Marketing site | GitHub Pages from `site/`, at <https://www.blowhorn.ai> (see [deploy.md](deploy.md)) |
+| Marketing site | GitHub Pages from `site/`, at <https://blowhorn.ai> (see [deploy.md](deploy.md)) |
 | macOS DMG | Release asset on this repo |
 | Checksums | `SHA256SUMS.txt` attached to each release |
 | Update manifest (later) | Release asset next to the DMG (for example `latest-mac.yml` for electron-updater, or a Sparkle `appcast.xml`) |

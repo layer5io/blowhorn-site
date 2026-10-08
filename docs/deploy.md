@@ -1,6 +1,6 @@
 # Deploying the site
 
-How `site/` becomes www.blowhorn.ai: the GitHub Pages deployment, the custom
+How `site/` becomes blowhorn.ai: the GitHub Pages deployment, the custom
 domain, the DNS records the registrar needs, and how to verify a deployment.
 
 ## What deploys, and when
@@ -29,10 +29,11 @@ gh-axi run list -R layer5io/blowhorn-site --workflow site.yml
 The newest run on `master` should show both jobs green. The deployment is live
 at the Pages URL within a minute of the `deploy` job finishing:
 
-- <https://www.blowhorn.ai/> once DNS points at GitHub Pages (below).
-- <https://layer5io.github.io/blowhorn-site/> until then. Once a custom domain
-  is set on Pages, GitHub redirects this URL to the custom domain, so set the
-  domain only after its DNS record resolves to GitHub.
+- <https://blowhorn.ai/> once DNS points at GitHub Pages (below).
+- <https://layer5io.github.io/blowhorn-site/> is the project URL. Because the
+  custom domain is already set on Pages, GitHub redirects this URL to
+  `https://blowhorn.ai/`, which answers with Cloudflare's 404 until the DNS
+  records below are in place. The artifact itself deploys fine either way.
 
 ## Pages configuration
 
@@ -46,53 +47,36 @@ gh-axi api -X POST repos/layer5io/blowhorn-site/pages --field build_type=workflo
 gh-axi api -X PUT repos/layer5io/blowhorn-site/pages --field build_type=workflow
 ```
 
-This was done on 2026-10-08: Pages exists with `build_type: workflow`,
-`https_enforced: true` and no custom domain yet.
+This was done on 2026-10-08: Pages exists with `build_type: workflow` and the
+custom domain `blowhorn.ai`. HTTPS enforcement is set once GitHub issues the
+certificate, which needs the DNS records below.
 
-`site/CNAME` carries `www.blowhorn.ai` for completeness. With a workflow
+`site/CNAME` carries `blowhorn.ai` for completeness. With a workflow
 deployment GitHub ignores the file; the custom domain is the one set through
 the API or Settings > Pages, below.
 
-## Custom domain: www.blowhorn.ai first, the apex later
+## Custom domain: blowhorn.ai (the apex)
 
-The site is published under **www.blowhorn.ai**. The apex `blowhorn.ai` is
-optional and can follow later; when both point at GitHub, Pages redirects the
-apex to `www`.
+The site is published under **blowhorn.ai**. `www.blowhorn.ai` is optional:
+when its record also points at GitHub, Pages redirects it to the apex.
 
 blowhorn.ai is registered at Porkbun and its DNS is served by Cloudflare. Only
-the domain's owner can change records. Set them in this order.
+the domain's owner can change records. Today the apex resolves to Cloudflare
+addresses that answer 404; those records are what the ones below replace.
 
-### Step 1: the www record (do this first)
+### Step 1: the apex records (do this first)
+
+Pick one of the two forms. Either way the record is **DNS only** (grey cloud):
+keep the Cloudflare proxy off at least until GitHub has issued the certificate,
+because the proxy hides the origin from GitHub's certificate check.
+
+Form A, a flattened CNAME (Cloudflare resolves it to GitHub's addresses itself):
 
 | Type | Name | Target | Proxy |
 |---|---|---|---|
-| CNAME | `www` | `layer5io.github.io` | DNS only (grey cloud). Keep the Cloudflare proxy off at least until GitHub has issued the certificate. |
+| CNAME | `@` | `layer5io.github.io` | DNS only |
 
-Wait until the record resolves:
-
-```bash
-dig +short CNAME www.blowhorn.ai   # expect: layer5io.github.io.
-```
-
-Then set the custom domain on Pages and, once GitHub reports the certificate
-issued (Settings > Pages shows "Enforce HTTPS" as available), enforce HTTPS:
-
-```bash
-gh-axi api -X PUT repos/layer5io/blowhorn-site/pages --field cname=www.blowhorn.ai
-gh-axi api repos/layer5io/blowhorn-site/pages --jq '.cname, .https_certificate.state'
-printf '{"https_enforced":true}' | gh-axi api -X PUT repos/layer5io/blowhorn-site/pages --input -
-```
-
-Set the custom domain only after `dig` shows the record, for two reasons:
-GitHub starts certificate issuance from the moment the domain is set, and
-from that moment it redirects the `layer5io.github.io/blowhorn-site/` URL to
-the custom domain, so a domain whose DNS still points elsewhere takes the site
-offline at both addresses.
-
-Certificate issuance usually takes a few minutes and can take up to a day. If
-it stalls, the usual cause is the Cloudflare proxy being on for the record.
-
-### Step 2: the apex records (optional, later)
+Form B, GitHub Pages' fixed addresses:
 
 | Type | Name | Value |
 |---|---|---|
@@ -105,14 +89,43 @@ it stalls, the usual cause is the Cloudflare proxy being on for the record.
 | AAAA | `@` | `2606:50c0:8002::153` |
 | AAAA | `@` | `2606:50c0:8003::153` |
 
-DNS only, proxy off, like the www record. Remove whatever the apex points at
-today (it currently serves a Cloudflare 404). With `www.blowhorn.ai` as the
-Pages custom domain and these records in place, GitHub answers the apex with
-a redirect to `https://www.blowhorn.ai/`.
+Wait until the apex resolves to GitHub:
 
 ```bash
-dig +short A blowhorn.ai       # expect the four 185.199.* addresses
-curl -sI https://blowhorn.ai   # expect 301 to https://www.blowhorn.ai/
+dig +short A blowhorn.ai        # expect the four 185.199.* addresses
+dig +short AAAA blowhorn.ai     # expect the four 2606:50c0:* addresses
+```
+
+The Pages custom domain is already `blowhorn.ai`. Confirm it, watch the
+certificate, and enforce HTTPS once GitHub reports it issued (Settings > Pages
+shows "Enforce HTTPS" as available):
+
+```bash
+gh-axi api repos/layer5io/blowhorn-site/pages --jq '.cname, .https_certificate.state'
+printf '{"https_enforced":true}' | gh-axi api -X PUT repos/layer5io/blowhorn-site/pages --input -
+```
+
+If the custom domain ever has to be set again:
+
+```bash
+gh-axi api -X PUT repos/layer5io/blowhorn-site/pages --field cname=blowhorn.ai
+```
+
+Certificate issuance usually takes a few minutes and can take up to a day. If
+it stalls, the usual cause is the Cloudflare proxy being on for the record.
+
+### Step 2: the www record (optional)
+
+| Type | Name | Target | Proxy |
+|---|---|---|---|
+| CNAME | `www` | `layer5io.github.io` | DNS only |
+
+With `blowhorn.ai` as the Pages custom domain and this record in place, GitHub
+answers `www.blowhorn.ai` with a redirect to `https://blowhorn.ai/`.
+
+```bash
+dig +short CNAME www.blowhorn.ai   # expect: layer5io.github.io.
+curl -sI https://www.blowhorn.ai   # expect 301 to https://blowhorn.ai/
 ```
 
 ## Pages that assume the root
@@ -121,11 +134,11 @@ curl -sI https://blowhorn.ai   # expect 301 to https://www.blowhorn.ai/
 (`/styles.css`) because GitHub serves it for any missing path, including
 nested ones, where relative paths would break. At the fallback
 `layer5io.github.io/blowhorn-site/` URL the 404 page therefore renders without
-styles; at www.blowhorn.ai it is fully styled. Every other page uses relative
+styles; at blowhorn.ai it is fully styled. Every other page uses relative
 paths and works at both hosts.
 
 The canonical URLs, Open Graph tags, `sitemap.xml` and `robots.txt` name
-`https://www.blowhorn.ai/`.
+`https://blowhorn.ai/`.
 
 ## Local checks and evidence
 

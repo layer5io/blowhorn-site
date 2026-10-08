@@ -9,7 +9,7 @@
 
 This repository is two things for **Layer5 Blowhorn**:
 
-1. **The marketing site** at [www.blowhorn.ai](https://www.blowhorn.ai). The source is the static site in [`site/`](site/), deployed to GitHub Pages by [`site.yml`](.github/workflows/site.yml). Until DNS points at Pages it is reachable at <https://layer5io.github.io/blowhorn-site/>.
+1. **The marketing site** at [blowhorn.ai](https://blowhorn.ai). The source is the static site in [`site/`](site/), deployed to GitHub Pages by [`site.yml`](.github/workflows/site.yml). Until DNS points at Pages it is reachable at <https://layer5io.github.io/blowhorn-site/>.
 2. **Public downloads.** macOS disk images and their checksums are published as [GitHub Releases](https://github.com/layer5io/blowhorn-site/releases) on this repository. Nothing binary is committed here.
 
 Blowhorn is a social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot. One message. Many ears.

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.blowhorn.ai/sitemap.xml
+Sitemap: https://blowhorn.ai/sitemap.xml
