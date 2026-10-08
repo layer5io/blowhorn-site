@@ -9,8 +9,8 @@
 
 This repository is two things for **Layer5 Blowhorn**:
 
-1. **The marketing site** at [blowhorn.ai](https://blowhorn.ai). The source is the static site in [`site/`](site/), deployed to GitHub Pages by [`site.yml`](.github/workflows/site.yml). Until DNS points at Pages it is reachable at <https://layer5io.github.io/blowhorn-site/>.
-2. **Public downloads.** macOS disk images and their checksums are published as [GitHub Releases](https://github.com/layer5io/blowhorn-site/releases) on this repository. Nothing binary is committed here.
+1. **The marketing site** at [blowhorn.ai](https://blowhorn.ai). The source is the static site in [`site/`](site/), deployed to GitHub Pages by [`site.yml`](.github/workflows/site.yml). The Pages custom domain is already blowhorn.ai, so the project URL <https://layer5io.github.io/blowhorn-site/> only redirects there; the site is reachable once the domain's DNS points at Pages, as [`docs/deploy.md`](docs/deploy.md) describes.
+2. **Public downloads.** macOS disk images and their checksums are published as [GitHub Releases](https://github.com/layer5io/blowhorn-site/releases) on this repository. No release binary is committed here.
 
 Blowhorn is a social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot. One message. Many ears.
 
@@ -61,7 +61,7 @@ The site follows the brand kit exactly: every colour, type style, spacing, radiu
 | Workflow | When | What it does |
 |---|---|---|
 | [`site.yml`](.github/workflows/site.yml) | Pull requests, pushes to `master`, manual runs | Lints the workflows, validates the site and builds the Pages artifact. On `master` it deploys the artifact to GitHub Pages. |
-| [`publish-dmg.yml`](.github/workflows/publish-dmg.yml) | Manual, or `repository_dispatch` (`publish-dmg`) from product CI | Downloads a built DMG over HTTPS, checks it, verifies signing and notarization on a macOS runner (required for any public release), then creates the release with versioned assets, the `Blowhorn-mac.dmg` alias (universal images only) and checksums. Drafts by default; never overwrites. |
+| [`publish-dmg.yml`](.github/workflows/publish-dmg.yml) | Manual, or `repository_dispatch` (`publish-dmg`) from product CI | Downloads a built DMG over HTTPS, checks it, verifies signing and notarization on a macOS runner (required for any public release), then creates the release with versioned assets, the `Blowhorn-mac.dmg` alias and checksums. Drafts by default; never overwrites. |
 
 <div>&nbsp;</div>
 

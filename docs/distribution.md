@@ -23,10 +23,7 @@ Pages hosts only the marketing site and small static files.
   (`v1.1.0-beta.1`) makes it a GitHub prerelease, which is never marked "latest".
 - **Assets per release:**
   - `Blowhorn-<version>-mac-<arch>.dmg`, where `<arch>` is `universal`, `arm64`, or `x64`
-  - `Blowhorn-mac.dmg`, a copy of the same file under a fixed name. **Only a
-    universal image gets the alias**: the always-latest URL below must work on
-    every Mac, so an `arm64` or `x64` release ships without it and the site
-    lists the architecture-specific images instead.
+  - `Blowhorn-mac.dmg`, a copy of the same file under a fixed name
   - `SHA256SUMS.txt`
 - **Always-latest download URL** (used by the site and install docs):
 
@@ -37,11 +34,11 @@ Pages hosts only the marketing site and small static files.
   GitHub resolves `latest` to the newest published, non-draft, non-prerelease
   release. Until the first stable release exists, this URL returns 404 and the
   site says the first public build is on its way. The site's Download section
-  (`site/download.js`) reads the latest release from GitHub's API in the
-  visitor's browser: the alias button when the alias exists, one link per
-  architecture-specific image otherwise, the "on its way" copy on a 404, and a
-  "lookup failed" state with a link to the releases page on any other error,
-  so an outage or rate limit is never reported as "no build".
+  (`site/download.js`) reads the release list from GitHub's API in the
+  visitor's browser and shows a download button on the always-latest URL for
+  the newest stable release, the "on its way" copy while there is none, and a
+  "lookup failed" state with a link to the releases page on any error, so an
+  outage or rate limit is never reported as "no build".
 - **Versioned URL:**
   `https://github.com/layer5io/blowhorn-site/releases/download/v1.0.0/Blowhorn-1.0.0-mac-universal.dmg`
 - Releases are never overwritten. Ship a new patch version instead.
@@ -68,16 +65,15 @@ published by the workflow.
 
 If `dmg_url` needs a bearer token (for example a GitHub API asset URL on a
 private repo, with `Accept: application/octet-stream`), store it as the
-`DMG_SOURCE_TOKEN` repository secret. The token is sent only to hosts listed in
-the `DMG_SOURCE_HOSTS` repository variable (space- or comma-separated; the
-default is GitHub's API and release-asset hosts). Any other HTTPS URL is
-downloaded without credentials, so a `dmg_url` pointing at an unexpected host
-cannot exfiltrate the secret. The download and every redirect must stay on
-HTTPS; `curl` is told to refuse anything else.
+`DMG_SOURCE_TOKEN` repository secret. The token is sent only to GitHub's API
+and release-asset hosts (`api.github.com`, `github.com`,
+`objects.githubusercontent.com` and `release-assets.githubusercontent.com`).
+Any other HTTPS URL is downloaded without credentials, so a `dmg_url` pointing
+at an unexpected host cannot exfiltrate the secret. The download and every
+redirect must stay on HTTPS; `curl` is told to refuse anything else.
 
-Runs are serialised per version (`concurrency: publish-dmg-<version>`), so two
-releases can publish side by side while a repeat dispatch of the same version
-waits for the first to finish rather than cancelling it.
+Runs are serialised (`concurrency: publish-dmg`): a second dispatch waits for
+the running one to finish rather than cancelling it.
 
 ### Option B: triggered from product CI
 

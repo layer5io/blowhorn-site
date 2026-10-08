@@ -5,11 +5,10 @@
 // GitHub's "latest" resolves to, so the always-latest URL and this card agree.
 //
 // States, in order of preference:
-//   1. The release carries the fixed-name alias (Blowhorn-mac.dmg): one button
-//      on the always-latest URL.
-//   2. The release carries only architecture-specific images: one link each.
-//   3. No stable release yet: the static "on its way" copy stays.
-//   4. Any failure (rate limit, outage, offline): say the lookup failed and
+//   1. A stable release carries the fixed-name alias (Blowhorn-mac.dmg): one
+//      button on the always-latest URL.
+//   2. No stable release with the alias yet: the static "on its way" copy stays.
+//   3. Any failure (rate limit, outage, offline): say the lookup failed and
 //      point at the releases page. Never claim "no build" on an error.
 (function () {
   "use strict";
@@ -66,33 +65,18 @@
     var assets = Array.isArray(release.assets) ? release.assets : [];
     var version = release.tag_name || release.name || "";
     var aliasAsset = assets.find(function (a) { return a.name === alias; });
-    var images = assets.filter(function (a) { return /\.dmg$/i.test(a.name) && a.name !== alias; });
     var sums = assets.find(function (a) { return a.name === "SHA256SUMS.txt"; });
-    if (!aliasAsset && images.length === 0) {
-      return false;
+    if (!aliasAsset) {
+      return;
     }
 
-    var children = [el("p", "Blowhorn " + version + " for Mac", { class: "h3" })];
-
-    if (aliasAsset) {
-      var actions = el("p", null, { class: "actions" });
-      actions.appendChild(el("a", "Download Blowhorn " + version, {
-        class: "button button-primary button-pop",
-        href: "https://github.com/" + repo + "/releases/latest/download/" + aliasAsset.name,
-      }));
-      actions.appendChild(el("span", aliasAsset.name + " · " + megabytes(aliasAsset.size), { class: "caption muted" }));
-      children.push(actions);
-    } else {
-      children.push(el("p", "Pick the image for your Mac.", { class: "meta" }));
-      var list = el("ul", null, { class: "download-list" });
-      images.forEach(function (image) {
-        var item = el("li");
-        item.appendChild(el("a", image.name, { class: "button button-secondary", href: image.browser_download_url }));
-        item.appendChild(el("span", megabytes(image.size), { class: "caption muted" }));
-        list.appendChild(item);
-      });
-      children.push(list);
-    }
+    var actions = el("p", null, { class: "actions" });
+    actions.appendChild(el("a", "Download Blowhorn " + version, {
+      class: "button button-primary button-pop",
+      href: "https://github.com/" + repo + "/releases/latest/download/" + aliasAsset.name,
+    }));
+    actions.appendChild(el("span", aliasAsset.name + " · " + megabytes(aliasAsset.size), { class: "caption muted" }));
+    var children = [el("p", "Blowhorn " + version + " for Mac", { class: "h3" }), actions];
 
     var meta = el("p", null, { class: "meta caption" });
     var date = release.published_at ? publishedOn(release.published_at) : null;
@@ -109,7 +93,6 @@
     }
     children.push(meta);
     replaceCard(children);
-    return true;
   }
 
   fetch("https://api.github.com/repos/" + repo + "/releases?per_page=20", {
@@ -129,7 +112,7 @@
         return r && !r.draft && !r.prerelease;
       });
       if (stable) {
-        showRelease(stable); // No stable release yet: keep the static copy.
+        showRelease(stable);
       }
     })
     .catch(function () {

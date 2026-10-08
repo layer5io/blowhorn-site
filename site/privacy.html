@@ -28,8 +28,8 @@
           <a href="./#platforms">Platforms</a>
           <a href="./#how">How you run it</a>
           <a href="./#trust">Trust</a>
-          <a class="button button-primary" href="./#download">Download</a>
         </nav>
+        <a class="button button-primary site-cta" href="./#download">Download</a>
       </div>
     </header>
 
@@ -46,7 +46,7 @@
           <p>blowhorn.ai is a static site served by GitHub Pages. It sets no cookies, runs no analytics and loads nothing from third parties: the fonts and images are served from this site.</p>
           <ul>
             <li>GitHub serves the pages and keeps its own server logs. Those are covered by the <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement">GitHub privacy statement</a>.</li>
-            <li>The Download section asks GitHub's public API for the newest release from your browser. That request carries your IP address to GitHub and nothing else. With JavaScript off, no request is made and the page links to the releases page instead.</li>
+            <li>The Download section asks GitHub's public API for the newest release from your browser. That request reaches GitHub like any other request your browser makes, with your IP address and the usual request headers. With JavaScript off, no request is made and the page links to the releases page instead.</li>
             <li>The site has no forms and collects nothing you type.</li>
           </ul>
 
@@ -55,18 +55,19 @@
           <ul>
             <li>Browser sessions for LinkedIn, X, Reddit and Hacker News live in Chrome profiles on your machine. They never leave it.</li>
             <li>Configuration lives in <code>.blowhorn.yaml</code> inside the installation. The store connection, including its password, lives in <code>~/.config/blowhorn/store.yaml</code>, readable only by your user account.</li>
+            <li>For LinkedIn, X, Reddit, Slack and Bluesky, the secret a run signs in with is read from <code>profiles/&lt;name&gt;/config.yaml</code> inside the installation, and <code>blowhorn profile set</code> writes it there.</li>
             <li>Run logs are written to the <code>logs/</code> directory of the installation. The menu-bar app keeps its preferences and state under <code>~/Library/Application Support/Blowhorn/</code>.</li>
           </ul>
           <h3 class="h3">In your organization's store on Layer5 Cloud</h3>
           <ul>
             <li>The content queue, schedule, profiles, run ledger and analytics. Every row is scoped to your organization's id.</li>
-            <li>Platform credentials, such as API tokens and app passwords, in the credentials table of your Layer5 Cloud organization. Blowhorn reads them when it checks which profile may act on which platform and when it authenticates to a platform's API.</li>
+            <li>Platform credentials, such as API tokens and app passwords, in the credentials table of your Layer5 Cloud organization. Blowhorn reads them when it checks which profile may act on which platform. GitHub and Hacker News runs authenticate with the stored value; LinkedIn, X, Reddit, Slack and Bluesky runs read theirs from the local <code>config.yaml</code> above.</li>
             <li>Layer5 Cloud's handling of that data is governed by the <a href="https://layer5.io/company/legal/privacy/">Layer5 privacy policy</a>.</li>
           </ul>
           <h3 class="h3">What the app sends</h3>
           <ul>
             <li>Posts, comments, reactions and invitations to the platforms a profile is configured for, when an approved row is due or when you run a command. Nothing is published from a dry run.</li>
-            <li>A version check against this site's public GitHub releases. The update button opens the release page in your browser; the app downloads and installs nothing itself.</li>
+            <li>A version check that lists the Blowhorn product repository's GitHub releases. When a GitHub token is already on your Mac (<code>GH_TOKEN</code>, <code>GITHUB_TOKEN</code> or <code>gh auth token</code>), the app sends it with that request, and updating downloads the new disk image, installs it into <code>/Applications</code> and relaunches. Without a token, the update button opens the release page in your browser and the app downloads nothing itself.</li>
             <li>No usage analytics and no crash reports. The app carries no analytics or crash-reporting library.</li>
           </ul>
 

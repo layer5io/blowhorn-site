@@ -108,6 +108,7 @@
   /* Layout */
   --measure: 1120px;
   --gutter: var(--space-4);
+  --header-h: 116px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -127,7 +128,7 @@
 }
 
 @media (min-width: 720px) {
-  :root { --gutter: var(--space-8); }
+  :root { --gutter: var(--space-8); --header-h: 72px; }
 }
 
 /* ---------- Base ---------- */
@@ -138,7 +139,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: var(--space-16);
+  scroll-padding-top: calc(var(--header-h) + var(--stroke-hairline));
 }
 
 body {
@@ -345,20 +346,18 @@ pre code { background: none; padding: 0; }
 }
 .site-header .wrap {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-3) var(--space-6);
-  min-height: 72px;
+  min-height: var(--header-h);
   padding-block: var(--space-3);
 }
 .brand { display: inline-flex; align-items: center; }
 .brand img { width: 176px; height: auto; }
 .site-nav {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2) var(--space-6);
+  gap: var(--space-6);
+  margin-left: auto;
 }
 .site-nav a {
   font-size: 14px;
@@ -369,10 +368,10 @@ pre code { background: none; padding: 0; }
   padding: var(--space-2) 0;
 }
 .site-nav a:hover { color: var(--link); text-decoration: underline; }
-.site-nav .button { padding-block: var(--space-2); min-height: 40px; }
+.site-cta { padding-block: var(--space-2); min-height: 40px; }
 @media (max-width: 719px) {
-  .site-header .wrap { justify-content: center; }
-  .site-nav { justify-content: center; }
+  .site-header .wrap { flex-wrap: wrap; justify-content: space-between; }
+  .site-nav { order: 1; flex-basis: 100%; justify-content: center; margin-left: 0; }
 }
 
 /* ---------- Hero ---------- */
@@ -568,8 +567,6 @@ pre code { background: none; padding: 0; }
 .download-card .actions { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
 .download-card .meta { color: var(--ink-muted); }
 .download-card .meta span + span::before { content: "\00b7"; margin-inline: var(--space-2); }
-.download-list { display: grid; gap: var(--space-2); }
-.download-list li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); }
 .download-aside { display: grid; gap: var(--space-4); align-content: start; }
 .download-aside .card > * + * { margin-top: var(--space-2); }
 @media (min-width: 900px) {

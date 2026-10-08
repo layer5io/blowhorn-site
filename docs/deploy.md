@@ -32,8 +32,8 @@ at the Pages URL within a minute of the `deploy` job finishing:
 - <https://blowhorn.ai/> once DNS points at GitHub Pages (below).
 - <https://layer5io.github.io/blowhorn-site/> is the project URL. Because the
   custom domain is already set on Pages, GitHub redirects this URL to
-  `https://blowhorn.ai/`, which answers with Cloudflare's 404 until the DNS
-  records below are in place. The artifact itself deploys fine either way.
+  `https://blowhorn.ai/`, so nothing is reachable there until the DNS records
+  below are in place. The artifact itself deploys fine either way.
 
 ## Pages configuration
 
@@ -61,8 +61,10 @@ The site is published under **blowhorn.ai**. `www.blowhorn.ai` is optional:
 when its record also points at GitHub, Pages redirects it to the apex.
 
 blowhorn.ai is registered at Porkbun and its DNS is served by Cloudflare. Only
-the domain's owner can change records. Today the apex resolves to Cloudflare
-addresses that answer 404; those records are what the ones below replace.
+the domain's owner can change records. Today the apex resolves to Cloudflare's
+proxy addresses and answers HTTP 526: the record is proxied, so GitHub cannot
+verify the origin or issue a certificate. Those records are what the ones
+below replace.
 
 ### Step 1: the apex records (do this first)
 
