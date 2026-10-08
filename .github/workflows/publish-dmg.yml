@@ -8,6 +8,15 @@ name: Publish DMG release
 #   - repository_dispatch (event type "publish-dmg") from the product repo's CI,
 #     with client_payload: {"version", "dmg_url", "arch", "draft",
 #     "require_notarized", "notes"}.
+#
+# Safety rules enforced here:
+#   - A public (non-draft) release must pass signature and notarization checks
+#     on a macOS runner. Only a draft may skip them, for review.
+#   - The download and every redirect must stay on HTTPS.
+#   - DMG_SOURCE_TOKEN is sent only to the hosts in the DMG_SOURCE_HOSTS
+#     repository variable (default: GitHub's API and asset hosts).
+#   - Blowhorn-mac.dmg, the fixed-name alias behind the always-latest URL, is
+#     created only for a universal image, so no one is handed the wrong build.
 
 on:
   workflow_dispatch:
@@ -33,9 +42,9 @@ on:
         type: boolean
         default: true
       require_notarized:
-        description: "Verify Apple signature and stapled notarization on macOS before publishing"
+        description: "Verify Apple signature and stapled notarization on macOS before publishing (required unless draft)"
         type: boolean
-        default: false
+        default: true
       notes:
         description: "Optional release notes (Markdown)"
         type: string
@@ -47,8 +56,10 @@ on:
 permissions:
   contents: read
 
+# One run per version at a time. Different versions queue independently, so a
+# second dispatch never replaces a pending run for another release.
 concurrency:
-  group: publish-dmg
+  group: publish-dmg-${{ github.event.inputs.version || github.event.client_payload.version }}
   cancel-in-progress: false
 
 jobs:
@@ -57,6 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.resolve.outputs.version }}
+      arch: ${{ steps.resolve.outputs.arch }}
       prerelease: ${{ steps.resolve.outputs.prerelease }}
       draft: ${{ steps.resolve.outputs.draft }}
       require_notarized: ${{ steps.resolve.outputs.require_notarized }}
@@ -78,8 +90,8 @@ jobs:
             echo "::error::version must look like v1.2.3 or v1.2.3-beta.1 (got '$IN_VERSION')"
             exit 1
           fi
-          if [[ ! "$IN_URL" =~ ^https:// ]]; then
-            echo "::error::dmg_url must be an https:// URL"
+          if [[ ! "$IN_URL" =~ ^https://[^/]+/ ]]; then
+            echo "::error::dmg_url must be an https:// URL with a host and a path"
             exit 1
           fi
           arch="${IN_ARCH:-universal}"
@@ -88,8 +100,12 @@ jobs:
           [[ "$IN_VERSION" == *-* ]] && prerelease=true
           draft=true
           [[ "${IN_DRAFT,,}" == "false" ]] && draft=false
-          notarized=false
-          [[ "${IN_NOTARIZED,,}" == "true" ]] && notarized=true
+          notarized=true
+          [[ "${IN_NOTARIZED,,}" == "false" ]] && notarized=false
+          if [[ "$draft" == "false" && "$notarized" == "false" ]]; then
+            echo "::error::a public release must be verified: set require_notarized=true, or keep draft=true to review an unverified image"
+            exit 1
+          fi
           {
             echo "version=$IN_VERSION"
             echo "arch=$arch"
@@ -106,12 +122,25 @@ jobs:
           # Optional. Only needed when dmg_url requires a bearer token (for
           # example a GitHub API release-asset URL on a private repository).
           DMG_SOURCE_TOKEN: ${{ secrets.DMG_SOURCE_TOKEN }}
+          # Space- or comma-separated hosts the token may be sent to. Anything
+          # else is downloaded without credentials.
+          DMG_SOURCE_HOSTS: ${{ vars.DMG_SOURCE_HOSTS || 'api.github.com github.com objects.githubusercontent.com release-assets.githubusercontent.com' }}
         run: |
           set -euo pipefail
           mkdir -p dist
-          args=(--fail --location --silent --show-error --retry 3 --output dist/source.dmg)
+          host=$(printf '%s' "$DMG_URL" | sed -E 's#^https://([^/@]*@)?([^/:?]+).*$#\2#')
+          args=(--proto '=https' --proto-redir '=https' --fail --location --silent --show-error --retry 3 --output dist/source.dmg)
           if [[ -n "${DMG_SOURCE_TOKEN:-}" ]]; then
-            args+=(--header "Authorization: Bearer $DMG_SOURCE_TOKEN" --header "Accept: application/octet-stream")
+            allowed=false
+            for candidate in ${DMG_SOURCE_HOSTS//,/ }; do
+              [[ "$host" == "$candidate" ]] && allowed=true
+            done
+            if [[ "$allowed" == "true" ]]; then
+              echo "Sending DMG_SOURCE_TOKEN to $host"
+              args+=(--header "Authorization: Bearer $DMG_SOURCE_TOKEN" --header "Accept: application/octet-stream")
+            else
+              echo "::notice::$host is not in DMG_SOURCE_HOSTS; downloading without credentials"
+            fi
           fi
           curl "${args[@]}" "$DMG_URL"
 
@@ -124,9 +153,13 @@ jobs:
           .github/scripts/check-dmg.sh dist/source.dmg
           versioned="Blowhorn-${VERSION#v}-mac-${ARCH}.dmg"
           mv dist/source.dmg "dist/$versioned"
-          # Stable, version-less alias so /releases/latest/download/Blowhorn-mac.dmg
-          # always points at the newest published release.
-          cp "dist/$versioned" dist/Blowhorn-mac.dmg
+          # The fixed-name alias behind /releases/latest/download/Blowhorn-mac.dmg
+          # must work on every Mac, so only a universal image gets it.
+          if [[ "$ARCH" == "universal" ]]; then
+            cp "dist/$versioned" dist/Blowhorn-mac.dmg
+          else
+            echo "::notice::$ARCH image: Blowhorn-mac.dmg alias not created; the site lists architecture-specific images instead"
+          fi
           (cd dist && sha256sum -- *.dmg >SHA256SUMS.txt && cat SHA256SUMS.txt)
           mv notes.md dist/notes.md
 
@@ -162,7 +195,10 @@ jobs:
     needs:
       - fetch
       - verify-macos
-    if: always() && needs.fetch.result == 'success' && (needs.verify-macos.result == 'success' || needs.verify-macos.result == 'skipped')
+    # A draft may skip verification (verify-macos is then skipped). A public
+    # release reaches this job only after verify-macos succeeded, because the
+    # resolve step refuses draft=false without require_notarized=true.
+    if: always() && needs.fetch.result == 'success' && (needs.verify-macos.result == 'success' || (needs.verify-macos.result == 'skipped' && needs.fetch.outputs.draft == 'true'))
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -191,7 +227,9 @@ jobs:
             echo "## Download"
             echo
             echo "- macOS: \`$(basename "${versioned[0]}")\`"
-            echo "- Always-latest link: https://github.com/${GH_REPO}/releases/latest/download/Blowhorn-mac.dmg"
+            if [[ -f dist/Blowhorn-mac.dmg ]]; then
+              echo "- Always-latest link: https://github.com/${GH_REPO}/releases/latest/download/Blowhorn-mac.dmg"
+            fi
             echo
             echo "## SHA-256"
             echo

@@ -3,41 +3,398 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Blowhorn by Layer5</title>
-    <meta name="description" content="Blowhorn is Layer5's automated megaphone for communities: one message in, loud reach across every profile you run.">
-    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-    <link rel="alternate icon" href="favicon.ico">
+    <title>Blowhorn: one message, many ears</title>
+    <meta name="description" content="Blowhorn is a social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot. Made by Layer5 for macOS.">
+    <link rel="canonical" href="https://www.blowhorn.ai/">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1E2117">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Blowhorn">
+    <meta property="og:title" content="Blowhorn: one message, many ears">
+    <meta property="og:description" content="A social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot.">
+    <meta property="og:url" content="https://www.blowhorn.ai/">
+    <meta property="og:image" content="https://www.blowhorn.ai/assets/brand/marketing/blowhorn-social-banner-16x9.png">
+    <meta property="og:image:width" content="1600">
+    <meta property="og:image:height" content="900">
+    <meta property="og:image:alt" content="Major Blowhorn, a rooster drill sergeant, crows through a megaphone beside the Blowhorn wordmark and the tagline One message. Many ears.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Blowhorn: one message, many ears">
+    <meta name="twitter:description" content="A social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot.">
+    <meta name="twitter:image" content="https://www.blowhorn.ai/assets/brand/marketing/blowhorn-social-banner-16x9.png">
+    <link rel="icon" href="favicon.ico" sizes="32x32">
+    <link rel="icon" href="assets/brand/logo/blowhorn-favicon-32.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/brand/logo/blowhorn-apple-touch-icon-180.png">
     <link rel="stylesheet" href="styles.css">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Blowhorn",
+        "alternateName": "Layer5 Blowhorn",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "macOS 13 or newer",
+        "url": "https://www.blowhorn.ai/",
+        "description": "A social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot.",
+        "author": { "@type": "Organization", "name": "Layer5, Inc.", "url": "https://layer5.io/" },
+        "downloadUrl": "https://github.com/layer5io/blowhorn-site/releases/latest"
+      }
+    </script>
   </head>
   <body>
+    <a class="skip-link ui" href="#main">Skip to content</a>
+
+    <svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+      <!-- Platform marks: the Blowhorn console's own monoline currentColor drawings. -->
+      <symbol id="mark-linkedin" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="3" stroke-width="1.6"></rect>
+        <path d="M8.3 10.6v6" stroke-width="1.6"></path>
+        <circle cx="8.3" cy="7.9" r="0.9" fill="currentColor" stroke="none"></circle>
+        <path d="M12 16.6v-6" stroke-width="1.6"></path>
+        <path d="M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9" stroke-width="1.6"></path>
+      </symbol>
+      <symbol id="mark-x" viewBox="0 0 24 24">
+        <path d="M5 4l14 16" stroke-width="1.8"></path>
+        <path d="M19 4L5 20" stroke-width="1.8"></path>
+      </symbol>
+      <symbol id="mark-reddit" viewBox="0 0 24 24">
+        <ellipse cx="12" cy="14" rx="7.5" ry="5.5" stroke-width="1.6"></ellipse>
+        <path d="M12 8.5l1.2-4.5 3.3.9" stroke-width="1.6"></path>
+        <circle cx="17.5" cy="5" r="1.2" stroke-width="1.6"></circle>
+        <circle cx="5.5" cy="11" r="1.6" stroke-width="1.6"></circle>
+        <circle cx="18.5" cy="11" r="1.6" stroke-width="1.6"></circle>
+        <circle cx="9.5" cy="13.5" r="0.9" fill="currentColor" stroke="none"></circle>
+        <circle cx="14.5" cy="13.5" r="0.9" fill="currentColor" stroke="none"></circle>
+        <path d="M9.5 16.5c1.5 1.2 3.5 1.2 5 0" stroke-width="1.6"></path>
+      </symbol>
+      <symbol id="mark-hn" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="3" stroke-width="1.6"></rect>
+        <path d="M8.5 7.5 12 12.6l3.5-5.1" stroke-width="1.8"></path>
+        <path d="M12 12.6v4.4" stroke-width="1.8"></path>
+      </symbol>
+      <symbol id="mark-slack" viewBox="0 0 24 24">
+        <path d="M9 4v7" stroke-width="2.4"></path>
+        <path d="M15 13v7" stroke-width="2.4"></path>
+        <path d="M4 15h7" stroke-width="2.4"></path>
+        <path d="M13 9h7" stroke-width="2.4"></path>
+        <path d="M9 13v7" stroke-width="2.4"></path>
+        <path d="M15 4v7" stroke-width="2.4"></path>
+        <path d="M4 9h7" stroke-width="2.4"></path>
+        <path d="M13 15h7" stroke-width="2.4"></path>
+      </symbol>
+      <symbol id="mark-bluesky" viewBox="0 0 24 24">
+        <path fill="currentColor" stroke="none" d="M12 10.8C10.9 8.5 8 4.7 5.3 3.3 2.7 2 2 2.3 2 4.6c0 .8.5 6.7.8 7.6.9 3 4.2 4 7.2 3.6-5.2.9-6.5 3.8-3.7 6.7 5.4 5.6 7.7-1.4 5.7-4.9 2 3.5 4.3 10.5 5.7 4.9 2.8-2.9 1.5-5.8-3.7-6.7 3 .4 6.3-.6 7.2-3.6.3-.9.8-6.8.8-7.6 0-2.3-.7-2.6-3.3-1.3C16 4.7 13.1 8.5 12 10.8z"></path>
+      </symbol>
+      <symbol id="mark-github" viewBox="0 0 24 24">
+        <path fill="currentColor" stroke="none" d="M12 2C6.5 2 2 6.6 2 12.3c0 4.5 2.9 8.4 6.8 9.7.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 2.9.9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 1.9v2.8c0 .3.2.6.7.5 4-1.3 6.8-5.2 6.8-9.7C22 6.6 17.5 2 12 2z"></path>
+      </symbol>
+      <!-- UI glyphs for the "How you run it" cards: 24px grid, round caps and joins. -->
+      <symbol id="glyph-menubar" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+        <path d="M3 9h18"></path>
+        <path d="M7 6.5h.01M10 6.5h.01"></path>
+        <path d="M8 14h8M8 17h5"></path>
+      </symbol>
+      <symbol id="glyph-terminal" viewBox="0 0 24 24">
+        <path d="M5 7l5 5-5 5"></path>
+        <path d="M12 17h7"></path>
+      </symbol>
+      <symbol id="glyph-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M12 7v5l3 2"></path>
+      </symbol>
+      <symbol id="glyph-extension" viewBox="0 0 24 24">
+        <path d="M10 4a2 2 0 1 1 4 0v1h3a1 1 0 0 1 1 1v3h-1a2 2 0 1 0 0 4h1v4a1 1 0 0 1-1 1h-4v-1a2 2 0 1 0-4 0v1H5a1 1 0 0 1-1-1v-4h1a2 2 0 1 0 0-4H4V6a1 1 0 0 1 1-1h5z"></path>
+      </symbol>
+      <symbol id="glyph-download" viewBox="0 0 24 24">
+        <path d="M12 4v11"></path>
+        <path d="M7 11l5 5 5-5"></path>
+        <path d="M4 19h16"></path>
+      </symbol>
+    </svg>
+
     <header class="site-header">
-      <a class="brand" href="./"><img src="assets/blowhorn-lockup.svg" alt="Blowhorn" width="210" height="48"></a>
-      <nav aria-label="Primary">
-        <a href="#download">Download</a>
-        <a href="https://layer5.io">Layer5</a>
-      </nav>
+      <div class="wrap">
+        <a class="brand" href="./" aria-label="Blowhorn home">
+          <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg">
+            <img src="assets/brand/logo/blowhorn-lockup-horizontal.svg" alt="Blowhorn" width="176" height="44">
+          </picture>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#platforms">Platforms</a>
+          <a href="#how">How you run it</a>
+          <a href="#trust">Trust</a>
+          <a class="button button-primary" href="#download">Download</a>
+        </nav>
+      </div>
     </header>
 
-    <main>
-      <section class="hero">
-        <p class="eyebrow">From Layer5, the makers of Meshery</p>
-        <h1>One message in. Loud reach everywhere.</h1>
-        <p class="lede">Blowhorn runs many social profiles at once and broadcasts, reposts, and amplifies your community&rsquo;s posts across X, LinkedIn, Bluesky, Mastodon, Slack, Discord, and more.</p>
-        <p><a class="button" href="#download">Download for macOS</a></p>
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <p class="label">Layer5 Blowhorn · for macOS</p>
+            <h1 id="hero-title" class="display-xl">One message. Many ears.</h1>
+            <p class="body-lg">Blowhorn is a social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot.</p>
+            <div class="hero-actions">
+              <a class="button button-primary button-pop" href="#download">
+                <svg aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#glyph-download"></use></svg>
+                Download for Mac
+              </a>
+              <a class="button button-secondary" href="#how">See how it works</a>
+            </div>
+            <p class="hero-note caption muted">
+              <span>macOS 13 or newer</span>
+              <span>Google Chrome for LinkedIn, X, Reddit and Hacker News</span>
+            </p>
+          </div>
+          <figure class="hero-art">
+    <svg class="fan" viewBox="0 0 560 470" role="img" aria-labelledby="fan-title" focusable="false" xmlns="http://www.w3.org/2000/svg">
+      <title id="fan-title">One message fanning out to seven platforms</title>
+      <path class="fan-line" d="M174 226.0C244 226.0 220 73.0 290 73.0"></path>
+      <path class="fan-line" d="M174 226.0C244 226.0 356 125.0 426 125.0"></path>
+      <path class="fan-line" d="M174 226.0C244 226.0 246 189.0 316 189.0"></path>
+      <path class="fan-line" d="M174 226.0C244 226.0 372 251.0 442 251.0"></path>
+      <path class="fan-line" d="M174 226.0C244 226.0 236 310.0 306 310.0"></path>
+      <path class="fan-line" d="M174 226.0C244 226.0 366 366.0 436 366.0"></path>
+      <path class="fan-line" d="M174 226.0C244 226.0 242 421.0 312 421.0"></path>
+      <g class="bubble-source">
+        <path d="M44 170H154Q174 170 174 190V262Q174 282 154 282H72L40 304L52 282H44Q24 282 24 262V190Q24 170 44 170Z"></path>
+        <path class="text-line" d="M52 204H142"></path>
+        <path class="text-line" d="M52 226H124"></path>
+        <path class="text-line" d="M52 248H96"></path>
+      </g>
+      <g class="bubble bubble-teal">
+        <path d="M314 36H386Q400 36 400 50V96Q400 110 386 110H314Q300 110 300 96V81.0L290 73.0L300 65.0V50Q300 36 314 36Z"></path>
+        <use class="mark" href="#mark-linkedin" x="336" y="59" width="28" height="28"></use>
+      </g>
+      <g class="bubble bubble-raised">
+        <path d="M450 96H498Q512 96 512 110V140Q512 154 498 154H450Q436 154 436 140V133.0L426 125.0L436 117.0V110Q436 96 450 96Z"></path>
+        <use class="mark" href="#mark-x" x="460" y="111" width="28" height="28"></use>
+      </g>
+      <g class="bubble bubble-bright">
+        <path d="M340 156H400Q414 156 414 170V208Q414 222 400 222H340Q326 222 326 208V197.0L316 189.0L326 181.0V170Q326 156 340 156Z"></path>
+        <use class="mark" href="#mark-reddit" x="356" y="175" width="28" height="28"></use>
+      </g>
+      <g class="bubble bubble-teal">
+        <path d="M466 220H522Q536 220 536 234V268Q536 282 522 282H466Q452 282 452 268V259.0L442 251.0L452 243.0V234Q452 220 466 220Z"></path>
+        <use class="mark" href="#mark-slack" x="480" y="237" width="28" height="28"></use>
+      </g>
+      <g class="bubble bubble-raised">
+        <path d="M330 276H394Q408 276 408 290V330Q408 344 394 344H330Q316 344 316 330V318.0L306 310.0L316 302.0V290Q316 276 330 276Z"></path>
+        <use class="mark" href="#mark-bluesky" x="348" y="296" width="28" height="28"></use>
+      </g>
+      <g class="bubble bubble-yellow">
+        <path d="M460 338H504Q518 338 518 352V380Q518 394 504 394H460Q446 394 446 380V374.0L436 366.0L446 358.0V352Q446 338 460 338Z"></path>
+        <use class="mark" href="#mark-hn" x="468" y="352" width="28" height="28"></use>
+      </g>
+      <g class="bubble bubble-bright">
+        <path d="M336 390H392Q406 390 406 404V438Q406 452 392 452H336Q322 452 322 438V429.0L312 421.0L322 413.0V404Q322 390 336 390Z"></path>
+        <use class="mark" href="#mark-github" x="350" y="407" width="28" height="28"></use>
+      </g>
+    </svg>
+            <figcaption class="visually-hidden">One message fans out into seven speech bubbles, one for each platform: LinkedIn, X, Reddit, Slack, Bluesky, Hacker News and GitHub.</figcaption>
+          </figure>
+        </div>
       </section>
 
-      <section id="download" class="download" aria-labelledby="download-title">
-        <h2 id="download-title">Download</h2>
-        <div id="download-status" class="download-card" data-repo="layer5io/blowhorn-site" data-asset="Blowhorn-mac.dmg">
-          <p class="muted">No public build yet. The first signed and notarized macOS release will appear here.</p>
-          <p><a href="https://github.com/layer5io/blowhorn-site/releases">See all releases</a></p>
+      <section id="platforms" class="section" aria-labelledby="platforms-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Platforms</p>
+            <h2 id="platforms-title" class="display">Say it once. Everywhere.</h2>
+            <p class="body-lg muted">7 platforms, 1 queue. Each profile keeps its own timing and outreach, and one approved row goes out to every platform it names.</p>
+          </div>
+          <ul class="platforms section-body">
+            <li class="platform">
+              <svg aria-hidden="true" focusable="false"><use href="#mark-linkedin"></use></svg>
+              <span class="ui">LinkedIn</span>
+              <span class="caption">Chrome extension</span>
+            </li>
+            <li class="platform">
+              <svg aria-hidden="true" focusable="false"><use href="#mark-x"></use></svg>
+              <span class="ui">X</span>
+              <span class="caption">Chrome extension</span>
+            </li>
+            <li class="platform">
+              <svg aria-hidden="true" focusable="false"><use href="#mark-reddit"></use></svg>
+              <span class="ui">Reddit</span>
+              <span class="caption">Chrome extension</span>
+            </li>
+            <li class="platform">
+              <svg aria-hidden="true" focusable="false"><use href="#mark-hn"></use></svg>
+              <span class="ui">Hacker News</span>
+              <span class="caption">Chrome extension. Submit and comment, never a vote</span>
+            </li>
+            <li class="platform">
+              <svg aria-hidden="true" focusable="false"><use href="#mark-slack"></use></svg>
+              <span class="ui">Slack</span>
+              <span class="caption">API</span>
+            </li>
+            <li class="platform">
+              <svg aria-hidden="true" focusable="false"><use href="#mark-bluesky"></use></svg>
+              <span class="ui">Bluesky</span>
+              <span class="caption">API</span>
+            </li>
+            <li class="platform">
+              <svg aria-hidden="true" focusable="false"><use href="#mark-github"></use></svg>
+              <span class="ui">GitHub</span>
+              <span class="caption">API</span>
+            </li>
+          </ul>
+          <p class="platform-note">Blowhorn also writes long-form blog posts: a Layer5 or Meshery row becomes a post in the matching site repository. Platform marks are Blowhorn's own drawings, not the platforms' logos.</p>
         </div>
-        <p class="fine-print">Requires macOS and Google Chrome. Each download is listed with its SHA-256 checksum in <code>SHA256SUMS.txt</code> on the release page.</p>
+      </section>
+
+      <section id="how" class="section" aria-labelledby="how-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">How you run it</p>
+            <h2 id="how-title" class="display">Amplify on autopilot.</h2>
+            <p class="body-lg muted">3 ways in, 1 engine. Every command has a read-only or dry-run form, so you rehearse a run before anything is published.</p>
+          </div>
+          <ul class="grid grid-4 section-body">
+            <li class="card">
+              <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-menubar"></use></svg></span>
+              <h3 class="h3">Menu-bar app</h3>
+              <p>The popover shows what is due, running and about to post. The console covers jobs, content, runs, profiles, analytics, the service and settings.</p>
+            </li>
+            <li class="card">
+              <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-terminal"></use></svg></span>
+              <h3 class="h3">CLI</h3>
+              <p>The engine behind everything. Each command carries its own help and a worked example, with the preview form first.</p>
+              <pre><code>blowhorn post --profile all --dry-run</code></pre>
+            </li>
+            <li class="card">
+              <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-clock"></use></svg></span>
+              <h3 class="h3">Background service</h3>
+              <p>A launchd service checks the queue every 10 minutes and runs what is due, with the app closed and nobody watching.</p>
+            </li>
+            <li class="card">
+              <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-extension"></use></svg></span>
+              <h3 class="h3">Chrome extension</h3>
+              <p>LinkedIn, X, Reddit and Hacker News actions run inside your own signed-in Chrome through the Blowhorn extension. GitHub, Bluesky and Slack go through their APIs.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" aria-label="Major Blowhorn">
+        <div class="wrap">
+          <div class="major-card">
+            <figure class="major-figure">
+              <img src="assets/brand/mascot/major-blowhorn-attention.svg" alt="Major Blowhorn, a teal rooster in a drill sergeant's campaign hat, standing at attention" width="440" height="480">
+            </figure>
+            <div class="major-copy">
+              <p class="speech h3">Broadcast authorized.</p>
+              <p class="label">Major Blowhorn</p>
+              <p>Major Blowhorn runs the queue like a drill sergeant. Every approved post is an order, every platform is his platoon, and he barks it out on all of them at once. He barks at the message, never at you.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="trust" class="section" aria-labelledby="trust-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Trust</p>
+            <h2 id="trust-title" class="display">Yours to keep.</h2>
+            <p class="body-lg muted">Blowhorn runs as many public voices as you need without handing the keys to anyone else.</p>
+          </div>
+          <ul class="grid grid-3 section-body">
+            <li class="card">
+              <h3 class="h3">Your sign-ins stay on your Mac</h3>
+              <p>Browser sessions never leave your machine. LinkedIn, X, Reddit and Hacker News actions run in your own signed-in Chrome through the Blowhorn extension.</p>
+            </li>
+            <li class="card">
+              <h3 class="h3">Your organization's store, on Layer5 Cloud</h3>
+              <p>The queue, schedule, profiles, run ledger and platform tokens live in a database scoped to your organization on Layer5 Cloud. Every row carries your organization's id.</p>
+            </li>
+            <li class="card">
+              <h3 class="h3">Hacker News: submit and comment only</h3>
+              <p>Blowhorn submits stories and posts comments on Hacker News. It never votes.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="download" class="section" aria-labelledby="download-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Download</p>
+            <h2 id="download-title" class="display">Download for Mac.</h2>
+            <p class="body-lg muted">Blowhorn ships as a disk image published as a GitHub Release. Drag Blowhorn.app to Applications and open it.</p>
+          </div>
+          <div class="download-grid section-body">
+            <div id="download-status" class="download-card" data-repo="layer5io/blowhorn-site" data-asset="Blowhorn-mac.dmg" aria-live="polite">
+              <p class="h3">The first public build is on its way.</p>
+              <p class="meta">Releases are published on GitHub. The newest build will appear here the moment it is public.</p>
+              <p class="actions"><a class="button button-secondary" href="https://github.com/layer5io/blowhorn-site/releases">See releases</a></p>
+            </div>
+            <div class="download-aside">
+              <div class="card">
+                <h3 class="h3">What you need</h3>
+                <ul>
+                  <li>macOS 13 or newer.</li>
+                  <li>Google Chrome, for LinkedIn, X, Reddit and Hacker News.</li>
+                  <li>A Layer5 Cloud organization. Your queue lives in its store.</li>
+                </ul>
+              </div>
+              <div class="card">
+                <h3 class="h3">Verify what you downloaded</h3>
+                <p>Every release carries a <code>SHA256SUMS.txt</code>. Check the disk image against it before you open it.</p>
+                <pre><code>shasum -a 256 -c SHA256SUMS.txt</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <p>&copy; Layer5, Inc. Blowhorn is a Layer5 product. <a href="https://github.com/layer5io/blowhorn-site">Site source</a></p>
+      <div class="wrap">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <picture>
+              <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo/layer5-blowhorn-lockup-on-dark.svg">
+              <img src="assets/brand/logo/layer5-blowhorn-lockup.svg" alt="Layer5 Blowhorn" width="220" height="60">
+            </picture>
+            <p>Blowhorn is made by Layer5, the company behind Meshery. One message in, many ears out.</p>
+          </div>
+          <div class="footer-cols">
+            <nav class="footer-col" aria-label="Product">
+              <p class="label">Product</p>
+              <ul class="ui">
+                <li><a href="#platforms">Platforms</a></li>
+                <li><a href="#how">How you run it</a></li>
+                <li><a href="#download">Download</a></li>
+                <li><a href="https://github.com/layer5io/blowhorn-site/releases">Releases</a></li>
+              </ul>
+            </nav>
+            <nav class="footer-col" aria-label="Layer5">
+              <p class="label">Layer5</p>
+              <ul class="ui">
+                <li><a href="https://layer5.io/">layer5.io</a></li>
+                <li><a href="https://github.com/layer5io">GitHub</a></li>
+                <li><a href="https://slack.layer5.io/">Slack</a></li>
+                <li><a href="https://layer5.io/community">Community</a></li>
+              </ul>
+            </nav>
+            <nav class="footer-col" aria-label="Legal">
+              <p class="label">Legal</p>
+              <ul class="ui">
+                <li><a href="privacy.html">Privacy</a></li>
+                <li><a href="terms.html">Terms</a></li>
+                <li><a href="https://layer5.io/company/legal/">Layer5 legal</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <div class="footer-meta caption">
+          <span>&copy; 2026 Layer5, Inc.</span>
+          <a href="https://github.com/layer5io/blowhorn-site">Site source on GitHub</a>
+        </div>
+      </div>
     </footer>
 
     <script src="download.js" defer></script>
