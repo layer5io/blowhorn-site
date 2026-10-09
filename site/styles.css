@@ -1,5 +1,6 @@
-/* Blowhorn marketing site. Every value here is a token from assets/brand/tokens.json
-   (version 1 of the brand kit). Light is the default theme; dark follows the OS. */
+/* Blowhorn marketing site. Every value here is a token from brand/tokens.json in the
+   Blowhorn product repository (version 1 of the brand kit). Light is the default theme;
+   dark follows the OS. */
 
 /* ---------- Fonts (self-hosted, SIL OFL; see assets/brand/LICENSES.md) ---------- */
 @font-face {
@@ -371,7 +372,7 @@ pre code { background: none; padding: 0; }
 .site-cta { padding-block: var(--space-2); min-height: 40px; }
 @media (max-width: 719px) {
   .site-header .wrap { flex-wrap: wrap; justify-content: space-between; }
-  .site-nav { order: 1; flex-basis: 100%; justify-content: center; margin-left: 0; }
+  .site-nav { flex-basis: 100%; justify-content: center; margin-left: 0; }
 }
 
 /* ---------- Hero ---------- */
@@ -415,13 +416,13 @@ pre code { background: none; padding: 0; }
   transform-origin: left center;
   animation: fan-pop 480ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
-.fan .bubble:nth-of-type(1) { animation-delay: 120ms; }
-.fan .bubble:nth-of-type(2) { animation-delay: 200ms; }
-.fan .bubble:nth-of-type(3) { animation-delay: 280ms; }
-.fan .bubble:nth-of-type(4) { animation-delay: 360ms; }
-.fan .bubble:nth-of-type(5) { animation-delay: 440ms; }
-.fan .bubble:nth-of-type(6) { animation-delay: 520ms; }
-.fan .bubble:nth-of-type(7) { animation-delay: 600ms; }
+.fan .bubble:nth-of-type(2) { animation-delay: 120ms; }
+.fan .bubble:nth-of-type(3) { animation-delay: 200ms; }
+.fan .bubble:nth-of-type(4) { animation-delay: 280ms; }
+.fan .bubble:nth-of-type(5) { animation-delay: 360ms; }
+.fan .bubble:nth-of-type(6) { animation-delay: 440ms; }
+.fan .bubble:nth-of-type(7) { animation-delay: 520ms; }
+.fan .bubble:nth-of-type(8) { animation-delay: 600ms; }
 @media (prefers-reduced-motion: reduce) {
   .fan .bubble { animation: none; }
   html { scroll-behavior: auto; }

@@ -119,16 +119,15 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist
-          host=$(printf '%s' "$DMG_URL" | sed -E 's#^https://([^/@]*@)?([^/:?]+).*$#\2#')
           args=(--proto '=https' --proto-redir '=https' --fail --location --silent --show-error --retry 3 --output dist/source.dmg)
           if [[ -n "${DMG_SOURCE_TOKEN:-}" ]]; then
-            case "$host" in
-              api.github.com|github.com|objects.githubusercontent.com|release-assets.githubusercontent.com)
-                echo "Sending DMG_SOURCE_TOKEN to $host"
+            case "$DMG_URL" in
+              https://api.github.com/*|https://github.com/*|https://objects.githubusercontent.com/*|https://release-assets.githubusercontent.com/*)
+                echo "dmg_url is on a GitHub host; sending DMG_SOURCE_TOKEN"
                 args+=(--header "Authorization: Bearer $DMG_SOURCE_TOKEN" --header "Accept: application/octet-stream")
                 ;;
               *)
-                echo "::notice::$host is not a GitHub host; downloading without credentials"
+                echo "::notice::dmg_url is not on a GitHub host; downloading without credentials"
                 ;;
             esac
           fi

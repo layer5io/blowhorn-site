@@ -65,12 +65,14 @@ published by the workflow.
 
 If `dmg_url` needs a bearer token (for example a GitHub API asset URL on a
 private repo, with `Accept: application/octet-stream`), store it as the
-`DMG_SOURCE_TOKEN` repository secret. The token is sent only to GitHub's API
-and release-asset hosts (`api.github.com`, `github.com`,
-`objects.githubusercontent.com` and `release-assets.githubusercontent.com`).
-Any other HTTPS URL is downloaded without credentials, so a `dmg_url` pointing
-at an unexpected host cannot exfiltrate the secret. The download and every
-redirect must stay on HTTPS; `curl` is told to refuse anything else.
+`DMG_SOURCE_TOKEN` repository secret. The token is attached only when
+`dmg_url` begins with `https://api.github.com/`, `https://github.com/`,
+`https://objects.githubusercontent.com/` or
+`https://release-assets.githubusercontent.com/`: a literal prefix, so the host
+must be followed directly by the path. Any other HTTPS URL is downloaded
+without credentials, so a `dmg_url` pointing at an unexpected host cannot
+exfiltrate the secret. The download and every redirect must stay on HTTPS;
+`curl` is told to refuse anything else.
 
 Runs are serialised (`concurrency: publish-dmg`): a second dispatch waits for
 the running one to finish rather than cancelling it.
