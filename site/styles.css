@@ -535,17 +535,20 @@ pre code { background: none; padding: 0; }
   border: 2px solid var(--near-black);
   border-radius: var(--radius-lg);
   padding: var(--space-4) var(--space-6);
+  margin-bottom: var(--space-2);
+  isolation: isolate;
 }
 .speech::after {
   content: "";
   position: absolute;
+  z-index: -1;
   left: 40px;
   bottom: -14px;
   width: 24px; height: 24px;
   background: var(--surface);
   border-right: 2px solid var(--near-black);
   border-bottom: 2px solid var(--near-black);
-  transform: translateY(-50%) rotate(45deg) skew(10deg, 10deg);
+  transform: rotate(45deg) skew(10deg, 10deg);
 }
 @media (prefers-color-scheme: dark) {
   .speech, .speech::after { border-color: var(--cream); }
@@ -627,7 +630,6 @@ pre code { background: none; padding: 0; }
 }
 .empty-state .major-figure { width: min(100%, 320px); }
 .empty-copy > * + * { margin-top: var(--space-4); }
-.empty-copy .speech { margin-bottom: var(--space-2); }
 @media (min-width: 720px) {
   .empty-state { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
 }
