@@ -1,0 +1,8 @@
+User-agent: *
+{{- if eq (getenv "HUGO_PREVIEW") "true" }}
+Disallow: /
+{{- else }}
+Allow: /
+
+Sitemap: {{ "sitemap.xml" | absURL }}
+{{- end }}

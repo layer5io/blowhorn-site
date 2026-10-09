@@ -1,0 +1,19 @@
+{{- /* On the home page the section links are in-page anchors; everywhere else
+  they lead back to the home page's sections. */ -}}
+{{- $home := cond .IsHome "" ("" | relURL) -}}
+<header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="{{ "" | relURL }}" aria-label="Blowhorn home">
+          <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="{{ "assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg" | relURL }}">
+            <img src="{{ "assets/brand/logo/blowhorn-lockup-horizontal.svg" | relURL }}" alt="Blowhorn" width="176" height="44">
+          </picture>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="{{ $home }}#platforms">Platforms</a>
+          <a href="{{ $home }}#how">How you run it</a>
+          <a href="{{ $home }}#trust">Trust</a>
+        </nav>
+        <a class="button button-primary site-cta" href="{{ $home }}#download">Download</a>
+      </div>
+    </header>

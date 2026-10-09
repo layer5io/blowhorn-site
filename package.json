@@ -1,0 +1,34 @@
+{
+  "name": "blowhorn-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The blowhorn.ai website",
+  "repository": "github:layer5io/blowhorn-site",
+  "homepage": "https://blowhorn.ai",
+  "author": "Layer5 Authors",
+  "license": "Apache-2.0",
+  "bugs": "https://github.com/layer5io/blowhorn-site/issues",
+  "scripts": {
+    "_hugo": "hugo",
+    "_hugo-dev": "npm run _hugo -- -e dev -DFE",
+    "_build": "npm run _hugo-dev -- --cleanDestinationDir",
+    "_site": "npm run _hugo-dev -- --minify server",
+    "_serve": "npm run _hugo-dev -- --minify --watch=false server",
+    "_check:links": "python3 .github/scripts/check-site-links.py public",
+    "build": "npm run _build",
+    "build:preview": "npm run _hugo-dev -- --cleanDestinationDir --minify --baseURL \"${BASE_URL:-${DEPLOY_PRIME_URL:-/}}\"",
+    "build:production": "npm run _hugo -- --cleanDestinationDir --minify --gc",
+    "site": "npm run _site",
+    "serve": "npm run _serve",
+    "clean": "rm -Rf public/* resources",
+    "check:links": "npm run _check:links",
+    "update:pkg:dep": "npm install --save-dev autoprefixer@latest postcss@latest postcss-cli@latest",
+    "update:pkg:hugo": "npm install --save-dev --save-exact hugo-extended@latest"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.5.0",
+    "hugo-extended": "0.158.0",
+    "postcss": "^8.5.25",
+    "postcss-cli": "^11.0.1"
+  }
+}

@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="site/assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg">
-    <img alt="Blowhorn" src="site/assets/brand/logo/blowhorn-lockup-horizontal.svg" width="360">
+    <source media="(prefers-color-scheme: dark)" srcset="static/assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg">
+    <img alt="Blowhorn" src="static/assets/brand/logo/blowhorn-lockup-horizontal.svg" width="360">
   </picture>
 </p>
 
@@ -9,7 +9,7 @@
 
 This repository is two things for **Layer5 Blowhorn**:
 
-1. **The marketing site** at [blowhorn.ai](https://blowhorn.ai). The source is the static site in [`site/`](site/), deployed to GitHub Pages by [`site.yml`](.github/workflows/site.yml). The Pages custom domain is already blowhorn.ai, so the project URL <https://layer5io.github.io/blowhorn-site/> only redirects there; the site is reachable once the domain's DNS points at Pages, as [`docs/deploy.md`](docs/deploy.md) describes.
+1. **The marketing site** at [blowhorn.ai](https://blowhorn.ai). It is a [Hugo](https://gohugo.io) site with [Docsy](https://www.docsy.dev) as a Hugo module, built like [docs.layer5.io](https://github.com/layer5io/docs) and deployed to GitHub Pages by [`site.yml`](.github/workflows/site.yml). The Pages custom domain is already blowhorn.ai, so the project URL <https://layer5io.github.io/blowhorn-site/> only redirects there; the site is reachable once the domain's DNS points at Pages, as [`docs/deploy.md`](docs/deploy.md) describes.
 2. **Public downloads.** macOS disk images and their checksums are published as [GitHub Releases](https://github.com/layer5io/blowhorn-site/releases) on this repository. No release binary is committed here.
 
 Blowhorn is a social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot. One message. Many ears.
@@ -34,8 +34,11 @@ The Chrome extension ships through the Chrome Web Store, not from this repositor
 
 | | |
 |---|---|
-| Site source | [`site/`](site/): hand-written HTML, CSS and a little JavaScript, no framework, no build step beyond copying |
-| Brand assets | [`site/assets/brand/`](site/assets/brand/): version 1 of the brand kit (logo system, Major Blowhorn, marketing art, `tokens.json`) and the three self-hosted fonts; attribution in [`LICENSES.md`](site/assets/brand/LICENSES.md) |
+| Site configuration | [`hugo.toml`](hugo.toml); the pinned toolchain is [`go.mod`](go.mod) (Docsy as a Hugo module), [`package.json`](package.json) (Hugo extended, postcss) and [`.nvmrc`](.nvmrc) (Node.js) |
+| Pages | [`content/en/`](content/en/): the home page's front matter, and the privacy and terms pages in Markdown |
+| Templates | [`layouts/`](layouts/): the home page ([`home.html`](layouts/home.html)), the shared shell ([`baseof.html`](layouts/baseof.html)), the legal pages ([`legal.html`](layouts/legal.html)), the 404 page, the header, footer and icon sprite partials, and the `llms.txt` and Markdown outputs |
+| Styles and script | [`assets/css/site.css`](assets/css/site.css) and [`assets/js/download.js`](assets/js/download.js) (the Download section); Hugo minifies and fingerprints both |
+| Brand assets | [`static/assets/brand/`](static/assets/brand/), served at `/assets/brand/`: version 1 of the brand kit (logo system, Major Blowhorn, marketing art, `tokens.json`) and the three self-hosted fonts; attribution in [`LICENSES.md`](static/assets/brand/LICENSES.md) |
 | How the site deploys and how the domain is wired | [`docs/deploy.md`](docs/deploy.md) |
 | How releases are published | [`docs/distribution.md`](docs/distribution.md) |
 | Release binaries | [Releases](https://github.com/layer5io/blowhorn-site/releases) on this repository |
@@ -45,22 +48,28 @@ The Chrome extension ships through the Chrome Web Store, not from this repositor
 
 ## Working on the site
 
-You need `make`, Python 3 and Node.js (for `npx`). Nothing is installed into the repository.
+You need Go (Hugo modules), Node.js and npm (the pinned Hugo extended and postcss come from `package.json`), Python 3 and `make`. The targets follow the shared contract of [layer5io/docs](https://github.com/layer5io/docs/blob/master/Makefile).
 
 ```bash
-make site-serve      # build into _site/ and serve at http://localhost:8080
-make site-check      # html-validate plus the local link, image and font check (same as CI)
-make workflow-check  # actionlint on this repository's workflows
-make check           # both checks
+make setup             # npm install: the pinned Hugo extended and postcss
+make site              # serve at http://localhost:1313 with live reload
+make build-production  # build into public/, what CI deploys
+make site-check        # production build, html-validate, link check, third-party check, URL and anchor contract
+make workflow-check    # actionlint on this repository's workflows
+make check             # both checks: what CI runs
 ```
 
-The site follows the brand kit exactly: every colour, type style, spacing, radius and shadow in `site/styles.css` is a token from `site/assets/brand/tokens.json`, with light as the default theme and dark following the operating system. Brand SVGs are used as files and never recoloured. The one-to-many hero illustration and the platform marks are inline SVG drawn in `currentColor`.
+The site follows the brand kit exactly: every colour, type style, spacing, radius and shadow in `assets/css/site.css` is a token from `static/assets/brand/tokens.json`, with light as the default theme and dark following the operating system. Brand SVGs are used as files and never recoloured. The one-to-many hero illustration and the platform marks are inline SVG drawn in `currentColor`.
+
+Nothing on the site loads from another host: no CDN, no web fonts from elsewhere, no analytics. The [privacy page](https://blowhorn.ai/privacy.html) promises it and `make site-check` fails a build that breaks it. The public URLs (`/`, `/privacy.html`, `/terms.html`, `/assets/brand/...`) and the home page's anchors (`#platforms`, `#how`, `#trust`, `#download`) are linked from outside this repository; the same check fails a build that loses one.
+
+The site also publishes [`/llms.txt`](https://blowhorn.ai/llms.txt), [`/llms-full.txt`](https://blowhorn.ai/llms-full.txt) and a Markdown copy of every page (`/privacy.md`), as docs.layer5.io does.
 
 ### CI
 
 | Workflow | When | What it does |
 |---|---|---|
-| [`site.yml`](.github/workflows/site.yml) | Pull requests, pushes to `master`, manual runs | Lints the workflows, validates the site and builds the Pages artifact. On `master` it deploys the artifact to GitHub Pages. |
+| [`site.yml`](.github/workflows/site.yml) | Pull requests, pushes to `master`, manual runs | Lints the workflows, builds the site with the pinned Hugo, Go and Node.js, runs `make site-check` and uploads the Pages artifact. On `master` it deploys the artifact to GitHub Pages. |
 | [`publish-dmg.yml`](.github/workflows/publish-dmg.yml) | Manual, or `repository_dispatch` (`publish-dmg`) from product CI | Downloads a built DMG over HTTPS, checks it, verifies signing and notarization on a macOS runner (required for any public release), then creates the release with versioned assets, the `Blowhorn-mac.dmg` alias and checksums. Drafts by default; never overwrites. |
 
 <div>&nbsp;</div>

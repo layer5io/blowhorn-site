@@ -1,0 +1,64 @@
+{{- /* Three footers, as the site has always had: the full footer on the home
+  page, a legal strip on the legal pages and a bare strip on the 404 page. */ -}}
+{{- $privacy := (site.GetPage "/privacy").RelPermalink -}}
+{{- $terms := (site.GetPage "/terms").RelPermalink -}}
+{{- $source := site.Params.github_repo -}}
+<footer class="site-footer">
+      <div class="wrap">
+        {{- if .IsHome }}
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <picture>
+              <source media="(prefers-color-scheme: dark)" srcset="{{ "assets/brand/logo/layer5-blowhorn-lockup-on-dark.svg" | relURL }}">
+              <img src="{{ "assets/brand/logo/layer5-blowhorn-lockup.svg" | relURL }}" alt="Layer5 Blowhorn" width="220" height="60">
+            </picture>
+            <p>Blowhorn is made by Layer5, the company behind Meshery. One message in, many ears out.</p>
+          </div>
+          <div class="footer-cols">
+            <nav class="footer-col" aria-label="Product">
+              <p class="label">Product</p>
+              <ul class="ui">
+                <li><a href="#platforms">Platforms</a></li>
+                <li><a href="#how">How you run it</a></li>
+                <li><a href="#download">Download</a></li>
+                <li><a href="{{ $source }}/releases">Releases</a></li>
+              </ul>
+            </nav>
+            <nav class="footer-col" aria-label="Layer5">
+              <p class="label">Layer5</p>
+              <ul class="ui">
+                <li><a href="https://layer5.io/">layer5.io</a></li>
+                <li><a href="https://github.com/layer5io">GitHub</a></li>
+                <li><a href="https://slack.layer5.io/">Slack</a></li>
+                <li><a href="https://layer5.io/community">Community</a></li>
+              </ul>
+            </nav>
+            <nav class="footer-col" aria-label="Legal">
+              <p class="label">Legal</p>
+              <ul class="ui">
+                <li><a href="{{ $privacy }}">Privacy</a></li>
+                <li><a href="{{ $terms }}">Terms</a></li>
+                <li><a href="https://layer5.io/company/legal/">Layer5 legal</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <div class="footer-meta caption">
+          <span>&copy; 2026 {{ site.Params.copyright }}</span>
+          <a href="{{ $source }}">Site source on GitHub</a>
+        </div>
+        {{- else if eq .Kind "404" }}
+        <div class="footer-meta caption">
+          <span>&copy; 2026 {{ site.Params.copyright }}</span>
+          <a href="{{ $source }}">Site source on GitHub</a>
+        </div>
+        {{- else }}
+        <div class="footer-meta caption">
+          <span>&copy; 2026 {{ site.Params.copyright }}</span>
+          <nav aria-label="Legal">
+            <a href="{{ $privacy }}">Privacy</a> &middot; <a href="{{ $terms }}">Terms</a> &middot; <a href="{{ $source }}">Site source on GitHub</a>
+          </nav>
+        </div>
+        {{- end }}
+      </div>
+    </footer>

@@ -50,40 +50,26 @@ Or you may configure your IDE, for example, Visual Studio Code to automatically 
 
 <a href="https://user-images.githubusercontent.com/7570704/64490167-98906400-d25a-11e9-8b8a-5f465b854d49.png" ><img src="https://user-images.githubusercontent.com/7570704/64490167-98906400-d25a-11e9-8b8a-5f465b854d49.png" width="50%"><a>
 
-## <a name="contributing-docs">Documentation Contribution Flow</a>
-Please contribute! Layer5 documentation uses Jekyll and GitHub Pages to host docs sites. Learn more about [Layer5's documentation framework](https://docs.google.com/document/d/17guuaxb0xsfutBCzyj2CT6OZiFnMu9w4PzoILXhRXSo/edit?usp=sharing). The process of contributing follows this flow:
+## <a name="contributing-docs">Site Contribution Flow</a>
+Please contribute! blowhorn.ai is a [Hugo](https://gohugo.io) site that uses [Docsy](https://www.docsy.dev) as a Hugo module, the same framework as [docs.layer5.io](https://github.com/layer5io/docs). You need Go, Node.js and npm, Python 3 and `make`; the pinned Hugo extended comes from `package.json`. The [README](README.md#working-on-the-site) maps the repository. The process of contributing follows this flow:
 
 1. Create a fork, if you have not already, by following the steps described [here](./CONTRIBUTING-gitflow.md)
-1. In the local copy of your fork, navigate to the docs folder.
-`cd docs`
 1. Create and checkout a new branch to make changes within
 `git checkout -b <my-changes>`
-1. Edit/add documentation.
-`vi <specific page>.md`
-1. Run site locally to preview changes.
+1. Install the site's dependencies once.
+`make setup`
+1. Edit the pages (`content/en/`), templates (`layouts/`), styles (`assets/css/site.css`) or brand files (`static/assets/brand/`).
+1. Run the site locally to preview changes at http://localhost:1313.
 `make site`
+1. Run the checks CI runs.
+`make check`
 1. Commit, [sign-off](#commit-signing), and push changes to your remote branch.
 `git push origin <my-changes>`
 1. Open a pull request (in your web browser) against the repo.
 
 
 #### Tests
-Users can now test their code on their local machine against the CI checks implemented using `make run-tests`.
-
-To test code changes on your local machine, run the following command:
-```
-make run-tests
-```
-
-#### Building Docker image
-To build a Docker image of the project, please ensure you have `Docker` installed to be able to build the image. Now, run the following command to build the Docker image:
-```sh
-make docker
-```
-
-### UI Lint Rules
-
-Layer5 uses ES-Lint to maintain code quality & consistency in our UI Code.
+`make check` runs what CI runs: a production build, html-validate on every page, the local link check, the check that no page loads anything from another host, the check that every public URL and anchor still exists, and actionlint on the workflows. Visual changes also need the screenshots [docs/deploy.md](docs/deploy.md#local-checks-and-evidence) describes.
 
 # <a name="maintaining"> Reviews</a>
 All contributors are invited to review pull requests. See this short video on [how to review a pull request](https://www.youtube.com/watch?v=isLfo7jfE6g&feature=youtu.be).

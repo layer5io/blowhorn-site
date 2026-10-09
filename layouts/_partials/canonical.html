@@ -1,0 +1,5 @@
+{{- /* The page's public URL. uglyURLs (hugo.toml) gives the home page the
+  permalink /index.html; its public URL has always been the site root. */ -}}
+{{- $url := .Permalink -}}
+{{- if .IsHome }}{{ $url = "" | absURL }}{{ end -}}
+{{- return $url -}}

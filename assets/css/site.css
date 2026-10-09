@@ -1,45 +1,45 @@
-/* Blowhorn marketing site. Every value here is a token from assets/brand/tokens.json
+/* Blowhorn marketing site. Every value here is a token from /assets/brand/tokens.json
    (version 1 of the brand kit). Light is the default theme; dark follows the OS. */
 
 /* ---------- Fonts (self-hosted, SIL OFL; see assets/brand/LICENSES.md) ---------- */
 @font-face {
   font-family: "Bricolage Grotesque";
-  src: url("assets/brand/fonts/BricolageGrotesque-Variable.woff2") format("woff2");
+  src: url("../assets/brand/fonts/BricolageGrotesque-Variable.woff2") format("woff2");
   font-weight: 200 800;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Instrument Sans";
-  src: url("assets/brand/fonts/InstrumentSans-Regular.woff2") format("woff2");
+  src: url("../assets/brand/fonts/InstrumentSans-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Instrument Sans";
-  src: url("assets/brand/fonts/InstrumentSans-Medium.woff2") format("woff2");
+  src: url("../assets/brand/fonts/InstrumentSans-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Instrument Sans";
-  src: url("assets/brand/fonts/InstrumentSans-SemiBold.woff2") format("woff2");
+  src: url("../assets/brand/fonts/InstrumentSans-SemiBold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "JetBrains Mono";
-  src: url("assets/brand/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  src: url("../assets/brand/fonts/JetBrainsMono-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "JetBrains Mono";
-  src: url("assets/brand/fonts/JetBrainsMono-Medium.woff2") format("woff2");
+  src: url("../assets/brand/fonts/JetBrainsMono-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
