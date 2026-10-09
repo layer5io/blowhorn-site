@@ -51,6 +51,9 @@ include .github/build/Makefile.show-help.mk
 #   docs-sync          Sync the user docs from a leecalcote/blowhorn checkout
 #                      into content/en/docs/: make docs-sync REF=<tag|branch|sha>
 #                      (see docs/deploy.md).
+#   docs-sync-start-checks
+#                      Start the site checks on the docs-sync branch after a
+#                      sync: gh workflow run site.yml (see docs/deploy.md).
 #   help               List every target with its description.
 #   clean              Remove the build output, Hugo's cache and downloaded tools.
 #-----------------------------------------------------------------------------
@@ -67,6 +70,8 @@ WORKFLOWS ?= .github/workflows/site.yml .github/workflows/publish-dmg.yml .githu
 # workflow checks the product repo out at this path).
 SOURCE_DIR ?= product
 DOCS_DIR ?= content/en/docs
+# Branch the sync-docs.yml workflow pushes and opens its pull request from.
+SYNC_BRANCH ?= docs-sync
 
 # ---------------------------------------------------------------------------
 # MAINTENANCE
@@ -185,6 +190,10 @@ docs-sync:
 	@test -n "$(REF)" || (echo "usage: make docs-sync REF=<tag|branch|sha of leecalcote/blowhorn> [SOURCE_DIR=path/to/checkout]"; exit 1)
 	python3 .github/scripts/sync-docs.py "$(SOURCE_DIR)" "$(DOCS_DIR)" --ref "$(REF)"
 
+## Start the site checks on the docs-sync branch after a sync: gh workflow run site.yml (what sync-docs.yml runs after opening the sync PR).
+docs-sync-start-checks:
+	.github/scripts/sync-docs-start-checks.sh "$(SYNC_BRANCH)"
+
 # publish-dmg.yml steps. Each reads its inputs from the environment, as the
 # workflow sets them; see the script headers in .github/scripts/publish-dmg/.
 
@@ -240,4 +249,5 @@ clean:
 	dmg-verify \
 	dmg-release \
 	docs-sync \
+	docs-sync-start-checks \
 	clean
