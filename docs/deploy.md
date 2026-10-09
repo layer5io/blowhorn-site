@@ -218,9 +218,16 @@ here, on the public site repository.
    the product's file converted. Pages carrying `draft: true` stay
    unpublished until the product ungates them.
 3. The workflow commits the result signed off (DCO) to the `docs-sync`
-   branch and opens or updates the one `docs: sync from <ref>` pull
-   request, which runs the normal site checks before it can merge;
-   merging deploys. The workflow never pushes to `master`.
+   branch, opens or updates the one `docs: sync from <ref>` pull request,
+   and starts the normal site checks on it itself
+   (`make docs-sync-start-checks`, which runs
+   `gh workflow run site.yml --ref docs-sync` via `workflow_dispatch`):
+   pushes and pull requests made with `github.token` never start
+   `pull_request` or `push` workflows, so `site.yml` would otherwise stay
+   silent on the sync PR, while a `workflow_dispatch` run started with that
+   same token is allowed and attaches to the branch head, showing as the
+   PR's check. Merging the PR once those checks pass deploys. The workflow
+   never pushes to `master`.
 
 When a synced page breaks a check, fix the converter or the site-side
 rendering it drives (`layouts/alias.html`, `layouts/_markup/`,
