@@ -188,6 +188,57 @@ make check         # production build, html-validate, link, third-party and cont
 make site          # http://localhost:1313 with live reload
 ```
 
+## Product docs sync
+
+The user docs under `/docs/` live in the private product repository
+(`leecalcote/blowhorn`, `docs/{tutorials,how-to,reference,explanation}`
+and `docs/README.md`) and are mirrored into `content/en/docs/` by
+[`sync-docs.yml`](../.github/workflows/sync-docs.yml). The private
+repository runs no moderate or heavy Actions of its own, so the work runs
+here, on the public site repository.
+
+1. The workflow checks out the product repository at the requested ref
+   (a tag, branch or SHA; `master` by default) read-only with the existing
+   `DMG_SOURCE_TOKEN` secret (no new secret), the way `publish-dmg.yml`
+   handles it, then runs `make docs-sync REF=...`, which is
+   [`.github/scripts/sync-docs.py`](../.github/scripts/sync-docs.py)
+   (tested by `make test-scripts`). The script copies the four public
+   sections and rewrites each page for the site: relative `.md` links
+   become root-relative site URLs, `reference/cli.md` becomes the
+   `reference/cli/` section index, a missing title is derived from the
+   first H1, aliases colliding with a published URL are dropped, and
+   headings whose auto id would not begin with a letter get an explicit
+   `{#anchor}`. `docs/internal/`, `docs/gtm/` and any path listed in the
+   product's `internal-paths.txt` (when it exists) are never copied.
+2. `docs/README.md` maps onto the site-owned docs landing
+   (`content/en/docs/_index.md`): the landing stays as designed and no
+   page is written for the README, whose index role the landing cards and
+   the Docsy sidebar already serve. Site-owned `_index.md` landings with
+   no product counterpart are likewise kept; every other synced page is
+   the product's file converted. Pages carrying `draft: true` stay
+   unpublished until the product ungates them.
+3. The workflow commits the result signed off (DCO) to the `docs-sync`
+   branch and opens or updates the one `docs: sync from <ref>` pull
+   request, which runs the normal site checks before it can merge;
+   merging deploys. The workflow never pushes to `master`.
+
+When a synced page breaks a check, fix the converter or the site-side
+rendering it drives (`layouts/alias.html`, `layouts/_markup/`,
+`hugo.toml` markup settings), never the product docs: the next sync
+would overwrite a product-side edit anyway. A product-doc defect the
+converter cannot fix (a link outside the published tree, a reference to
+the private repository) goes in the sync pull request's description, to
+be fixed upstream and re-synced.
+
+Run the same flow locally from a product checkout at `./product`
+(or pass `SOURCE_DIR` for a checkout elsewhere):
+
+```bash
+git clone git@github.com:leecalcote/blowhorn.git product
+make docs-sync REF=master   # or a tag, branch or SHA
+make check                  # what the sync pull request runs
+```
+
 Before a visual change ships, build for production and serve `public/`, then
 take screenshots at 390, 820 and 1440 px wide in both colour schemes and
 confirm there is no horizontal scroll from 320 to 1440 px. With

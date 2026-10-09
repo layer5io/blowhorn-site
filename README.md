@@ -63,7 +63,7 @@ Every CI step that runs repository logic is a make target, and the workflow call
 | Target | What it runs | Run by |
 |---|---|---|
 | `setup-ci` | `npm ci` (the locked dependencies) | `site.yml` |
-| `workflow-check` | actionlint on `site.yml` and `publish-dmg.yml` | `site.yml` |
+| `workflow-check` | actionlint on `site.yml`, `publish-dmg.yml` and `sync-docs.yml` | `site.yml` |
 | `test-scripts` | unit tests for the check scripts in `.github/scripts/` | `site.yml` |
 | `site-check` | one production build, then the four checks below | `site.yml` |
 | `validate-html` | html-validate on every built page | `site-check` |
@@ -72,6 +72,7 @@ Every CI step that runs repository logic is a make target, and the workflow call
 | `check-urls` | every published URL and anchor still exists | `site-check` |
 | `dmg-resolve`, `dmg-download`, `dmg-package`, `dmg-verify`, `dmg-release` | the five steps of publishing a DMG release, each reading its inputs from the environment ([docs/distribution.md](docs/distribution.md#local-checks)) | `publish-dmg.yml` |
 | `dmg-check DMG=...` | sanity-check a disk image before publishing | `dmg-package` runs the same script (`check-dmg.sh`) |
+| `docs-sync REF=...` | copy the product docs from a `leecalcote/blowhorn` checkout into `content/en/docs/` ([docs/deploy.md](docs/deploy.md#product-docs-sync)) | `sync-docs.yml` |
 
 Each check target builds for production first, so it also runs on its own. `labeler.yml`, `label-commenter.yml` and `slack.yml` only call third-party actions and run no repository logic, so they have no target.
 
@@ -87,6 +88,7 @@ The site also publishes [`/llms.txt`](https://blowhorn.ai/llms.txt), [`/llms-ful
 |---|---|---|
 | [`site.yml`](.github/workflows/site.yml) | Pull requests, pushes to `master`, manual runs | Lints the workflows, runs the check-script unit tests, builds the site with the pinned Hugo, Go and Node.js, runs `make site-check` and uploads the Pages artifact. On `master` it deploys the artifact to GitHub Pages. |
 | [`publish-dmg.yml`](.github/workflows/publish-dmg.yml) | Manual, or `repository_dispatch` (`publish-dmg`) from product CI | Downloads a built DMG over HTTPS, checks it, verifies signing and notarization on a macOS runner (required for any public release), then creates the release with versioned assets, the `Blowhorn-mac.dmg` alias and checksums. Drafts by default; never overwrites. |
+| [`sync-docs.yml`](.github/workflows/sync-docs.yml) | Manual, or `repository_dispatch` (`sync-docs`) from product CI | Checks out the product docs at the requested ref and opens or updates the `docs-sync` pull request (`docs: sync from <ref>`); merging deploys through the normal site checks. |
 
 <div>&nbsp;</div>
 
