@@ -150,7 +150,7 @@ make site-serve    # http://localhost:8080
 ```
 
 Before a visual change ships, take screenshots at 390, 820 and 1440 px wide
-in both colour schemes and confirm there is no horizontal scroll from 360 to
+in both colour schemes and confirm there is no horizontal scroll from 320 to
 1440 px. With chrome-devtools-axi:
 
 ```bash
