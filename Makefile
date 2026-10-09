@@ -41,7 +41,8 @@ include .github/build/Makefile.show-help.mk
 #   dmg-check          Sanity-check a disk image before publishing it.
 #   clean              Remove the build output, Hugo's cache and downloaded tools.
 #-----------------------------------------------------------------------------
-BUILD_DIR ?= public
+# Fixed: the npm build and link-check scripts and site.yml all use public/.
+override BUILD_DIR := public
 HTML_VALIDATE_VERSION ?= 9.5.5
 ACTIONLINT_VERSION ?= 1.7.7
 BIN_DIR ?= .bin

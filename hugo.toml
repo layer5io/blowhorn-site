@@ -6,7 +6,7 @@
 # Docsy is imported for the /docs/ section. Never add analytics or anything
 # loaded from another host: the privacy page (content/en/privacy.md) promises
 # no cookies, no analytics and no third-party requests, and
-# `make third-party-check` fails the build when a page loads from another host.
+# `make site-check` fails the build when a page loads from another host.
 
 baseURL = "https://blowhorn.ai/"
 title = "Blowhorn"
