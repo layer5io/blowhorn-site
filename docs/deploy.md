@@ -14,7 +14,8 @@ every push to `master`:
    Hugo extended and postcss from [`package.json`](../package.json) with
    `npm ci`. The checkout has full history so each page's last-modified date
    (sitemap, `llms-full.txt`) comes from git.
-2. `make workflow-check` lints the workflows with actionlint.
+2. `make workflow-check` lints the workflows with actionlint, and
+   `make test-scripts` runs the unit tests for the check scripts below.
 3. `make site-check` builds for production into `public/`
    (`hugo --minify --gc`, which minifies CSS and JavaScript and leaves HTML
    readable), then checks that output:
@@ -23,7 +24,10 @@ every push to `master`:
      resolves ([`check-site-links.py`](../.github/scripts/check-site-links.py));
    - no page, stylesheet or script it loads requests anything from another
      host ([`check-third-party.py`](../.github/scripts/check-third-party.py)),
-     because the privacy page promises it;
+     because the privacy page promises it. The one exception is the Download
+     section's release lookup on `api.github.com` (`assets/js/download.js`),
+     which the privacy page discloses; it is the only host besides github.com
+     (links) that a script may name;
    - every public URL and every anchor the site has published still exists
      ([`check-site-contract.py`](../.github/scripts/check-site-contract.py)).
 4. `public/` is uploaded as the Pages artifact.
@@ -177,7 +181,7 @@ layer5io/docs; no page loads them.
 
 ```bash
 make setup         # once: npm install
-make check         # production build, html-validate, link, third-party and contract checks, actionlint: what CI runs
+make check         # production build, html-validate, link, third-party and contract checks, check-script tests, actionlint: what CI runs
 make site          # http://localhost:1313 with live reload
 ```
 

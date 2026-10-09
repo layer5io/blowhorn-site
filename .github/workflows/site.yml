@@ -59,6 +59,9 @@ jobs:
       - name: Lint workflows
         run: make workflow-check
 
+      - name: Test check scripts
+        run: make test-scripts
+
       # Production build into public/, then html-validate, the local link
       # check, the third-party host check and the URL and anchor contract.
       - name: Build and check site

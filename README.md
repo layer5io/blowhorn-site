@@ -56,12 +56,13 @@ make site              # serve at http://localhost:1313 with live reload
 make build-production  # build into public/, what CI deploys
 make site-check        # production build, html-validate, link check, third-party check, URL and anchor contract
 make workflow-check    # actionlint on this repository's workflows
-make check             # both checks: what CI runs
+make test-scripts      # unit tests for the check scripts
+make check             # all of the above: what CI runs
 ```
 
 The site follows the brand kit exactly: every colour, type style, spacing, radius and shadow in `assets/css/site.css` is a token from `static/assets/brand/tokens.json`, with light as the default theme and dark following the operating system. Brand SVGs are used as files and never recoloured. The one-to-many hero illustration and the platform marks are inline SVG drawn in `currentColor`.
 
-Nothing on the site loads from another host: no CDN, no web fonts from elsewhere, no analytics. The [privacy page](https://blowhorn.ai/privacy.html) promises it and `make site-check` fails a build that breaks it. The public URLs (`/`, `/privacy.html`, `/terms.html`, `/assets/brand/...`) and the home page's anchors (`#platforms`, `#how`, `#trust`, `#download`) are linked from outside this repository; the same check fails a build that loses one.
+Nothing on the site loads from another host: no CDN, no web fonts from elsewhere, no analytics. The one request to another host is the Download section's release lookup on GitHub's API (`assets/js/download.js`), which the [privacy page](https://blowhorn.ai/privacy.html) discloses. `make site-check` fails a build that loads anything else from another host. The public URLs (`/`, `/privacy.html`, `/terms.html`, `/assets/brand/...`) and the home page's anchors (`#platforms`, `#how`, `#trust`, `#download`) are linked from outside this repository; the same check fails a build that loses one.
 
 The site also publishes [`/llms.txt`](https://blowhorn.ai/llms.txt), [`/llms-full.txt`](https://blowhorn.ai/llms-full.txt) and a Markdown copy of every page (`/privacy.md`), as docs.layer5.io does.
 
