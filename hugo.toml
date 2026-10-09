@@ -50,6 +50,11 @@ disableKinds = ["taxonomy", "term", "rss"]
       block = true
     [markup.goldmark.renderer]
       unsafe = true
+  [markup.highlight]
+    # Class output, not Chroma's default inline styles: inline styles fail
+    # the no-inline-style check, and the classes inherit the site's own
+    # pre/code token styles instead.
+    noClasses = false
 
 # `--minify` minifies CSS, JS and the text outputs but leaves HTML as the
 # templates write it: html-validate checks the production build, and the HTML

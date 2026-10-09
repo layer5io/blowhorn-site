@@ -1,0 +1,132 @@
+name: Sync product docs
+
+# Mirrors the private product docs (leecalcote/blowhorn docs/{tutorials,
+# how-to,reference,explanation} and docs/README.md) into content/en/docs/
+# and opens or updates one 'docs: sync from <ref>' pull request, which runs
+# the normal site checks; merging deploys. See docs/deploy.md.
+#
+# Triggers:
+#   - Manual: Actions > Sync product docs > Run workflow (input: ref).
+#   - repository_dispatch (event type "sync-docs") from the product repo's
+#     CI, with client_payload: {"ref"}.
+#
+# Every step that runs repository logic is a make target (docs-sync) backed
+# by .github/scripts/sync-docs.py, so a maintainer can run the same flow
+# locally.
+#
+# Safety rules enforced here:
+#   - The product checkout is read-only (persist-credentials: false) and
+#     DMG_SOURCE_TOKEN authenticates only to GitHub, as in publish-dmg.yml.
+#   - docs/internal/, docs/gtm/ and internal-paths.txt entries never sync.
+#   - The workflow only ever pushes the docs-sync branch and opens or
+#     updates one pull request; it never pushes to master. Commits are
+#     signed off (DCO).
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Tag, branch or SHA of leecalcote/blowhorn to sync"
+        required: false
+        default: master
+        type: string
+  repository_dispatch:
+    types:
+      - sync-docs
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-docs
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync docs and open PR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      SYNC_REF: ${{ github.event.inputs.ref || github.event.client_payload.ref || 'master' }}
+      SYNC_BRANCH: docs-sync
+    steps:
+      # Full history so the docs-sync branch starts from the right place and
+      # the push below is a fast-forward. Credentials stay for the push.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      # Read-only mirror of publish-dmg.yml's token handling: the token only
+      # ever authenticates to GitHub, and nothing here can push to the
+      # product repository.
+      - name: Check out product repo (read-only)
+        uses: actions/checkout@v4
+        with:
+          repository: leecalcote/blowhorn
+          ref: ${{ env.SYNC_REF }}
+          token: ${{ secrets.DMG_SOURCE_TOKEN }}
+          path: product
+          persist-credentials: false
+
+      - name: Base the sync branch on the latest published state
+        run: |
+          set -euo pipefail
+          git fetch origin "$SYNC_BRANCH" 2>/dev/null || true
+          if git rev-parse --verify --quiet "origin/$SYNC_BRANCH"; then
+            git checkout -B "$SYNC_BRANCH" "origin/$SYNC_BRANCH"
+          else
+            git fetch origin master
+            git checkout -B "$SYNC_BRANCH" origin/master
+          fi
+
+      - name: Sync docs
+        run: make docs-sync REF="$SYNC_REF" 2>&1 | tee /tmp/sync.log
+
+      - name: Open or update the sync pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain -- content/en/docs)" ]; then
+            echo "No docs changes to sync."
+            exit 0
+          fi
+          PRODUCT_SHA="$(git -C product rev-parse HEAD)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/en/docs
+          git commit -s -m "docs: sync from ${SYNC_REF}" \
+            -m "Source: leecalcote/blowhorn@${PRODUCT_SHA}."
+          git push origin "$SYNC_BRANCH"
+          TITLE="docs: sync from ${SYNC_REF}"
+          {
+            echo "Syncs the user docs from leecalcote/blowhorn@${SYNC_REF} (${PRODUCT_SHA})."
+            echo
+            echo "- Source: docs/{tutorials,how-to,reference,explanation} at that ref."
+            echo "  docs/internal/, docs/gtm/ and internal-paths.txt entries are never copied."
+            echo "- docs/README.md maps onto the site-owned docs landing"
+            echo "  (content/en/docs/_index.md): the landing stays, no page is written for the README."
+            echo "- The product's reference/cli.md becomes the reference/cli/ section index"
+            echo "  (the product keeps one CLI page; per-command pages will land beside it)."
+            echo "- Gated pages (draft: true) stay unpublished until the product ungates them."
+            echo "- Merging this PR deploys; the normal site checks run on it first."
+            echo
+            echo "Converter warnings (fix the converter, not the product docs):"
+            echo
+            grep '^sync-docs warning: ' /tmp/sync.log | sed 's/^sync-docs warning: /- /' \
+              || echo "- None: every product link resolved inside the published tree."
+            echo
+            echo "Product-doc defects the converter cannot fix (fix upstream, then re-run the sync):"
+            echo
+            echo "<!-- maintainer: move any warning above that needs a product-side fix here -->"
+            echo "- None known."
+          } > /tmp/sync-pr-body.md
+          if gh pr view "$SYNC_BRANCH" --json number --jq .number >/dev/null 2>&1; then
+            gh pr edit "$SYNC_BRANCH" --title "$TITLE" --body-file /tmp/sync-pr-body.md
+          else
+            gh pr create --head "$SYNC_BRANCH" --base master \
+              --title "$TITLE" --body-file /tmp/sync-pr-body.md
+          fi

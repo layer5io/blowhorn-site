@@ -48,6 +48,9 @@ include .github/build/Makefile.show-help.mk
 #   dmg-check          Sanity-check a disk image: make dmg-check DMG=path/to/file.dmg
 #   dmg-resolve, dmg-download, dmg-package, dmg-verify, dmg-release
 #                      The steps of publish-dmg.yml (see docs/distribution.md).
+#   docs-sync          Sync the user docs from a leecalcote/blowhorn checkout
+#                      into content/en/docs/: make docs-sync REF=<tag|branch|sha>
+#                      (see docs/deploy.md).
 #   help               List every target with its description.
 #   clean              Remove the build output, Hugo's cache and downloaded tools.
 #-----------------------------------------------------------------------------
@@ -59,7 +62,11 @@ BIN_DIR ?= .bin
 # actionlint from PATH when installed; otherwise a pinned copy is downloaded into $(BIN_DIR).
 ACTIONLINT ?= $(shell command -v actionlint 2>/dev/null)
 # Workflows owned by this repo. Template workflows (labeler and friends) are left as-is.
-WORKFLOWS ?= .github/workflows/site.yml .github/workflows/publish-dmg.yml
+WORKFLOWS ?= .github/workflows/site.yml .github/workflows/publish-dmg.yml .github/workflows/sync-docs.yml
+# A leecalcote/blowhorn checkout for `make docs-sync` (the sync-docs.yml
+# workflow checks the product repo out at this path).
+SOURCE_DIR ?= product
+DOCS_DIR ?= content/en/docs
 
 # ---------------------------------------------------------------------------
 # MAINTENANCE
@@ -173,6 +180,11 @@ dmg-check:
 	@test -n "$(DMG)" || (echo "usage: make dmg-check DMG=path/to/file.dmg"; exit 1)
 	.github/scripts/check-dmg.sh "$(DMG)"
 
+## Sync the user docs from a leecalcote/blowhorn checkout at $(SOURCE_DIR) into $(DOCS_DIR): make docs-sync REF=<tag|branch|sha> (see docs/deploy.md).
+docs-sync:
+	@test -n "$(REF)" || (echo "usage: make docs-sync REF=<tag|branch|sha of leecalcote/blowhorn> [SOURCE_DIR=path/to/checkout]"; exit 1)
+	python3 .github/scripts/sync-docs.py "$(SOURCE_DIR)" "$(DOCS_DIR)" --ref "$(REF)"
+
 # publish-dmg.yml steps. Each reads its inputs from the environment, as the
 # workflow sets them; see the script headers in .github/scripts/publish-dmg/.
 
@@ -227,4 +239,5 @@ clean:
 	dmg-package \
 	dmg-verify \
 	dmg-release \
+	docs-sync \
 	clean
