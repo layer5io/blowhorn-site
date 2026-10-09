@@ -11,6 +11,8 @@ sitemap:
   priority: 0.3
 ---
 
+**Draft, pending legal review.** A lawyer has not yet reviewed these terms, and they may change before they are final.
+
 ## What these terms cover
 
 Blowhorn is a social media console made by Layer5, Inc. ("Layer5", "we" or "us"). These terms cover all of it:
@@ -37,10 +39,10 @@ During early access Blowhorn is free. There are no plans or tiers to choose betw
 
 ## Downloads
 
-- The only official Blowhorn app downloads are the disk images linked from blowhorn.ai. They are published as assets on the [releases page](https://github.com/layer5io/blowhorn-site/releases) of this site's repository. Verify each disk image against the `SHA256SUMS.txt` published with it before you open it.
+- The official Blowhorn app downloads are the disk images linked from blowhorn.ai, published as assets on the [releases page](https://github.com/layer5io/blowhorn-site/releases) of this site's repository, and the updates the Blowhorn app downloads and installs itself, as the [privacy page](/privacy.html) describes. Verify each disk image you download from blowhorn.ai against the `SHA256SUMS.txt` published with it before you open it.
 - The only official Blowhorn extension is the Chrome Web Store item named above.
 - Each release is distributed under the licence that ships inside it. Read that licence before you install. Where that licence and these terms differ about the software itself, the licence decides.
-- Releases are never replaced in place. A fix ships as a new version. The app checks for new versions as the privacy page describes.
+- Releases are never replaced in place. A fix ships as a new version.
 
 ## Your accounts
 

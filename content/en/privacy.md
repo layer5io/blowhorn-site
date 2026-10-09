@@ -44,7 +44,7 @@ The extension works only for the Blowhorn app on your Mac, over Chrome's native 
 ### What the app sends
 
 - Posts, comments, reactions and invitations to the platforms a profile is configured for, when an approved row is due or when you run a command. Nothing is published from a dry run.
-- A version check that lists the Blowhorn product repository's GitHub releases. When a GitHub token is already on your Mac (`GH_TOKEN`, `GITHUB_TOKEN` or `gh auth token`), the app sends it with that request, and updating downloads the new disk image, installs it into `/Applications` and relaunches. Without a token, the update button opens the release page in your browser and the app downloads nothing itself.
+- A version check that lists the Blowhorn product repository's GitHub releases. When a GitHub token is already on your Mac (`GH_TOKEN`, `GITHUB_TOKEN` or `gh auth token`), the app sends it with that request, and updating downloads the disk image published with the newest release, installs the Blowhorn app from it into `/Applications` and relaunches. Without a token, the update button opens the release page in your browser and the app downloads nothing itself.
 - No usage analytics and no crash reports. The app carries no analytics or crash-reporting library.
 
 ## Questions
