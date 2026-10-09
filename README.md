@@ -35,7 +35,7 @@ The Chrome extension ships through the Chrome Web Store, not from this repositor
 | | |
 |---|---|
 | Site source | [`site/`](site/): hand-written HTML, CSS and a little JavaScript, no framework, no build step beyond copying |
-| Brand assets | [`site/assets/brand/`](site/assets/brand/): the files from version 1 of the brand kit that the pages use (lockups, favicons, Major Blowhorn, the social banner) and the three self-hosted fonts; attribution in [`LICENSES.md`](site/assets/brand/LICENSES.md) |
+| Brand assets | [`site/assets/brand/`](site/assets/brand/): version 1 of the brand kit (logo system, Major Blowhorn, marketing art, `tokens.json`) and the three self-hosted fonts; attribution in [`LICENSES.md`](site/assets/brand/LICENSES.md) |
 | How the site deploys and how the domain is wired | [`docs/deploy.md`](docs/deploy.md) |
 | How releases are published | [`docs/distribution.md`](docs/distribution.md) |
 | Release binaries | [Releases](https://github.com/layer5io/blowhorn-site/releases) on this repository |
@@ -54,7 +54,7 @@ make workflow-check  # actionlint on this repository's workflows
 make check           # both checks
 ```
 
-The site follows the brand kit exactly: every colour, type style, spacing, radius and shadow in `site/styles.css` is a token from `brand/tokens.json` in the product repository (version 1 of the brand kit), with light as the default theme and dark following the operating system. Brand SVGs are used as files and never recoloured. The one-to-many hero illustration and the platform marks are inline SVG drawn in `currentColor`.
+The site follows the brand kit exactly: every colour, type style, spacing, radius and shadow in `site/styles.css` is a token from `site/assets/brand/tokens.json`, with light as the default theme and dark following the operating system. Brand SVGs are used as files and never recoloured. The one-to-many hero illustration and the platform marks are inline SVG drawn in `currentColor`.
 
 ### CI
 
