@@ -1,0 +1,282 @@
+// Blowhorn docs skin: docs-only styling over Docsy and Bootstrap.
+// Every value is a token from static/assets/brand/tokens.json (version 1).
+// Light is the default; dark follows the OS. The marketing sheet (site.css,
+// loaded after the Docsy bundle) owns the header, footer, type ramp, and
+// element rules; this file owns the docs layout and Docsy components.
+
+// ---------- Docs layout ----------
+
+.docs-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8);
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-12);
+}
+
+.docs-main {
+  min-width: 0;
+}
+
+.docs-toc {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .docs-wrap {
+    grid-template-columns: 15rem minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .docs-wrap {
+    grid-template-columns: 15rem minmax(0, 1fr) 13.75rem;
+  }
+
+  .docs-toc {
+    display: block;
+  }
+}
+
+// ---------- Docs type ----------
+
+// Section and leaf titles come from the template with the brand h1 class.
+// Landing and Markdown headings below match the same ramp.
+.docs-landing h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(32px, 4.5vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--ink-wordmark);
+}
+
+.docs-landing h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.01em;
+  color: var(--ink-wordmark);
+}
+
+.docs-main .prose h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.01em;
+  color: var(--ink-wordmark);
+  margin-top: var(--space-8);
+}
+
+.docs-main .prose h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 26px;
+  letter-spacing: -0.005em;
+  color: var(--ink-wordmark);
+  margin-top: var(--space-6);
+}
+
+.docs-lead {
+  color: var(--ink-muted);
+}
+
+// ---------- Landing: banner, cards, platforms, note ----------
+
+.docs-banner {
+  background: var(--surface-tint);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-6);
+  margin-top: var(--space-6);
+  max-width: 62ch;
+}
+
+.docs-start,
+.docs-quadrants {
+  margin-top: var(--space-6);
+}
+
+.docs-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.docs-card:hover {
+  background: var(--surface-tint);
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.docs-card > span {
+  display: block;
+}
+
+.docs-card > span:last-child {
+  color: var(--ink-muted);
+}
+
+.docs-landing .platforms {
+  margin-top: var(--space-6);
+}
+
+.docs-landing a.platform {
+  text-decoration: none;
+}
+
+.docs-landing a.platform:hover {
+  background: var(--surface-tint);
+  text-decoration: none;
+}
+
+.docs-note {
+  margin-top: var(--space-8);
+  color: var(--ink-muted);
+  max-width: 62ch;
+}
+
+// ---------- Sidebar, search, breadcrumb, contents, pager ----------
+
+.docs-sidebar {
+  min-width: 0;
+}
+
+.docs-sidebar a {
+  text-decoration: none;
+}
+
+.td-sidebar-nav a {
+  color: var(--ink);
+}
+
+.td-sidebar-nav a:hover {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.td-sidebar-nav .td-sidebar-link__page,
+.td-sidebar-nav-active-item {
+  color: var(--link);
+  font-weight: 600;
+}
+
+.td-sidebar__search {
+  position: relative;
+  padding-bottom: var(--space-4);
+}
+
+.td-search__input {
+  border-radius: var(--radius-md);
+}
+
+// Offline search results: an inline box under the field (see
+// assets/js/offline-search.js), not a Bootstrap popover.
+.td-offline-search-results {
+  position: absolute;
+  top: calc(100% - var(--space-4) + var(--space-2));
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: var(--space-4);
+}
+
+.td-offline-search-results__close {
+  border: 0;
+  background: none;
+  color: var(--ink-muted);
+  font-size: 20px;
+  line-height: 1;
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+}
+
+.td-offline-search-results__close:hover {
+  color: var(--ink);
+}
+
+// Narrow viewports hide the section nav until the toggle opens it: the nav
+// carries Bootstrap's collapse class, so it starts hidden, and the .show
+// class below reopens it. Wide viewports always show the nav through Docsy's
+// own rules. The toggle button is Docsy's; the class is wired in
+// assets/js/docs-toggle.js, without Bootstrap's JavaScript.
+#td-section-nav {
+  display: none;
+}
+
+#td-section-nav.show {
+  display: block;
+}
+
+// The toggle button ships without content or styling upstream; draw the
+// three bars here so narrow viewports can open the section nav.
+.td-sidebar__toggle {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  margin-left: var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+}
+
+.td-sidebar__toggle::before {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 12px;
+  margin: auto;
+  border-top: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  background: linear-gradient(currentColor, currentColor) center/100% 2px no-repeat;
+}
+
+.td-breadcrumbs {
+  font-size: 13px;
+  line-height: 20px;
+  margin-bottom: var(--space-4);
+}
+
+.td-breadcrumbs a {
+  text-decoration: none;
+}
+
+.td-breadcrumbs .breadcrumb-item.active {
+  color: var(--ink-muted);
+}
+
+.td-toc {
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.td-toc a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.td-toc a:hover {
+  color: var(--link);
+}
+
+.section-index .entry h5 a {
+  text-decoration: none;
+}
+
+.docs-main .btn-primary {
+  border-radius: var(--radius-md);
+  text-decoration: none;
+}
+
+// Keep code samples inside narrow columns: the grid items already allow
+// shrinking, and samples scroll instead of pushing the page wider.
+.docs-main pre {
+  max-width: 100%;
+}

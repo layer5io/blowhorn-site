@@ -66,6 +66,26 @@
 {{- $url := .Permalink -}}
 {{- with .OutputFormats.Get "md" }}{{- $url = .Permalink -}}{{- end }}
 - [{{ .Title }}]({{ $url }}){{ with .Params.description }}: {{ . }}{{ end }}
+{{- range .Pages.ByWeight }}
+{{- if .IsSection }}
+{{- $show1 := partial "llms_is_valid_page.html" (dict "url" .RelPermalink "includeList" $includeList "excludeList" $excludeList) }}
+{{- if $show1 }}
+{{- $u1 := .Permalink -}}
+{{- with .OutputFormats.Get "md" }}{{- $u1 = .Permalink -}}{{- end }}
+- [{{ .Title }}]({{ $u1 }}){{ with .Params.description }}: {{ . }}{{ end }}
+{{- range .Pages.ByWeight }}
+{{- if .IsSection }}
+{{- $show2 := partial "llms_is_valid_page.html" (dict "url" .RelPermalink "includeList" $includeList "excludeList" $excludeList) }}
+{{- if $show2 }}
+{{- $u2 := .Permalink -}}
+{{- with .OutputFormats.Get "md" }}{{- $u2 = .Permalink -}}{{- end }}
+- [{{ .Title }}]({{ $u2 }}){{ with .Params.description }}: {{ . }}{{ end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -98,6 +118,26 @@
 {{- $sectionUrl := $section.Permalink -}}
 {{- with $section.OutputFormats.Get "md" }}{{- $sectionUrl = .Permalink -}}{{- end }}
 - [{{ $section.Title }}]({{ $sectionUrl }}){{ with $section.Params.description }}: {{ . }}{{ end }}
+{{ range $section.Pages.ByWeight }}
+{{- if .IsSection }}
+{{- $show1 := partial "llms_is_valid_page.html" (dict "url" .RelPermalink "includeList" $includeList "excludeList" $excludeList) }}
+{{- if $show1 }}
+{{- $u1 := .Permalink -}}
+{{- with .OutputFormats.Get "md" }}{{- $u1 = .Permalink -}}{{- end }}
+- [{{ .Title }}]({{ $u1 }}){{ with .Params.description }}: {{ . }}{{ end }}
+{{- range .Pages.ByWeight }}
+{{- if .IsSection }}
+{{- $show2 := partial "llms_is_valid_page.html" (dict "url" .RelPermalink "includeList" $includeList "excludeList" $excludeList) }}
+{{- if $show2 }}
+{{- $u2 := .Permalink -}}
+{{- with .OutputFormats.Get "md" }}{{- $u2 = .Permalink -}}{{- end }}
+- [{{ .Title }}]({{ $u2 }}){{ with .Params.description }}: {{ . }}{{ end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
 {{ range $filteredPages }}
 {{- if .Title }}
 {{- $url := .Permalink -}}
