@@ -38,7 +38,7 @@ FIRST_PARTY = "blowhorn.ai"
 # Hosts a script may name. Each one must be disclosed on the privacy page.
 SCRIPT_HOSTS = {"api.github.com", "github.com"}
 # <link rel> values that name a URL without the browser fetching it.
-NON_FETCHING_RELS = {"canonical", "alternate", "author", "license", "me", "help", "search"}
+NON_FETCHING_RELS = {"canonical", "alternate", "author", "license", "me", "help"}
 # <script type> values that hold data, not code the browser runs.
 DATA_SCRIPT_TYPES = {"application/ld+json", "application/json"}
 # Attributes that name a URL without the browser fetching it, on any element.

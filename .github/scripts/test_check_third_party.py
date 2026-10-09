@@ -102,6 +102,11 @@ class CheckThirdPartyTest(unittest.TestCase):
     def test_base_href_to_another_host_fails(self):
         self.assert_fails_naming({"index.html": page('<base href="https://cdn.example/">')}, "cdn.example")
 
+    def test_link_rel_search_to_another_host_fails(self):
+        self.assert_fails_naming({"index.html": page('<link rel="search" type="application/opensearchdescription+xml" '
+                                                     'href="https://tracker.example/osd.xml">')},
+                                 "tracker.example")
+
     def test_legacy_background_attribute_fails(self):
         self.assert_fails_naming({"index.html": page().replace("<body>", '<body background="https://images.example/a.png">')},
                                  "images.example")
