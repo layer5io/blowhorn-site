@@ -32,13 +32,23 @@ include .github/build/Makefile.show-help.mk
 #   check-deps         Verify required commands and local dependencies.
 #   check-go           Verify Go is installed (required by Hugo Modules).
 #
-# BLOWHORN TARGETS
+# BLOWHORN TARGETS (every CI step that runs repository logic is one of these;
+# the workflows call the target, so `make <target>` reproduces that step)
 #
-#   site-check         Production build, then html-validate, check-links, the
-#                      third-party host check and the URL and anchor contract.
+#   setup-ci           Install the exact locked dependencies (npm ci), as CI does.
+#   validate-html      Production build, then html-validate on every page.
+#   check-third-party  Production build, then fail on any request to another host.
+#   check-urls         Production build, then fail on a lost public URL or anchor.
+#   site-check         Production build once, then validate-html, check-links,
+#                      check-third-party and check-urls (site.yml).
+#   test-scripts       Unit tests for the check scripts in .github/scripts/.
 #   workflow-check     actionlint on this repository's workflows.
-#   check              site-check and workflow-check: everything CI runs.
-#   dmg-check          Sanity-check a disk image before publishing it.
+#   check              site-check, test-scripts and workflow-check.
+#   ci                 setup-ci, then everything site.yml's check job runs.
+#   dmg-check          Sanity-check a disk image: make dmg-check DMG=path/to/file.dmg
+#   dmg-resolve, dmg-download, dmg-package, dmg-verify, dmg-release
+#                      The steps of publish-dmg.yml (see docs/distribution.md).
+#   help               List every target with its description.
 #   clean              Remove the build output, Hugo's cache and downloaded tools.
 #-----------------------------------------------------------------------------
 # Fixed: the npm build and link-check scripts and site.yml all use public/.
@@ -72,6 +82,9 @@ check-go:
 check-links: build-production
 	npm run check:links
 
+## List every target with its description.
+help: show-help
+
 # ---------------------------------------------------------------------------
 # LOCAL BUILDS
 # ---------------------------------------------------------------------------
@@ -79,6 +92,10 @@ check-links: build-production
 ## Install blowhorn.ai dependencies (the pinned Hugo extended and postcss) on your local machine.
 setup:
 	npm install
+
+## Install the exact locked dependencies from package-lock.json (npm ci), as CI does.
+setup-ci:
+	npm ci
 
 ## Build the site locally with draft and future content enabled.
 build: check-go check-deps
@@ -111,12 +128,24 @@ serve: check-go check-deps
 # CHECKS
 # ---------------------------------------------------------------------------
 
-## Build for production, then validate the HTML, check local links, fail on any third-party request and on a lost URL or anchor.
-site-check: build-production
+## Build for production, then run html-validate on every page.
+validate-html: build-production
 	npx --yes html-validate@$(HTML_VALIDATE_VERSION) "$(BUILD_DIR)/**/*.html"
-	npm run check:links
+
+## Build for production, then fail if a page, or a stylesheet or script it loads, requests another host.
+check-third-party: build-production
 	python3 .github/scripts/check-third-party.py $(BUILD_DIR)
+
+## Build for production, then fail if a published URL or anchor is gone.
+check-urls: build-production
 	python3 .github/scripts/check-site-contract.py $(BUILD_DIR)
+
+## Build for production once, then validate-html, check-links, check-third-party and check-urls (what site.yml runs).
+site-check: validate-html check-links check-third-party check-urls
+
+## Run the unit tests for the check scripts in .github/scripts/.
+test-scripts:
+	python3 -m unittest discover -s .github/scripts -p 'test_*.py'
 
 ## Lint this repo's GitHub Actions workflows with actionlint.
 workflow-check:
@@ -129,13 +158,43 @@ else
 	$(ACTIONLINT) -color $(WORKFLOWS)
 endif
 
-## Run every check CI runs: site-check and workflow-check.
-check: site-check workflow-check
+## Run every check: site-check, test-scripts and workflow-check.
+check: site-check test-scripts workflow-check
+
+## Reproduce site.yml's check job: setup-ci, workflow-check, test-scripts and site-check, in that order.
+ci:
+	$(MAKE) setup-ci
+	$(MAKE) workflow-check
+	$(MAKE) test-scripts
+	$(MAKE) site-check
 
 ## Sanity-check a local disk image before publishing: make dmg-check DMG=path/to/Blowhorn.dmg
 dmg-check:
 	@test -n "$(DMG)" || (echo "usage: make dmg-check DMG=path/to/file.dmg"; exit 1)
 	.github/scripts/check-dmg.sh "$(DMG)"
+
+# publish-dmg.yml steps. Each reads its inputs from the environment, as the
+# workflow sets them; see the script headers in .github/scripts/publish-dmg/.
+
+## publish-dmg step 1: validate IN_VERSION, IN_URL, IN_ARCH, IN_DRAFT, IN_NOTARIZED, IN_NOTES into GITHUB_OUTPUT.
+dmg-resolve:
+	.github/scripts/publish-dmg/resolve.sh
+
+## publish-dmg step 2: download DMG_URL to dist/source.dmg over HTTPS (DMG_SOURCE_TOKEN only to GitHub hosts).
+dmg-download:
+	.github/scripts/publish-dmg/download.sh
+
+## publish-dmg step 3: check dist/source.dmg, name it for VERSION and ARCH, write SHA256SUMS.txt.
+dmg-package:
+	.github/scripts/publish-dmg/package.sh
+
+## publish-dmg step 4 (macOS): verify integrity, signature, Gatekeeper and stapled notarization of dist/*.dmg.
+dmg-verify:
+	.github/scripts/publish-dmg/verify-macos.sh
+
+## publish-dmg step 5: create the GitHub Release VERSION from dist/ (never overwrites).
+dmg-release:
+	.github/scripts/publish-dmg/release.sh
 
 ## Remove the build output, Hugo's resource cache and downloaded tools.
 clean:
@@ -152,8 +211,20 @@ clean:
 	check-links \
 	check-deps \
 	check-go \
+	help \
+	setup-ci \
+	validate-html \
+	check-third-party \
+	check-urls \
 	site-check \
+	test-scripts \
 	workflow-check \
 	check \
+	ci \
 	dmg-check \
+	dmg-resolve \
+	dmg-download \
+	dmg-package \
+	dmg-verify \
+	dmg-release \
 	clean

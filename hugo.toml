@@ -5,7 +5,8 @@
 # (layouts/home.html, layouts/baseof.html, layouts/legal.html, layouts/404.html);
 # Docsy is imported for the /docs/ section. Never add analytics or anything
 # loaded from another host: the privacy page (content/en/privacy.md) promises
-# no cookies, no analytics and no third-party requests, and
+# no cookies, no analytics and no assets from third parties (the Download
+# section's GitHub release lookup is the one disclosed outside request), and
 # `make site-check` fails the build when a page loads from another host.
 
 baseURL = "https://blowhorn.ai/"

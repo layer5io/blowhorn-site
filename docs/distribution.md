@@ -119,3 +119,23 @@ make site                              # http://localhost:1313
 make workflow-check                    # actionlint on this repo's workflows
 make dmg-check DMG=path/to/file.dmg    # UDIF sanity check before publishing
 ```
+
+Each step of `publish-dmg.yml` that runs repository logic is a make target backed
+by a script in `.github/scripts/publish-dmg/`, and the workflow calls the target.
+The targets read their inputs from the environment, exactly as the workflow sets
+them, so a step can be rehearsed locally:
+
+| Target | Inputs | Does |
+|---|---|---|
+| `dmg-resolve` | `IN_VERSION`, `IN_URL`, `IN_ARCH`, `IN_DRAFT`, `IN_NOTARIZED`, optional `IN_NOTES`, `GITHUB_OUTPUT` | validates the inputs, refuses a public release that skips verification, writes `notes.md` |
+| `dmg-download` | `DMG_URL`, optional `DMG_SOURCE_TOKEN` | downloads to `dist/source.dmg` over HTTPS only; the token goes only to GitHub hosts |
+| `dmg-package` | `VERSION`, `ARCH`, and the `notes.md` that `dmg-resolve` wrote | runs `check-dmg.sh`, names the versioned and `Blowhorn-mac.dmg` assets, writes `SHA256SUMS.txt`, moves `notes.md` into `dist/` |
+| `dmg-verify` | (macOS only) | `hdiutil verify`, `codesign`, `spctl` and `stapler validate` on each DMG in `dist/` |
+| `dmg-release` | `GH_TOKEN`, `GH_REPO`, `VERSION`, `PRERELEASE`, `DRAFT`, `GITHUB_SHA`, optional `GITHUB_STEP_SUMMARY` | creates the release; refuses an existing tag |
+
+```bash
+GITHUB_OUTPUT=/tmp/out IN_VERSION=v1.2.3 IN_URL=https://example.com/Blowhorn.dmg \
+  IN_DRAFT=true IN_NOTARIZED=true make dmg-resolve   # rehearse input validation
+```
+
+`dmg-resolve` needs bash 4 or newer (macOS ships 3.2; `brew install bash`).

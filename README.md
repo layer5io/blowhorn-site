@@ -48,20 +48,36 @@ The Chrome extension ships through the Chrome Web Store, not from this repositor
 
 ## Working on the site
 
-You need Go (Hugo modules), Node.js and npm (the pinned Hugo extended and postcss come from `package.json`), Python 3 and `make`. The targets follow the shared contract of [layer5io/docs](https://github.com/layer5io/docs/blob/master/Makefile).
+You need Go (Hugo modules), Node.js and npm (the pinned Hugo extended and postcss come from `package.json`), Python 3 and `make`. The build targets follow the shared contract of [layer5io/docs](https://github.com/layer5io/docs/blob/master/Makefile). `make help` lists every target.
 
 ```bash
 make setup             # npm install: the pinned Hugo extended and postcss
 make site              # serve at http://localhost:1313 with live reload
 make build-production  # build into public/, what CI deploys
-make site-check        # production build, html-validate, link check, third-party check, URL and anchor contract
-make workflow-check    # actionlint on this repository's workflows
-make check             # both checks: what CI runs
+make check             # every check, against a fresh production build
+make ci                # exactly what site.yml's check job runs, starting with npm ci
 ```
+
+Every CI step that runs repository logic is a make target, and the workflow calls that target, so one `make` command reproduces any CI step:
+
+| Target | What it runs | Run by |
+|---|---|---|
+| `setup-ci` | `npm ci` (the locked dependencies) | `site.yml` |
+| `workflow-check` | actionlint on `site.yml` and `publish-dmg.yml` | `site.yml` |
+| `test-scripts` | unit tests for the check scripts in `.github/scripts/` | `site.yml` |
+| `site-check` | one production build, then the four checks below | `site.yml` |
+| `validate-html` | html-validate on every built page | `site-check` |
+| `check-links` | every local link, image, font and `srcset` reference resolves | `site-check` |
+| `check-third-party` | no page, or stylesheet or script it loads, requests another host (except the disclosed GitHub release lookup) | `site-check` |
+| `check-urls` | every published URL and anchor still exists | `site-check` |
+| `dmg-resolve`, `dmg-download`, `dmg-package`, `dmg-verify`, `dmg-release` | the five steps of publishing a DMG release, each reading its inputs from the environment ([docs/distribution.md](docs/distribution.md#local-checks)) | `publish-dmg.yml` |
+| `dmg-check DMG=...` | sanity-check a disk image before publishing | `dmg-package` runs the same script (`check-dmg.sh`) |
+
+Each check target builds for production first, so it also runs on its own. `labeler.yml`, `label-commenter.yml` and `slack.yml` only call third-party actions and run no repository logic, so they have no target.
 
 The site follows the brand kit exactly: every colour, type style, spacing, radius and shadow in `assets/css/site.css` is a token from `static/assets/brand/tokens.json`, with light as the default theme and dark following the operating system. Brand SVGs are used as files and never recoloured. The one-to-many hero illustration and the platform marks are inline SVG drawn in `currentColor`.
 
-Nothing on the site loads from another host: no CDN, no web fonts from elsewhere, no analytics. The [privacy page](https://blowhorn.ai/privacy.html) promises it and `make site-check` fails a build that breaks it. The public URLs (`/`, `/privacy.html`, `/terms.html`, `/assets/brand/...`) and the home page's anchors (`#platforms`, `#how`, `#trust`, `#download`) are linked from outside this repository; the same check fails a build that loses one.
+Nothing on the site loads from another host: no CDN, no web fonts from elsewhere, no analytics. The one request to another host is the Download section's release lookup on GitHub's API (`assets/js/download.js`), which the [privacy page](https://blowhorn.ai/privacy.html) discloses. `make site-check` fails a build that loads anything else from another host. The public URLs (`/`, `/privacy.html`, `/terms.html`, `/assets/brand/...`) and the home page's anchors (`#platforms`, `#how`, `#trust`, `#download`) are linked from outside this repository; the same check fails a build that loses one.
 
 The site also publishes [`/llms.txt`](https://blowhorn.ai/llms.txt), [`/llms-full.txt`](https://blowhorn.ai/llms-full.txt) and a Markdown copy of every page (`/privacy.md`), as docs.layer5.io does.
 
@@ -69,7 +85,7 @@ The site also publishes [`/llms.txt`](https://blowhorn.ai/llms.txt), [`/llms-ful
 
 | Workflow | When | What it does |
 |---|---|---|
-| [`site.yml`](.github/workflows/site.yml) | Pull requests, pushes to `master`, manual runs | Lints the workflows, builds the site with the pinned Hugo, Go and Node.js, runs `make site-check` and uploads the Pages artifact. On `master` it deploys the artifact to GitHub Pages. |
+| [`site.yml`](.github/workflows/site.yml) | Pull requests, pushes to `master`, manual runs | Lints the workflows, runs the check-script unit tests, builds the site with the pinned Hugo, Go and Node.js, runs `make site-check` and uploads the Pages artifact. On `master` it deploys the artifact to GitHub Pages. |
 | [`publish-dmg.yml`](.github/workflows/publish-dmg.yml) | Manual, or `repository_dispatch` (`publish-dmg`) from product CI | Downloads a built DMG over HTTPS, checks it, verifies signing and notarization on a macOS runner (required for any public release), then creates the release with versioned assets, the `Blowhorn-mac.dmg` alias and checksums. Drafts by default; never overwrites. |
 
 <div>&nbsp;</div>

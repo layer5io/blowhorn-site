@@ -69,7 +69,7 @@ Please contribute! blowhorn.ai is a [Hugo](https://gohugo.io) site that uses [Do
 
 
 #### Tests
-`make check` runs what CI runs: a production build, html-validate on every page, the local link check, the check that no page loads anything from another host, the check that every public URL and anchor still exists, and actionlint on the workflows. Visual changes also need the screenshots [docs/deploy.md](docs/deploy.md#local-checks-and-evidence) describes.
+`make check` runs what CI runs: a production build, html-validate on every page, the local link check, the check that no page loads anything from another host except the disclosed GitHub release lookup, the check that every public URL and anchor still exists, unit tests for those check scripts, and actionlint on the workflows. Visual changes also need the screenshots [docs/deploy.md](docs/deploy.md#local-checks-and-evidence) describes.
 
 # <a name="maintaining"> Reviews</a>
 All contributors are invited to review pull requests. See this short video on [how to review a pull request](https://www.youtube.com/watch?v=isLfo7jfE6g&feature=youtu.be).

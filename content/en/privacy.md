@@ -2,9 +2,9 @@
 title: Privacy
 heading: What Blowhorn stores, and where
 description: What the Blowhorn website and the Blowhorn app store, where they store it, and what the app sends.
-lead: Last updated 8 October 2026. This page covers this website and the Layer5 Blowhorn app. Layer5's own [privacy policy](https://layer5.io/company/legal/privacy/) covers Layer5 Cloud and every other Layer5 service.
+lead: Last updated 9 October 2026. This page covers this website and the Layer5 Blowhorn app. Layer5's own [privacy policy](https://layer5.io/company/legal/privacy/) covers Layer5 Cloud and every other Layer5 service.
 layout: legal
-lastmod: 2026-10-08
+lastmod: 2026-10-09
 sitemap:
   changefreq: yearly
   priority: 0.3
@@ -12,7 +12,7 @@ sitemap:
 
 ## This website
 
-blowhorn.ai is a static site served by GitHub Pages. It sets no cookies, runs no analytics and loads nothing from third parties: the fonts and images are served from this site.
+blowhorn.ai is a static site served by GitHub Pages. It sets no cookies, runs no analytics and loads no fonts, images, styles or scripts from third parties: they are all served from this site. Its one request to another host is the Download section's release lookup, described below.
 
 - GitHub serves the pages and keeps its own server logs. Those are covered by the [GitHub privacy statement](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement).
 - The Download section asks GitHub's public API for the newest release from your browser. That request reaches GitHub like any other request your browser makes, with your IP address and the usual request headers. With JavaScript off, no request is made and the page links to the releases page instead.
