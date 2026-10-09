@@ -41,7 +41,7 @@ During early access Blowhorn is free. There are no plans or tiers to choose betw
 
 - The official Blowhorn app downloads are the signed disk images linked from blowhorn.ai, published as assets on the [releases page](https://github.com/layer5io/blowhorn-site/releases) of this site's repository, and the updates the Blowhorn app installs itself from Layer5's release channel, as the [privacy page](/privacy.html) describes. Nothing else is an official copy. Verify each disk image you download from blowhorn.ai against the `SHA256SUMS.txt` published with it before you open it.
 - The only official Blowhorn extension is the Chrome Web Store item named above.
-- Each release is distributed under the licence that ships inside it. Read that licence before you install. Where that licence and these terms differ about the software itself, the licence decides.
+- The Blowhorn software, meaning the app for macOS, the `blowhorn` command-line tool, the background service and the Chrome extension, is licensed under the [GNU Affero General Public License, version 3](https://www.gnu.org/licenses/agpl-3.0.html) (AGPL-3.0). Each release ships a copy of that licence. Read it before you install. Where the licence and these terms differ about the software itself, the licence decides.
 - Releases are never replaced in place. A fix ships as a new version.
 
 ## Your accounts
@@ -79,7 +79,7 @@ If you use Blowhorn from outside the United States, you are responsible for foll
 
 Blowhorn, the Crowhorn mark, Major Blowhorn and Layer5 are trademarks of Layer5, Inc. The brand assets this site serves are a copy of the Blowhorn brand kit, published for the site's pages and as the kit's public reference; they are not licensed for reuse. The fonts are licensed under the SIL Open Font License and are credited in the site's [licence note](https://github.com/layer5io/blowhorn-site/blob/master/static/assets/brand/LICENSES.md).
 
-The site's text, graphics, logos and images belong to Layer5 or its suppliers and are protected by copyright and other laws. Except for the licence that ships with each release, these terms give you no licence to Layer5's intellectual property.
+The site's text, graphics, logos and images belong to Layer5 or its suppliers and are protected by copyright and other laws. Except for the AGPL-3.0 licence that covers the Blowhorn software, these terms give you no licence to Layer5's intellectual property.
 
 ## No warranty
 
@@ -116,7 +116,7 @@ You and Layer5 may bring claims against each other only individually, and not as
 - These terms create no joint venture, partnership, employment or agency relationship between you and Layer5.
 - Layer5's performance of these terms is subject to existing laws and legal process, and nothing in them limits Layer5's right to comply with government, court or law enforcement requests.
 - If any part of these terms is found invalid or unenforceable, it is replaced by a valid provision that most closely matches its intent, and the rest of the terms stay in effect.
-- These terms, together with the licence that ships with each release and Layer5's terms for Layer5 Cloud, are the entire agreement between you and Layer5 about Blowhorn and this site.
+- These terms, together with the AGPL-3.0 licence that covers the Blowhorn software and Layer5's terms for Layer5 Cloud, are the entire agreement between you and Layer5 about Blowhorn and this site.
 - These terms are written in English, and the English version governs.
 
 ## Changes
