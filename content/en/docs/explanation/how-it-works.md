@@ -1,0 +1,50 @@
+---
+title: "How Blowhorn works"
+description: "The app, the engine, the extension, the background service, and your organization's store."
+weight: 280
+---
+
+# How Blowhorn works
+
+Blowhorn is a social media console that takes one message and
+broadcasts, reposts and amplifies it across every profile and platform
+your community runs, on autopilot. Five parts do it together.
+
+The app is what you see: the menu-bar popover and the console. It shows
+the queue, the schedule, the runs, and the settings, and it installs
+updates. It never posts on its own.
+
+The engine is what acts: `blowhorn <command>` run from the app, the
+background service, or your terminal. Every run resolves its profiles,
+reads the queue, reaches Chrome or an API, and writes the ledger. The
+same engine answers the app's screens, so the app can never offer what
+the engine does not know.
+
+The extension is how the engine reaches your signed-in Chrome. It
+carries out the clicks and keystrokes the engine queues, inside the
+Chrome profile you already use, on the sites Blowhorn acts on. It makes
+no requests of its own.
+
+The background service is what runs the schedule while the app is
+closed: one pass every ten minutes claiming the rows that are due.
+Quitting the app never pauses it; pausing is explicit, per machine,
+per organization, or per row.
+
+Your organization's store is what the parts share: the content rows,
+the schedule, the profiles and their credentials, the ledgers, and the
+run history. Your Mac holds the app, the engine, and your Chrome
+sessions; the store holds everything the Macs share.
+
+A post travels this path: a row in the queue, approved and due; a run
+acting as the row's profile; the platform reached through your Chrome
+or its API; the outcome written back to the row and the ledger. Any
+step the run cannot confirm stops the run instead of guessing: the row
+reads clicked, outcome not read, and waits for you.
+
+## Related
+
+- [The Blowhorn app, screen by screen](/docs/reference/use-the-desktop-app/) - what you see.
+- [Platforms](/docs/reference/platforms/) - what each platform leg does.
+- [Why Blowhorn uses your own Chrome](/docs/explanation/your-own-chrome/) - the extension leg.
+- [How scheduling works](/docs/explanation/scheduling/) - the service leg.
+- [Preview and publish queued posts](/docs/how-to/publish/post-content/) - watch the engine work.

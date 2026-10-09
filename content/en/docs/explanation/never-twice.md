@@ -1,0 +1,45 @@
+---
+title: "Why Blowhorn never repeats a public action"
+description: "One click per run, preview first, and what clicked-outcome-not-read means."
+weight: 285
+---
+
+# Why Blowhorn never repeats a public action
+
+A public action cannot be taken back, and a guess repeated is spam.
+Blowhorn therefore clicks once per run and records exactly what it
+read: posted where it read a confirmation, clicked where it did not,
+and never "not sent" once the control was clicked.
+
+Preview first. `--check-queue` lists what a run would do, and
+`--dry-run` walks it end to end, without publishing, following, or
+writing anything. A Hacker News row gets both before its first real
+run, because its landing is permanent.
+
+One click per run. The sending control is clicked a single time; there
+is no retry click. "No confirmation, the dialog still reads open"
+reports the row not sent and stops. The page a flow started on is never
+the new post's link: a reader that starts on a post refuses it at every
+rung and records no link rather than the wrong one.
+
+"Clicked, outcome not read" is the honest middle. Once the control was
+clicked, the absence of a confirmation is no reading of "nothing went
+out", so the run records the click, counts nothing, writes no
+promotion link, and leaves the row out of the pending set without
+marking it done. A person left in that state is held the same way:
+recorded, kept off the drain, and listed at the start of every run
+until settled. Neither a retry nor a drop is a run's to decide.
+
+A lost write-back is recorded the same way. A post whose store
+write-back fails is not spooled anywhere: the row stays pending in
+form but carries the unread stamp, LinkedIn amplify re-checks before
+acting, and any other platform risks a duplicate on re-run, which is
+why the run stops instead of carrying on.
+
+## Related
+
+- [Preview and publish queued posts](/docs/how-to/publish/post-content/) - check before publishing.
+- [Content queue columns and row states](/docs/reference/content-queue/) - the unread state.
+- [Messages and exit codes](/docs/reference/messages/) - what the sentences mean.
+- [Post to Hacker News](/docs/how-to/publish/post-to-hacker-news/) - permanence first.
+- [How Blowhorn paces itself](/docs/explanation/reliability-and-anti-bot-design/) - why no retry click.

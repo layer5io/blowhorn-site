@@ -1,0 +1,47 @@
+---
+title: "Why Blowhorn uses your own Chrome"
+description: "Signed-in Chrome through the extension, APIs where they exist, and never headless."
+weight: 283
+---
+
+# Why Blowhorn uses your own Chrome
+
+Platforms trust people, not programs. A post that arrives from a
+browser you signed in to, carrying your session, your history, and
+your ordinary behavior, reads as you. A post from a datacenter browser
+that never slept reads as automation. Blowhorn therefore acts in the
+Chrome you already use, and reaches for an API only where the platform
+offers one it can honestly use.
+
+The extension drives your signed-in Chrome: the tabs you have open, on
+the sites Blowhorn acts on, with the sessions you made by hand. There
+is no second browser to sign in to, no session to export, and nothing
+that rots when a cookie expires except the session itself, which you
+renew by signing in again. Scheduled passes drive the same Chrome
+through the same extension; an unattended run never waits for a person
+at a sign-in or a challenge, it stops and says so.
+
+Slack, Bluesky, and GitHub post through their APIs above the browser,
+because those calls carry a token, not a pretense. Everything else
+drives Chrome, because anything else would be a poorer copy of you.
+
+Chrome is never launched headless, and never swapped for bundled
+Chromium. A headless Chrome announces itself in every request while
+its hints still claim Google Chrome, and the bundled build announces
+itself in both. Either would mark the run as automation to every site
+it touches. An unattended run takes the minimized background window
+instead: invisible, but honest about what it is.
+
+What a site sees is therefore your own user agent, your own session,
+and input delivered as real keystrokes and clicks with human pauses
+between them. That honesty is also the limit: a CAPTCHA or a
+second-factor challenge hands back to you, always, because passing it
+for you would stop being you.
+
+## Related
+
+- [Chrome reference](/docs/reference/chrome/) - launch modes and the extension default.
+- [Chrome extension permissions](/docs/reference/extension-permissions/) - what the extension may do.
+- [Platforms](/docs/reference/platforms/) - which platforms drive Chrome and which use APIs.
+- [How Blowhorn paces itself](/docs/explanation/reliability-and-anti-bot-design/) - human pauses between actions.
+- [Map Blowhorn profiles to Chrome profiles](/docs/how-to/set-up/map-chrome-profiles/) - the Chrome half of setup.
