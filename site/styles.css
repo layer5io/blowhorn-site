@@ -458,6 +458,7 @@ pre code { background: none; padding: 0; }
 }
 .card > * + * { margin-top: var(--space-3); }
 .card .h3 { margin-top: var(--space-4); }
+.card > .h3:first-child { margin-top: 0; }
 .card .label { margin-top: var(--space-1); }
 .card-icon {
   width: 40px; height: 40px;
@@ -467,7 +468,7 @@ pre code { background: none; padding: 0; }
   color: var(--ink);
 }
 .card-icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
-.card p { color: var(--ink-muted); }
+.card p, .card ul { color: var(--ink-muted); }
 .card pre { margin-top: var(--space-4); max-width: 100%; white-space: pre-wrap; overflow-wrap: anywhere; }
 
 /* Platforms */
@@ -607,6 +608,8 @@ pre code { background: none; padding: 0; }
   gap: var(--space-2) var(--space-6);
   justify-content: space-between;
 }
+/* Secondary pages carry only the meta row; the footer's own top rule already separates it. */
+.footer-meta:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
 @media (min-width: 720px) {
   .footer-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
   .footer-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
