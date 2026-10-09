@@ -35,7 +35,7 @@ The Chrome extension ships through the Chrome Web Store, not from this repositor
 | | |
 |---|---|
 | Site configuration | [`hugo.toml`](hugo.toml); the pinned toolchain is [`go.mod`](go.mod) (Docsy as a Hugo module), [`package.json`](package.json) (Hugo extended, postcss) and [`.nvmrc`](.nvmrc) (Node.js) |
-| Pages | [`content/en/`](content/en/): the home page's front matter, and the privacy and terms pages in Markdown |
+| Pages | [`content/en/`](content/en/): the home page's front matter, the privacy and terms pages, and the [`docs/`](content/en/docs/) section scaffold (landing, quadrant, group, and CLI indexes) in Markdown |
 | Templates | [`layouts/`](layouts/): the home page ([`home.html`](layouts/home.html)), the shared shell ([`baseof.html`](layouts/baseof.html)), the legal pages ([`legal.html`](layouts/legal.html)), the 404 page, the header, footer and icon sprite partials, and the `llms.txt` and Markdown outputs |
 | Styles and script | [`assets/css/site.css`](assets/css/site.css) and [`assets/js/download.js`](assets/js/download.js) (the Download section); Hugo minifies and fingerprints both |
 | Brand assets | [`static/assets/brand/`](static/assets/brand/), served at `/assets/brand/`: version 1 of the brand kit (logo system, Major Blowhorn, marketing art, `tokens.json`) and the three self-hosted fonts; attribution in [`LICENSES.md`](static/assets/brand/LICENSES.md) |

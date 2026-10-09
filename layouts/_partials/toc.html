@@ -1,0 +1,22 @@
+{{/* Forked from Docsy v0.14.3 layouts/_partials/toc.html.
+  Two accessibility fixes, nothing else:
+  - the "Top of page" link carries screen-reader text: an empty link
+    fails wcag/h30, and the icon styling is untouched;
+  - the contents nav is labelled: Hugo generates it without a name and an
+    unnamed nav fails unique-landmark next to the Primary, Docs, breadcrumb,
+    and Legal navs. Hugo offers no render hook for the table of contents,
+    so the label goes in with one string replacement of Hugo's stable
+    wrapper element. */ -}}
+<div class="td-toc" data-proofer-ignore>
+{{ if not .Params.notoc -}}
+  {{ $toc := .TableOfContents -}}
+  {{ if and $toc (ne $toc `<nav id="TableOfContents"></nav>`) -}}
+    {{ $tocLabel := i18n "toc_on_this_page" -}}
+    <div class="td-toc-title">
+      <span class="td-toc-title__text">{{ $tocLabel }}</span>
+      <a class="td-toc-title__link" title="{{ i18n "toc_top_of_page" }}" href="#"><span class="visually-hidden">{{ i18n "toc_top_of_page" }}</span></a>
+    </div>
+    {{ replace $toc `<nav id="TableOfContents">` (printf `<nav id="TableOfContents" aria-label="%s">` $tocLabel) | safeHTML }}
+  {{ end -}}
+{{ end -}}
+</div>

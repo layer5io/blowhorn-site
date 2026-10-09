@@ -1,0 +1,13 @@
+{{- /* Future leaf pages, which arrive through the docs sync from the product
+  repository. Rendered with Blowhorn's shell, brand type, and prev/next. */ -}}
+{{ define "main" -}}
+<div class="prose docs-page">
+  <h1 class="h1">{{ .Title }}</h1>
+  {{ with .Description -}}
+  <p class="body-lg docs-lead">{{ . | markdownify }}</p>
+  {{ end -}}
+  {{ .Content }}
+  {{ partial "page-meta-lastmod.html" . -}}
+</div>
+{{ partial "pager.html" . -}}
+{{ end -}}

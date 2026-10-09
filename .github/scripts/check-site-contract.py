@@ -33,6 +33,48 @@ PAGES = {
     "404.html": [
         "main", "missing-title",
     ],
+    "docs/index.html": [
+        "main", "start", "quadrants", "platforms",
+    ],
+    "docs/tutorials/index.html": [
+        "main",
+    ],
+    "docs/how-to/index.html": [
+        "main",
+    ],
+    "docs/how-to/set-up/index.html": [
+        "main",
+    ],
+    "docs/how-to/publish/index.html": [
+        "main",
+    ],
+    "docs/how-to/grow/index.html": [
+        "main",
+    ],
+    "docs/how-to/schedule/index.html": [
+        "main",
+    ],
+    "docs/how-to/measure/index.html": [
+        "main",
+    ],
+    "docs/how-to/settings/index.html": [
+        "main",
+    ],
+    "docs/how-to/troubleshoot/index.html": [
+        "main",
+    ],
+    "docs/how-to/manage/index.html": [
+        "main",
+    ],
+    "docs/reference/index.html": [
+        "main",
+    ],
+    "docs/reference/cli/index.html": [
+        "main",
+    ],
+    "docs/explanation/index.html": [
+        "main",
+    ],
 }
 # Other files that must be published at these paths.
 FILES = [

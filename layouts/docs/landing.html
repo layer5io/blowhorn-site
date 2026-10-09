@@ -1,0 +1,7 @@
+{{- /* The docs landing page (content/en/docs/_index.md): the body carries its
+  own h1, cards and platform strip, so the template only wraps it. */ -}}
+{{ define "main" -}}
+<div class="docs-landing">
+  {{ .Content }}
+</div>
+{{ end -}}

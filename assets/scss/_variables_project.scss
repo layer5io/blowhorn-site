@@ -1,0 +1,37 @@
+// Blowhorn docs skin: variable overrides for Docsy and Bootstrap.
+// Every value is a token from static/assets/brand/tokens.json (version 1).
+// Light is the default theme; dark follows the OS ($color-mode-type).
+
+// Dark follows the operating system through a media query: no JavaScript,
+// no stored theme, no toggle. Docsy's JS-driven dark mode stays off.
+$color-mode-type: media-query;
+
+// Docsy never loads web fonts; Blowhorn's are self-hosted in site.css.
+$td-enable-google-fonts: false;
+
+// Brand fills. Teal-deep is the text-safe teal on light grounds (4.9:1).
+$primary: #00756A;
+$secondary: #3C494F;
+$success: #00756A;
+$info: #00B39F;
+$link-color: #00756A;
+$link-hover-color: #008F80;
+$code-color: #1E2117;
+
+// Dark-ground equivalents: teal-bright is the link and focus colour.
+$body-bg-dark: #1E2117;
+$body-color-dark: #FFFFFF;
+$link-color-dark: #00D3A9;
+$link-hover-color-dark: #00D3A9;
+$code-color-dark: #FFFFFF;
+
+// Type: Bricolage Grotesque for headings, Instrument Sans for body,
+// JetBrains Mono for code. The files are declared in site.css.
+$font-family-sans-serif: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+$font-family-monospace: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+$headings-font-family: "Bricolage Grotesque", "Instrument Sans", system-ui, sans-serif;
+
+// Radius: cards land on 16px.
+$border-radius-sm: 6px;
+$border-radius: 10px;
+$border-radius-lg: 16px;

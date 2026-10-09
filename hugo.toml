@@ -94,6 +94,9 @@ disableKinds = ["taxonomy", "term", "rss"]
   copyright = "Layer5, Inc."
   github_repo = "https://github.com/layer5io/blowhorn-site"
   github_branch = "master"
+  # Docsy's offline search, with lunr bundled locally (layouts/_partials/docs-head.html).
+  offlineSearch = true
+  offlineSearchMaxResults = 10
 
 [params.llms]
   generate_llms_txt = true

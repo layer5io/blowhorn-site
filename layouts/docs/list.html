@@ -1,0 +1,13 @@
+{{- /* Quadrant and group index pages: title, lead, body, the child pages, and
+  prev/next across the section. */ -}}
+{{ define "main" -}}
+<div class="prose docs-section">
+  <h1 class="h1">{{ .Title }}</h1>
+  {{ with .Description -}}
+  <p class="body-lg docs-lead">{{ . | markdownify }}</p>
+  {{ end -}}
+  {{ .Content -}}
+  {{- partial "section-index.html" . -}}
+</div>
+{{ partial "pager.html" . -}}
+{{ end -}}

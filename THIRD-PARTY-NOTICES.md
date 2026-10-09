@@ -33,3 +33,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## jQuery (OpenJS Foundation)
+
+`assets/js/vendor/jquery.min.js` is jQuery v3.7.1, the same bytes Docsy loads
+from its CDN, vendored so the docs ship no third-party request. Unmodified.
+
+```
+Copyright OpenJS Foundation and other contributors, https://openjsf.org/
+```
+
+(MIT license; the full text ships in the file's banner.)
+
+## lunr.js (Oliver Nightingale)
+
+`assets/js/vendor/lunr.min.js` is lunr v2.3.9, the same bytes Docsy loads
+from its CDN, vendored so the docs ship no third-party request. One
+comment-only change: the banner no longer names the project's homepage URL,
+because shipped scripts may not reference another host. Copyright and license
+are unchanged.
+
+```
+Copyright (C) 2020 Oliver Nightingale
+```
+
+(MIT license; the full text ships in the file's banner.)
+
+## Docsy offline search (Google LLC, Apache-2.0)
+
+`assets/js/offline-search.js` is forked from Docsy v0.14.3
+`assets/js/offline-search.js`. The index, the query, and the result entries
+are unchanged; the attribution comment no longer names a blog URL (same
+reason as above) and results render in an inline box instead of a Bootstrap
+popover, because Bootstrap's JavaScript is not shipped.

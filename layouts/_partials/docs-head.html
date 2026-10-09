@@ -1,0 +1,30 @@
+{{- /* The head for every /docs/ page. Docsy renders the docs section, but the
+  head is rebuilt from Blowhorn's own: no CDN, no analytics, no web fonts
+  from another host (the privacy page promises it, and `make site-check`
+  enforces it). jQuery and lunr are the same bytes Docsy loads from its CDN,
+  vendored under assets/js/vendor/ (see THIRD-PARTY-NOTICES.md). */ -}}
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ .Title }}: {{ site.Title }}</title>
+    {{- if eq (getenv "HUGO_PREVIEW") "true" }}
+    <meta name="robots" content="noindex, nofollow">
+    {{- end }}
+    {{- with .Description }}
+    <meta name="description" content="{{ . }}">
+    {{- end }}
+    <link rel="canonical" href="{{ partial "canonical.html" . }}">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1E2117">
+    <link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="32x32">
+    <link rel="icon" href="{{ "assets/brand/logo/blowhorn-favicon-32.svg" | relURL }}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ "assets/brand/logo/blowhorn-apple-touch-icon-180.png" | relURL }}">
+    {{- /* Docsy and Bootstrap first, then the brand sheet: on equal
+      specificity the brand's element rules (body, code, lists) win, while
+      the docs skin's classes win everywhere else. */ -}}
+    {{- partialCached "head-css.html" . "docs-head-css" }}
+    {{- $site := resources.Get "css/site.css" | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ $site.RelPermalink }}">
+    {{- $jquery := resources.Get "js/vendor/jquery.min.js" | fingerprint }}
+    <script src="{{ $jquery.RelPermalink }}"></script>
+    {{- $lunr := resources.Get "js/vendor/lunr.min.js" | fingerprint }}
+    <script src="{{ $lunr.RelPermalink }}"></script>
