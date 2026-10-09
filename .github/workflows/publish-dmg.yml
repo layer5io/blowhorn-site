@@ -9,6 +9,10 @@ name: Publish DMG release
 #     with client_payload: {"version", "dmg_url", "arch", "draft",
 #     "require_notarized", "notes"}.
 #
+# Every step that runs repository logic is a make target (dmg-resolve,
+# dmg-download, dmg-package, dmg-verify, dmg-release) backed by a script in
+# .github/scripts/publish-dmg/, so a maintainer can run any step locally.
+#
 # Safety rules enforced here:
 #   - A public (non-draft) release must pass signature and notarization checks
 #     on a macOS runner. Only a draft may skip them, for review.
@@ -78,76 +82,19 @@ jobs:
           IN_DRAFT: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.draft || github.event.client_payload.draft }}
           IN_NOTARIZED: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.require_notarized || github.event.client_payload.require_notarized }}
           IN_NOTES: ${{ github.event.inputs.notes || github.event.client_payload.notes }}
-        run: |
-          set -euo pipefail
-          if [[ ! "$IN_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
-            echo "::error::version must look like v1.2.3 or v1.2.3-beta.1 (got '$IN_VERSION')"
-            exit 1
-          fi
-          if [[ ! "$IN_URL" =~ ^https://[^/]+/ ]]; then
-            echo "::error::dmg_url must be an https:// URL with a host and a path"
-            exit 1
-          fi
-          arch="${IN_ARCH:-universal}"
-          case "$arch" in universal|arm64|x64) ;; *) echo "::error::arch must be universal, arm64, or x64"; exit 1 ;; esac
-          prerelease=false
-          [[ "$IN_VERSION" == *-* ]] && prerelease=true
-          draft=true
-          [[ "${IN_DRAFT,,}" == "false" ]] && draft=false
-          notarized=true
-          [[ "${IN_NOTARIZED,,}" == "false" ]] && notarized=false
-          if [[ "$draft" == "false" && "$notarized" == "false" ]]; then
-            echo "::error::a public release must be verified: set require_notarized=true, or keep draft=true to review an unverified image"
-            exit 1
-          fi
-          {
-            echo "version=$IN_VERSION"
-            echo "arch=$arch"
-            echo "prerelease=$prerelease"
-            echo "draft=$draft"
-            echo "require_notarized=$notarized"
-          } >>"$GITHUB_OUTPUT"
-          printf '%s' "$IN_NOTES" >notes.md
-          echo "Publishing $IN_VERSION ($arch) draft=$draft prerelease=$prerelease require_notarized=$notarized"
-
+        run: make dmg-resolve
       - name: Download DMG
         env:
           DMG_URL: ${{ github.event.inputs.dmg_url || github.event.client_payload.dmg_url }}
           # Optional. Only needed when dmg_url requires a bearer token (for
           # example a GitHub API release-asset URL on a private repository).
           DMG_SOURCE_TOKEN: ${{ secrets.DMG_SOURCE_TOKEN }}
-        run: |
-          set -euo pipefail
-          mkdir -p dist
-          args=(--proto '=https' --proto-redir '=https' --fail --location --silent --show-error --retry 3 --output dist/source.dmg)
-          if [[ -n "${DMG_SOURCE_TOKEN:-}" ]]; then
-            case "$DMG_URL" in
-              https://api.github.com/*|https://github.com/*|https://objects.githubusercontent.com/*|https://release-assets.githubusercontent.com/*)
-                echo "dmg_url is on a GitHub host; sending DMG_SOURCE_TOKEN"
-                args+=(--header "Authorization: Bearer $DMG_SOURCE_TOKEN" --header "Accept: application/octet-stream")
-                ;;
-              *)
-                echo "::notice::dmg_url is not on a GitHub host; downloading without credentials"
-                ;;
-            esac
-          fi
-          curl "${args[@]}" "$DMG_URL"
-
+        run: make dmg-download
       - name: Validate and name assets
         env:
           VERSION: ${{ steps.resolve.outputs.version }}
           ARCH: ${{ steps.resolve.outputs.arch }}
-        run: |
-          set -euo pipefail
-          .github/scripts/check-dmg.sh dist/source.dmg
-          versioned="Blowhorn-${VERSION#v}-mac-${ARCH}.dmg"
-          mv dist/source.dmg "dist/$versioned"
-          # Stable, version-less alias so /releases/latest/download/Blowhorn-mac.dmg
-          # always points at the newest published release.
-          cp "dist/$versioned" dist/Blowhorn-mac.dmg
-          (cd dist && sha256sum -- *.dmg >SHA256SUMS.txt && cat SHA256SUMS.txt)
-          mv notes.md dist/notes.md
-
+        run: make dmg-package
       - uses: actions/upload-artifact@v4
         with:
           name: blowhorn-dmg
@@ -160,20 +107,18 @@ jobs:
     if: needs.fetch.outputs.require_notarized == 'true'
     runs-on: macos-latest
     steps:
+      # The Makefile and .github/scripts/publish-dmg/ hold the steps below.
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
       - uses: actions/download-artifact@v4
         with:
           name: blowhorn-dmg
           path: dist
 
       - name: Verify DMG
-        run: |
-          set -euo pipefail
-          for dmg in dist/Blowhorn-*-mac-*.dmg; do
-            hdiutil verify "$dmg"
-            codesign --verify --verbose=2 "$dmg"
-            spctl --assess --type open --context context:primary-signature --verbose=2 "$dmg"
-            xcrun stapler validate "$dmg"
-          done
+        run: make dmg-verify
 
   publish:
     name: Create GitHub Release
@@ -188,6 +133,11 @@ jobs:
     permissions:
       contents: write
     steps:
+      # The Makefile and .github/scripts/publish-dmg/ hold the steps below.
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
       - uses: actions/download-artifact@v4
         with:
           name: blowhorn-dmg
@@ -200,32 +150,4 @@ jobs:
           VERSION: ${{ needs.fetch.outputs.version }}
           PRERELEASE: ${{ needs.fetch.outputs.prerelease }}
           DRAFT: ${{ needs.fetch.outputs.draft }}
-        run: |
-          set -euo pipefail
-          if gh release view "$VERSION" >/dev/null 2>&1; then
-            echo "::error::release $VERSION already exists; refusing to overwrite"
-            exit 1
-          fi
-          versioned=(dist/Blowhorn-*-mac-*.dmg)
-          {
-            if [[ -s dist/notes.md ]]; then cat dist/notes.md; echo; echo; fi
-            echo "## Download"
-            echo
-            echo "- macOS: \`$(basename "${versioned[0]}")\`"
-            echo "- Always-latest link: https://github.com/${GH_REPO}/releases/latest/download/Blowhorn-mac.dmg"
-            echo
-            echo "## SHA-256"
-            echo
-            echo '```'
-            cat dist/SHA256SUMS.txt
-            echo '```'
-          } >release-notes.md
-          flags=(--title "Blowhorn ${VERSION}" --notes-file release-notes.md --target "${GITHUB_SHA}")
-          [[ "$DRAFT" == "true" ]] && flags+=(--draft)
-          if [[ "$PRERELEASE" == "true" ]]; then
-            flags+=(--prerelease --latest=false)
-          else
-            flags+=(--latest)
-          fi
-          gh release create "$VERSION" "${flags[@]}" dist/*.dmg dist/SHA256SUMS.txt
-          echo "### Release ${VERSION} created (draft=${DRAFT}, prerelease=${PRERELEASE})" >>"$GITHUB_STEP_SUMMARY"
+        run: make dmg-release

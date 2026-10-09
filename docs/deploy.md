@@ -16,19 +16,22 @@ every push to `master`:
    (sitemap, `llms-full.txt`) comes from git.
 2. `make workflow-check` lints the workflows with actionlint, and
    `make test-scripts` runs the unit tests for the check scripts below.
-3. `make site-check` builds for production into `public/`
+   Every step is a make target (`make setup-ci` installs the dependencies);
+   `make ci` runs the whole job locally in the same order.
+3. `make site-check` builds for production into `public/` once
    (`hugo --minify --gc`, which minifies CSS and JavaScript and leaves HTML
    readable), then checks that output:
-   - html-validate on every page;
+   - `make validate-html`: html-validate on every page;
    - `make check-links`: every local link, image, font and `srcset` reference
      resolves ([`check-site-links.py`](../.github/scripts/check-site-links.py));
-   - no page, stylesheet or script it loads requests anything from another
-     host ([`check-third-party.py`](../.github/scripts/check-third-party.py)),
+   - `make check-third-party`: no page, stylesheet or script it loads
+     requests anything from another host ([`check-third-party.py`](../.github/scripts/check-third-party.py)),
      because the privacy page promises it. The one exception is the Download
      section's release lookup on `api.github.com` (`assets/js/download.js`),
      which the privacy page discloses; it is the only host besides github.com
      (links) that a script may name;
-   - every public URL and every anchor the site has published still exists
+   - `make check-urls`: every public URL and every anchor the site has
+     published still exists
      ([`check-site-contract.py`](../.github/scripts/check-site-contract.py)).
 4. `public/` is uploaded as the Pages artifact.
 5. On `master` only (a push or a manual run), the `deploy` job publishes that

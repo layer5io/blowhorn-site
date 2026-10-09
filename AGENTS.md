@@ -31,6 +31,13 @@ The marketing and legal pages do not use Docsy's templates: they render through
 - **The product repository is private.** Never link its files, issues or pull requests
   from a page; every reader would get a 404.
 
+## CI runs through make
+
+Every CI step that runs repository logic is a Makefile target and the workflow calls it
+(`site.yml`, and the `dmg-*` steps of `publish-dmg.yml` backed by `.github/scripts/publish-dmg/`).
+When you add or change a CI step, put the logic behind a make target, call the target from
+the workflow, and list it in the README's target table. `make ci` reproduces site.yml's check job.
+
 ## Keeping URLs and anchors alive
 
 `/`, `/privacy.html`, `/terms.html`, `/assets/brand/...` and the home page's anchors

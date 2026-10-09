@@ -48,17 +48,32 @@ The Chrome extension ships through the Chrome Web Store, not from this repositor
 
 ## Working on the site
 
-You need Go (Hugo modules), Node.js and npm (the pinned Hugo extended and postcss come from `package.json`), Python 3 and `make`. The targets follow the shared contract of [layer5io/docs](https://github.com/layer5io/docs/blob/master/Makefile).
+You need Go (Hugo modules), Node.js and npm (the pinned Hugo extended and postcss come from `package.json`), Python 3 and `make`. The build targets follow the shared contract of [layer5io/docs](https://github.com/layer5io/docs/blob/master/Makefile). `make help` lists every target.
 
 ```bash
 make setup             # npm install: the pinned Hugo extended and postcss
 make site              # serve at http://localhost:1313 with live reload
 make build-production  # build into public/, what CI deploys
-make site-check        # production build, html-validate, link check, third-party check, URL and anchor contract
-make workflow-check    # actionlint on this repository's workflows
-make test-scripts      # unit tests for the check scripts
-make check             # all of the above: what CI runs
+make check             # every check, against a fresh production build
+make ci                # exactly what site.yml's check job runs, starting with npm ci
 ```
+
+Every CI step that runs repository logic is a make target, and the workflow calls that target, so one `make` command reproduces any CI step:
+
+| Target | What it runs | Run by |
+|---|---|---|
+| `setup-ci` | `npm ci` (the locked dependencies) | `site.yml` |
+| `workflow-check` | actionlint on `site.yml` and `publish-dmg.yml` | `site.yml` |
+| `test-scripts` | unit tests for the check scripts in `.github/scripts/` | `site.yml` |
+| `site-check` | one production build, then the four checks below | `site.yml` |
+| `validate-html` | html-validate on every built page | `site-check` |
+| `check-links` | every local link, image, font and `srcset` reference resolves | `site-check` |
+| `check-third-party` | no page, or stylesheet or script it loads, requests another host (except the disclosed GitHub release lookup) | `site-check` |
+| `check-urls` | every published URL and anchor still exists | `site-check` |
+| `dmg-resolve`, `dmg-download`, `dmg-package`, `dmg-verify`, `dmg-release` | the five steps of publishing a DMG release, each reading its inputs from the environment ([docs/distribution.md](docs/distribution.md#local-checks)) | `publish-dmg.yml` |
+| `dmg-check DMG=...` | sanity-check a disk image before publishing | `dmg-package` |
+
+Each check target builds for production first, so it also runs on its own. `labeler.yml`, `label-commenter.yml` and `slack.yml` only call third-party actions and run no repository logic, so they have no target.
 
 The site follows the brand kit exactly: every colour, type style, spacing, radius and shadow in `assets/css/site.css` is a token from `static/assets/brand/tokens.json`, with light as the default theme and dark following the operating system. Brand SVGs are used as files and never recoloured. The one-to-many hero illustration and the platform marks are inline SVG drawn in `currentColor`.
 

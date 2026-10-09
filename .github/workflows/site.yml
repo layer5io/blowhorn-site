@@ -54,7 +54,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: make setup-ci
 
       - name: Lint workflows
         run: make workflow-check
@@ -62,8 +62,9 @@ jobs:
       - name: Test check scripts
         run: make test-scripts
 
-      # Production build into public/, then html-validate, the local link
-      # check, the third-party host check and the URL and anchor contract.
+      # Every step below is a make target; `make ci` runs the same sequence locally.
+      # site-check: one production build into public/, then validate-html,
+      # check-links, check-third-party and check-urls.
       - name: Build and check site
         run: make site-check
 
