@@ -6,8 +6,9 @@ and loads no fonts, images, styles or scripts from third parties", and
 discloses its one outside request. This check holds the build to it:
 
 - HTML: every attribute that makes the browser fetch something (src, srcset,
-  poster, data, action, <link href> other than canonical and alternate, and
-  <meta http-equiv="refresh">), every url(...) or @import in inline styles,
+  poster, data, action, <link href> other than canonical and alternate,
+  href and xlink:href on SVG <image>, <feImage> and <use>, each URL in a
+  ping attribute, and <meta http-equiv="refresh">), every url(...) or @import in inline styles,
   and every absolute URL in inline scripts and on* event-handler attributes
   (JSON data blocks such as application/ld+json are data, not requests).
 - CSS: every url(...) and @import in each stylesheet a page loads.
@@ -18,7 +19,8 @@ discloses its one outside request. This check holds the build to it:
 
 A stylesheet or script a page loads by an absolute first-party URL
 (https://blowhorn.ai/...) is read from the build and checked like a local one.
-Plain links (<a href>) are navigation, not requests, and are not checked.
+Plain links (<a href>) are navigation, not requests, and are not checked;
+their ping URLs are.
 Files no page loads (Docsy ships a few in its static/ directory) are not
 checked either: they are never requested.
 Usage: check-third-party.py BUILD_DIR [FIRST_PARTY_HOST]
@@ -37,6 +39,8 @@ SCRIPT_HOSTS = {"api.github.com", "github.com"}
 NON_FETCHING_RELS = {"canonical", "alternate", "author", "license", "me", "help", "search"}
 # <script type> values that hold data, not code the browser runs.
 DATA_SCRIPT_TYPES = {"application/ld+json", "application/json"}
+# SVG elements whose href the browser fetches (HTMLParser lowercases tag names).
+SVG_FETCH_TAGS = {"image", "feimage", "use"}
 
 CSS_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
 CSS_URL = re.compile(r"""url\(\s*(?:"([^"]*)"|'([^']*)'|([^"')\s]*))\s*\)""")
@@ -82,6 +86,10 @@ class FetchCollector(HTMLParser):
                     candidate = candidate.strip()
                     if candidate:
                         self.refs.append((tag, name, candidate.split()[0]))
+            elif name == "ping":
+                self.refs += [(tag, name, url) for url in value.split()]
+            elif name in ("href", "xlink:href") and tag in SVG_FETCH_TAGS:
+                self.refs.append((tag, name, value))
             elif name == "style":
                 self.refs += [(tag, "style", ref) for ref in css_refs(value)]
             elif name.startswith("on"):

@@ -84,6 +84,21 @@ class CheckThirdPartyTest(unittest.TestCase):
             "css/site.css": "body{background:url(https://images.example/a.png)}",
         }, "images.example")
 
+    def test_external_svg_image_href_fails(self):
+        self.assert_fails_naming({"index.html": page(body='<svg><image href="https://images.example/a.png"/></svg>')},
+                                 "images.example")
+
+    def test_external_svg_use_xlink_href_fails(self):
+        self.assert_fails_naming({"index.html": page(body='<svg><use xlink:href="https://sprites.example/s.svg#a"/></svg>')},
+                                 "sprites.example")
+
+    def test_link_ping_to_another_host_fails(self):
+        self.assert_fails_naming({"index.html": page(body='<a href="/x" ping="/ok https://tracker.example/p">x</a>')},
+                                 "tracker.example")
+
+    def test_svg_use_of_same_document_fragment_passes(self):
+        self.assert_passes({"index.html": page(body='<svg><use href="#mark-x"/></svg>')})
+
 
 if __name__ == "__main__":
     unittest.main()
