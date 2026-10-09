@@ -17,8 +17,9 @@ The marketing and legal pages do not use Docsy's templates: they render through
 
 ## Rules the site holds
 
-- **No third parties.** The privacy page promises no cookies, no analytics and nothing
-  loaded from another host. Never add an analytics id, a CDN script or stylesheet, or web
+- **No third parties.** The privacy page promises no cookies, no analytics and no asset
+  loaded from another host; the only outside request is the Download section's disclosed
+  release lookup on api.github.com. Never add an analytics id, a CDN script or stylesheet, or web
   fonts from elsewhere; never copy layer5io/docs' head, navbar, footer or its
   `[services.googleAnalytics]` block. `.github/scripts/check-third-party.py` fails the build.
 - **Brand tokens only.** Every colour, type style, radius and shadow in

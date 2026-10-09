@@ -37,7 +37,8 @@ include .github/build/Makefile.show-help.mk
 #   site-check         Production build, then html-validate, check-links, the
 #                      third-party host check and the URL and anchor contract.
 #   workflow-check     actionlint on this repository's workflows.
-#   check              site-check and workflow-check: everything CI runs.
+#   test-scripts       Unit tests for the check scripts in .github/scripts/.
+#   check              site-check, test-scripts and workflow-check: everything CI runs.
 #   dmg-check          Sanity-check a disk image before publishing it.
 #   clean              Remove the build output, Hugo's cache and downloaded tools.
 #-----------------------------------------------------------------------------
@@ -118,6 +119,10 @@ site-check: build-production
 	python3 .github/scripts/check-third-party.py $(BUILD_DIR)
 	python3 .github/scripts/check-site-contract.py $(BUILD_DIR)
 
+## Run the unit tests for the check scripts in .github/scripts/.
+test-scripts:
+	python3 -m unittest discover -s .github/scripts -p 'test_*.py'
+
 ## Lint this repo's GitHub Actions workflows with actionlint.
 workflow-check:
 ifeq ($(ACTIONLINT),)
@@ -129,8 +134,8 @@ else
 	$(ACTIONLINT) -color $(WORKFLOWS)
 endif
 
-## Run every check CI runs: site-check and workflow-check.
-check: site-check workflow-check
+## Run every check CI runs: site-check, test-scripts and workflow-check.
+check: site-check test-scripts workflow-check
 
 ## Sanity-check a local disk image before publishing: make dmg-check DMG=path/to/Blowhorn.dmg
 dmg-check:
@@ -153,6 +158,7 @@ clean:
 	check-deps \
 	check-go \
 	site-check \
+	test-scripts \
 	workflow-check \
 	check \
 	dmg-check \
