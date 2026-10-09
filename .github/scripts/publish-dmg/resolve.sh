@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Validate the release inputs and write them to $GITHUB_OUTPUT.
-# Env: IN_VERSION, IN_URL, IN_ARCH, IN_DRAFT, IN_NOTARIZED, IN_NOTES, GITHUB_OUTPUT.
+# Env: IN_VERSION, IN_URL, IN_ARCH, IN_DRAFT, IN_NOTARIZED, optional IN_NOTES, GITHUB_OUTPUT.
 # Writes notes.md (the release notes) in the current directory.
 # Run through make (see the dmg-* targets); publish-dmg.yml calls the same targets.
 set -euo pipefail
@@ -31,5 +31,5 @@ fi
   echo "draft=$draft"
   echo "require_notarized=$notarized"
 } >>"$GITHUB_OUTPUT"
-printf '%s' "$IN_NOTES" >notes.md
+printf '%s' "${IN_NOTES:-}" >notes.md
 echo "Publishing $IN_VERSION ($arch) draft=$draft prerelease=$prerelease require_notarized=$notarized"

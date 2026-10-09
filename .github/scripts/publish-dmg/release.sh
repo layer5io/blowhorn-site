@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Create the GitHub Release from dist/; refuses to overwrite an existing tag.
-# Env: GH_TOKEN, GH_REPO, VERSION, PRERELEASE, DRAFT, GITHUB_SHA, GITHUB_STEP_SUMMARY.
+# Env: GH_TOKEN, GH_REPO, VERSION, PRERELEASE, DRAFT, GITHUB_SHA, optional GITHUB_STEP_SUMMARY.
 # Run through make (see the dmg-* targets); publish-dmg.yml calls the same targets.
 set -euo pipefail
 if gh release view "$VERSION" >/dev/null 2>&1; then
@@ -29,4 +29,6 @@ else
   flags+=(--latest)
 fi
 gh release create "$VERSION" "${flags[@]}" dist/*.dmg dist/SHA256SUMS.txt
-echo "### Release ${VERSION} created (draft=${DRAFT}, prerelease=${PRERELEASE})" >>"$GITHUB_STEP_SUMMARY"
+if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+  echo "### Release ${VERSION} created (draft=${DRAFT}, prerelease=${PRERELEASE})" >>"$GITHUB_STEP_SUMMARY"
+fi

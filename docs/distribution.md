@@ -127,11 +127,11 @@ them, so a step can be rehearsed locally:
 
 | Target | Inputs | Does |
 |---|---|---|
-| `dmg-resolve` | `IN_VERSION`, `IN_URL`, `IN_ARCH`, `IN_DRAFT`, `IN_NOTARIZED`, `IN_NOTES`, `GITHUB_OUTPUT` | validates the inputs, refuses a public release that skips verification, writes `notes.md` |
+| `dmg-resolve` | `IN_VERSION`, `IN_URL`, `IN_ARCH`, `IN_DRAFT`, `IN_NOTARIZED`, optional `IN_NOTES`, `GITHUB_OUTPUT` | validates the inputs, refuses a public release that skips verification, writes `notes.md` |
 | `dmg-download` | `DMG_URL`, optional `DMG_SOURCE_TOKEN` | downloads to `dist/source.dmg` over HTTPS only; the token goes only to GitHub hosts |
 | `dmg-package` | `VERSION`, `ARCH` | runs `check-dmg.sh`, names the versioned and `Blowhorn-mac.dmg` assets, writes `SHA256SUMS.txt` |
 | `dmg-verify` | (macOS only) | `hdiutil verify`, `codesign`, `spctl` and `stapler validate` on each DMG in `dist/` |
-| `dmg-release` | `GH_TOKEN`, `GH_REPO`, `VERSION`, `PRERELEASE`, `DRAFT`, `GITHUB_SHA` | creates the release; refuses an existing tag |
+| `dmg-release` | `GH_TOKEN`, `GH_REPO`, `VERSION`, `PRERELEASE`, `DRAFT`, `GITHUB_SHA`, optional `GITHUB_STEP_SUMMARY` | creates the release; refuses an existing tag |
 
 ```bash
 GITHUB_OUTPUT=/tmp/out IN_VERSION=v1.2.3 IN_URL=https://example.com/Blowhorn.dmg \
