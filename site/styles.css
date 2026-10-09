@@ -553,7 +553,7 @@ pre code { background: none; padding: 0; }
 @media (prefers-color-scheme: dark) {
   .speech, .speech::after { border-color: var(--cream); }
 }
-.major-copy p { color: var(--ink-muted); max-width: 36rem; }
+.major-copy p:not(.speech) { color: var(--ink-muted); max-width: 36rem; }
 @media (min-width: 720px) {
   .major-card {
     grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
