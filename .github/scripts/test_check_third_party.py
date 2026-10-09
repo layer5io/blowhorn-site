@@ -99,6 +99,21 @@ class CheckThirdPartyTest(unittest.TestCase):
     def test_svg_use_of_same_document_fragment_passes(self):
         self.assert_passes({"index.html": page(body='<svg><use href="#mark-x"/></svg>')})
 
+    def test_base_href_to_another_host_fails(self):
+        self.assert_fails_naming({"index.html": page('<base href="https://cdn.example/">')}, "cdn.example")
+
+    def test_legacy_background_attribute_fails(self):
+        self.assert_fails_naming({"index.html": page().replace("<body>", '<body background="https://images.example/a.png">')},
+                                 "images.example")
+
+    def test_svg_script_href_fails(self):
+        self.assert_fails_naming({"index.html": page(body='<svg><script href="https://cdn.example/x.js"></script></svg>')},
+                                 "cdn.example")
+
+    def test_svg_namespace_fragment_use_and_outbound_link_pass(self):
+        self.assert_passes({"index.html": page(body='<svg xmlns="http://www.w3.org/2000/svg"><use href="#mark-x"/></svg>'
+                                                    '<a href="https://other.example/">x</a>')})
+
 
 if __name__ == "__main__":
     unittest.main()

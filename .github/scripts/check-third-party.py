@@ -5,12 +5,16 @@ The privacy page promises that blowhorn.ai "sets no cookies, runs no analytics
 and loads no fonts, images, styles or scripts from third parties", and
 discloses its one outside request. This check holds the build to it:
 
-- HTML: every attribute that makes the browser fetch something (src, srcset,
-  poster, data, action, <link href> other than canonical and alternate,
-  href and xlink:href on SVG <image>, <feImage> and <use>, each URL in a
-  ping attribute, and <meta http-equiv="refresh">), every url(...) or @import in inline styles,
-  and every absolute URL in inline scripts and on* event-handler attributes
-  (JSON data blocks such as application/ld+json are data, not requests).
+- HTML: deny by default. Every attribute value on every element that is an
+  absolute http(s) or protocol-relative URL is treated as a fetch; srcset,
+  imagesrcset and ping are split into their URLs, style attributes and <style>
+  are read as CSS, and inline scripts and on* event-handler attributes are
+  scanned for absolute URLs (JSON data blocks such as application/ld+json are
+  data, not requests). Only attributes that never make the browser request
+  anything are exempt: href and xlink:href on <a> and <area> (navigation),
+  <link href> whose rel values all name without fetching (canonical,
+  alternate, ...), cite, itemtype, itemid, itemprop, xmlns and xmlns:*, and
+  <meta content>, except the url= of <meta http-equiv="refresh">.
 - CSS: every url(...) and @import in each stylesheet a page loads.
 - JavaScript: every absolute URL in each script a page loads. The Download section's script
   (assets/js/download.js) asks GitHub's public API for the newest release, a
@@ -19,8 +23,6 @@ discloses its one outside request. This check holds the build to it:
 
 A stylesheet or script a page loads by an absolute first-party URL
 (https://blowhorn.ai/...) is read from the build and checked like a local one.
-Plain links (<a href>) are navigation, not requests, and are not checked;
-their ping URLs are.
 Files no page loads (Docsy ships a few in its static/ directory) are not
 checked either: they are never requested.
 Usage: check-third-party.py BUILD_DIR [FIRST_PARTY_HOST]
@@ -39,8 +41,10 @@ SCRIPT_HOSTS = {"api.github.com", "github.com"}
 NON_FETCHING_RELS = {"canonical", "alternate", "author", "license", "me", "help", "search"}
 # <script type> values that hold data, not code the browser runs.
 DATA_SCRIPT_TYPES = {"application/ld+json", "application/json"}
-# SVG elements whose href the browser fetches (HTMLParser lowercases tag names).
-SVG_FETCH_TAGS = {"image", "feimage", "use"}
+# Attributes that name a URL without the browser fetching it, on any element.
+NON_FETCHING_ATTRS = {"cite", "itemtype", "itemid", "itemprop", "xmlns"}
+# Elements whose href is navigation, not a request.
+NAVIGATION_TAGS = {"a", "area"}
 
 CSS_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
 CSS_URL = re.compile(r"""url\(\s*(?:"([^"]*)"|'([^']*)'|([^"')\s]*))\s*\)""")
@@ -76,11 +80,23 @@ class FetchCollector(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         values = dict(attrs)
+        rels = set((values.get("rel") or "").lower().split())
         for name, value in attrs:
-            if not value:
+            if not value or name in NON_FETCHING_ATTRS or name.startswith("xmlns:"):
                 continue
-            if name in ("src", "poster", "data", "action", "formaction"):
-                self.refs.append((tag, name, value))
+            if name in ("href", "xlink:href") and (
+                tag in NAVIGATION_TAGS or (tag == "link" and rels and rels <= NON_FETCHING_RELS)
+            ):
+                continue
+            if name == "style":
+                self.refs += [(tag, "style", ref) for ref in css_refs(value)]
+            elif name.startswith("on"):
+                self.inline_js.append((f"<{tag} {name}>", value))
+            elif tag == "meta" and name == "content":
+                if (values.get("http-equiv") or "").lower() == "refresh":
+                    match = re.search(r"url\s*=\s*(\S+)", value, re.IGNORECASE)
+                    if match:
+                        self.refs.append((tag, "refresh", match.group(1).strip("'\"")))
             elif name in ("srcset", "imagesrcset"):
                 for candidate in value.split(","):
                     candidate = candidate.strip()
@@ -88,20 +104,8 @@ class FetchCollector(HTMLParser):
                         self.refs.append((tag, name, candidate.split()[0]))
             elif name == "ping":
                 self.refs += [(tag, name, url) for url in value.split()]
-            elif name in ("href", "xlink:href") and tag in SVG_FETCH_TAGS:
+            else:
                 self.refs.append((tag, name, value))
-            elif name == "style":
-                self.refs += [(tag, "style", ref) for ref in css_refs(value)]
-            elif name.startswith("on"):
-                self.inline_js.append((f"<{tag} {name}>", value))
-        if tag == "link" and values.get("href"):
-            rels = set((values.get("rel") or "").lower().split())
-            if not rels or not rels <= NON_FETCHING_RELS:
-                self.refs.append((tag, "href", values["href"]))
-        if tag == "meta" and (values.get("http-equiv") or "").lower() == "refresh":
-            match = re.search(r"url\s*=\s*(\S+)", values.get("content") or "", re.IGNORECASE)
-            if match:
-                self.refs.append((tag, "refresh", match.group(1).strip("'\"")))
         self._in_style = tag == "style"
         script_type = (values.get("type") or "").lower().split(";")[0].strip()
         self._in_script = tag == "script" and not values.get("src") and script_type not in DATA_SCRIPT_TYPES
