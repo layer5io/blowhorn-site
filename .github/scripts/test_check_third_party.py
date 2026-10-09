@@ -119,6 +119,10 @@ class CheckThirdPartyTest(unittest.TestCase):
         self.assert_passes({"index.html": page(body='<svg xmlns="http://www.w3.org/2000/svg"><use href="#mark-x"/></svg>'
                                                     '<a href="https://other.example/">x</a>')})
 
+    def test_long_non_url_attribute_value_passes(self):
+        path = "M12 10.8" + " 1.5-5.8" * 60
+        self.assert_passes({"index.html": page(body=f'<svg viewBox="0 0 24 24"><path d="{path}"/></svg>')})
+
 
 if __name__ == "__main__":
     unittest.main()

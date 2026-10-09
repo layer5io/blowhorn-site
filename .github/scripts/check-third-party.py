@@ -45,6 +45,10 @@ DATA_SCRIPT_TYPES = {"application/ld+json", "application/json"}
 NON_FETCHING_ATTRS = {"cite", "itemtype", "itemid", "itemprop", "xmlns"}
 # Elements whose href is navigation, not a request.
 NAVIGATION_TAGS = {"a", "area"}
+# (tag, attribute) pairs that load a stylesheet or script, read from the build and
+# checked in turn. Every other collected value is only host-checked: under deny by
+# default it may be any attribute text (an SVG path, a class), not a file path.
+FILE_LOADS = {("link", "href"), ("script", "src"), ("script", "href"), ("script", "xlink:href"), ("style", "css")}
 
 CSS_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
 CSS_URL = re.compile(r"""url\(\s*(?:"([^"]*)"|'([^']*)'|([^"')\s]*))\s*\)""")
@@ -154,6 +158,8 @@ def main(root: Path, first_party: str) -> int:
             host = host_of(ref)
             if host and host not in allowed:
                 problems.append(f"{page.relative_to(root)}: <{tag} {attr}> loads {ref}")
+            if (tag, attr) not in FILE_LOADS:
+                continue
             target = local_file(root, page, ref, allowed)
             if target and target.suffix == ".css":
                 sheets.add(target)
