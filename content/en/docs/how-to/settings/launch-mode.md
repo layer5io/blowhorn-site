@@ -1,0 +1,143 @@
+---
+title: "Choose how Blowhorn reaches Chrome"
+description: "Stay on the extension default, or attach to your Chrome or launch Blowhorn's own. Advanced."
+weight: 180
+aliases: [/docs/how-to/choose-a-chrome-launch-mode/]
+---
+
+# Choose how Blowhorn reaches Chrome
+
+Most runs should keep the default: Blowhorn drives Chrome through the Blowhorn
+Chrome extension and launches nothing of its own. Change it only when one run
+or one job needs a real Chrome window. Advanced page: the default is the right
+choice until you have a reason.
+
+## Before you start
+
+Every profile the run acts for must be mapped to a Chrome profile first. A run
+refuses an unmapped profile by name in every mode. `blowhorn chrome status`
+reports which mode a run would use right now, and every run names the driver
+it used once.
+
+## The default: the extension
+
+With nothing set, a run drives your mapped Chrome profiles through the
+extension. It opens one mapped profile per process, a scheduled job included,
+and refuses by name what the extension cannot do yet. During early access your
+Blowhorn administrator helps you install it.
+
+One case needs another mode today: the extension's typing does not reach X's
+editor or sign-in form, so X posts and X sign-ins stop before anything is
+typed. Run those with `--chrome-launch persistent`.
+
+## Launch Blowhorn's own Chrome
+
+```bash
+blowhorn post --profile ada --chrome-launch persistent
+```
+
+For one shell instead of one run: `BLOWHORN_CHROME_LAUNCH=persistent`. To move
+the whole process back to launching: `BLOWHORN_EXTENSION_ROLLBACK=1`.
+
+The run launches Blowhorn's own Chrome from its automation directory, with
+your mapped Chrome directory as the profile inside it. No allow dialog ever,
+and it runs beside your open daily Chrome without contending for its lock.
+Each automation profile starts empty, so sign it in once with `--headed`
+before a real run.
+
+## Attach to the Chrome you have open
+
+```bash
+blowhorn post --profile ada --chrome-launch cdp
+```
+
+Mac only. The run connects to your open Chrome, Chrome asks you to allow the
+connection once per run, and Blowhorn's tab opens in the mapped profile. The
+dialog has no "remember me", so every run asks again: this is an interactive
+mode, for runs you watch. Never pin an overnight job to it: with nobody there
+to click allow, the job waits out the short unattended bound and fails by
+name, every time.
+
+A dialog outlives the run that raised it. Clicking allow in a leftover dialog
+approves nothing: click cancel there and run again.
+
+## An unattended attach: no Allow dialog
+
+For the authenticity of a real Chrome profile with no dialog, run a second
+Chrome on a tree of its own. Chrome 136 and later ignore the classic port
+switch on the default data directory, which is why this is a separate Chrome
+and not your daily one. Mac only:
+
+```bash
+blowhorn chrome attach-chrome start
+```
+
+That starts Chrome on `~/.blowhorn/attach-chrome`, prints the steps it leaves
+to you, and steps back: Blowhorn never drives that Chrome itself. Do them in
+order:
+
+```bash
+blowhorn config set defaults.chrome.data_dir ~/.blowhorn/attach-chrome
+blowhorn chrome profiles
+blowhorn chrome map ada 'Default'
+blowhorn post --profile ada --chrome-launch cdp
+```
+
+On its own, `blowhorn chrome attach-chrome` reports that tree without starting
+anything, and `start --dry-run` prints the command line without running it.
+The profiles there start empty and are signed in once, like automation
+profiles. Starting is refused when the tree is Chrome's own default data
+directory, or when a port is already recorded there: a crashed Chrome leaves
+its `DevToolsActivePort` behind too, so the refusal names the file to delete.
+
+## One scheduled job, its own driver
+
+A job names its driver in its `Driver Mode`: `default`, `extension`, `cdp` or
+`persistent`. Set "browser driver" in the job editor, or the key on `blowhorn
+schedule upsert`. The choice belongs to that job alone and applies to nothing
+else in the pass.
+
+Two explicit overrides still win over the job: a launch mode forced on the
+whole tick (`--chrome-launch` on the tick, or `BLOWHORN_CHROME_LAUNCH` in its
+environment), and `BLOWHORN_EXTENSION_ROLLBACK=1` over a job set to
+`extension`. The job's log names the driver it used and says when an override
+beat it.
+
+## Where the setting is read
+
+Top wins over everything below it, with one exception: the rollback switch
+also beats a job set to `extension`, and it replaces whatever the file says.
+
+| layer | spelling |
+| --- | --- |
+| one run | `--chrome-launch auto\|cdp\|persistent\|extension`, on every command |
+| your shell | `BLOWHORN_CHROME_LAUNCH=cdp` |
+| one scheduled job | its `Driver Mode` (`default`, `extension`, `cdp`, `persistent`) |
+| debugging | `BLOWHORN_BROWSER_DRIVER=cdp` (no file key, no flag) |
+| whole process fallback | `BLOWHORN_EXTENSION_ROLLBACK=1` selects launching unless a layer above decides - a job's `cdp` or `persistent`, or the variable's `auto`, `cdp` or `persistent`; a job's `extension`, the variable's `extension` and the file's value all give way to it |
+| this checkout | `defaults.chrome.launch_mode` in `.blowhorn.yaml` |
+| nothing set | the extension default |
+
+A value outside the four is refused before anything runs. A forced `cdp`
+against a Chrome that is not ready is refused with the next step `blowhorn
+chrome status` prints; only `auto` falls back to launching, and says so once.
+
+A scheduler tick adds no layer of its own: unless the flag is on the tick's
+argv, each job resolves its own driver.
+
+## When something refuses
+
+| sentence | what to do |
+| --- | --- |
+| `profile ada has no chrome profile mapped on <host>; …` | `blowhorn chrome map ada '<directory>'` |
+| `chrome launch mode is cdp but chrome is not ready: <next step>` | do the next step, or drop the forced `cdp` |
+| `chrome's 'Allow remote debugging?' dialog was not answered within 120 s; …` (20 s for a scheduled job) | click cancel in the dialog still open in Chrome, run again and click allow in the new one, or run with `--chrome-launch persistent` |
+| `profile ada on linkedin is in use by blowhorn process <pid>; …` | another run is acting as that profile: wait for it, or stop it |
+| `… is google chrome's own data directory; …` | the dedicated tree must never be Chrome's own default directory |
+
+## Related
+
+- [Change your defaults](/docs/how-to/settings/defaults/) - the file layer these settings sit in
+- [Schedule a job](/docs/how-to/schedule/schedule-a-job/) - give one job its own driver
+- [Fix the Chrome extension connection](/docs/how-to/troubleshoot/extension-connection/) - when the default route breaks
+- [Post to X when it will not confirm](/docs/how-to/troubleshoot/x-posting/) - the one case that needs another mode

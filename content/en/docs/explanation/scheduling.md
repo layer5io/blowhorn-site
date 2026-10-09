@@ -1,0 +1,49 @@
+---
+title: "How scheduling works"
+description: "Ten-minute passes, one shared queue across Macs, leases, and the three pause scopes."
+weight: 286
+---
+
+# How scheduling works
+
+Posting on autopilot means a pass that runs without you, a queue every
+Mac can share, and pauses that mean what they say. This page explains
+the arrangement; the words and commands are in
+[Job options and schedules](/docs/reference/jobs/).
+
+One pass runs every ten minutes. It wakes, claims the rows that are
+due, runs them one at a time, writes the ledger, and sleeps again. A
+pass that finds nothing due costs nothing and changes nothing. The
+service owns the passes while the app is closed; your terminal owns
+the pass you trigger by hand, which never waits for the interval.
+
+Several Macs share one queue through leases, not locks. A claimed row
+says running with a lease timestamp, and the holder renews the lease
+as it works. A row whose lease lapsed is some dead machine's, and the
+next pass reclaims it. That is why a row's Status never reads as a
+lock, and why two Macs never work the same row: the claim statement
+reads the lease alone, atomically, and only one claimant wins it.
+
+Three pause scopes cover the three reasons to stop. This machine's
+file stops this Mac and nothing else, for maintenance on one machine.
+The organization-wide pause stops every Mac sharing the store, with a
+reason every banner repeats. One row's pause holds that row everywhere
+until resumed. A row is claimed only when none of the three says
+paused, and quitting the app touches none of them: pausing is always
+explicit, resuming always named.
+
+A row that did not run is never a mystery. `schedule why` reads the
+claim the pass would make: paused at some scope, not yet due, lease
+held by a living run, or eligible and waiting for the next pass. The
+popover says the same thing in fewer words: due now, running, paused,
+or needs you.
+
+## Related
+
+- [Schedule a job](/docs/how-to/schedule/schedule-a-job/) - create and edit jobs.
+- [Pause and resume posting](/docs/how-to/schedule/pause/) - the pause scopes in practice.
+- [Find out why a job did not run](/docs/how-to/schedule/why-not-run/) - read `schedule why`.
+- [Job options and schedules](/docs/reference/jobs/) - recurrence words and scopes.
+- [What runs when the app is closed](/docs/explanation/distribution/) - the service behind the passes.
+- [The Blowhorn app, screen by screen](/docs/reference/use-the-desktop-app/) - the "jobs" screen.
+- [Collect and read your analytics](/docs/how-to/measure/analytics/) - read what the passes produced.
