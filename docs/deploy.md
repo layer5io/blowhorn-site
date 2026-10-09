@@ -1,24 +1,38 @@
 # Deploying the site
 
-How `site/` becomes blowhorn.ai: the GitHub Pages deployment, the custom
-domain, the DNS records the registrar needs, and how to verify a deployment.
+How the Hugo site in this repository becomes blowhorn.ai: the build, the
+GitHub Pages deployment, the custom domain, the DNS records the registrar
+needs, and how to verify a deployment.
 
 ## What deploys, and when
 
 [`site.yml`](../.github/workflows/site.yml) runs on every pull request and on
 every push to `master`:
 
-1. `make workflow-check` lints the workflows with actionlint.
-2. `make site-check` validates every page with html-validate and checks every
-   local link, image, font and `srcset` reference.
-3. `make site-build` copies `site/` to `_site/` and adds `.nojekyll`, and the
-   result is uploaded as the Pages artifact.
-4. On `master` only (a push or a manual run), the `deploy` job publishes that
+1. It installs the pinned toolchain: Go from [`go.mod`](../go.mod) (Hugo
+   fetches Docsy as a Hugo module), Node.js from [`.nvmrc`](../.nvmrc), and
+   Hugo extended and postcss from [`package.json`](../package.json) with
+   `npm ci`. The checkout has full history so each page's last-modified date
+   (sitemap, `llms-full.txt`) comes from git.
+2. `make workflow-check` lints the workflows with actionlint.
+3. `make site-check` builds for production into `public/`
+   (`hugo --minify --gc`, which minifies CSS and JavaScript and leaves HTML
+   readable), then checks that output:
+   - html-validate on every page;
+   - `make check-links`: every local link, image, font and `srcset` reference
+     resolves ([`check-site-links.py`](../.github/scripts/check-site-links.py));
+   - no page, stylesheet or script it loads requests anything from another
+     host ([`check-third-party.py`](../.github/scripts/check-third-party.py)),
+     because the privacy page promises it;
+   - every public URL and every anchor the site has published still exists
+     ([`check-site-contract.py`](../.github/scripts/check-site-contract.py)).
+4. `public/` is uploaded as the Pages artifact.
+5. On `master` only (a push or a manual run), the `deploy` job publishes that
    artifact with `actions/deploy-pages` under the `github-pages` environment.
    The job needs `pages: write` and `id-token: write`, which it declares itself.
 
-A pull request never deploys. There is no build step, so what is in `site/` on
-`master` is exactly what is served.
+A pull request never deploys. Its run still uploads the built site as the
+`github-pages` artifact, which you can download from the run to inspect.
 
 ### Verify a deployment
 
@@ -51,7 +65,7 @@ This was done on 2026-10-08: Pages exists with `build_type: workflow` and the
 custom domain `blowhorn.ai`. HTTPS enforcement is set once GitHub issues the
 certificate, which needs the DNS records below.
 
-`site/CNAME` carries `blowhorn.ai` for completeness. With a workflow
+`static/CNAME` (published as `/CNAME`) carries `blowhorn.ai` for completeness. With a workflow
 deployment GitHub ignores the file; the custom domain is the one set through
 the API or Settings > Pages, below.
 
@@ -130,30 +144,50 @@ dig +short CNAME www.blowhorn.ai   # expect: layer5io.github.io.
 curl -sI https://www.blowhorn.ai   # expect 301 to https://blowhorn.ai/
 ```
 
-## Pages that assume the root
+## URLs
 
-`site/404.html` references its stylesheet and images with root-relative paths
-(`/styles.css`) because GitHub serves it for any missing path, including
-nested ones, where relative paths would break. At the fallback
-`layer5io.github.io/blowhorn-site/` URL the 404 page therefore renders without
-styles; at blowhorn.ai it is fully styled. Every other page uses relative
-paths and works at both hosts.
+Every page and asset reference is root-relative (`/css/site.<hash>.css`,
+`/assets/brand/...`), built from `baseURL` in [`hugo.toml`](../hugo.toml)
+(`https://blowhorn.ai/`). That is what lets `404.html` work for any missing
+path, nested ones included. A build with a different base URL
+(`make build-production BASE_URL=...` or `make build-preview`) prefixes every
+reference with that URL's path. The project URL
+`layer5io.github.io/blowhorn-site/` redirects to blowhorn.ai, so nothing is
+served under that path in production.
+
+The public URLs are a contract, checked by `make site-check`:
+
+- `/`, `/privacy.html` and `/terms.html`. The privacy and terms pages live in
+  `content/en/` and keep their `.html` URLs through `uglyURLs` in
+  `hugo.toml`; their Markdown copies are `/privacy.md` and `/terms.md`.
+- The home page's anchors: `#platforms`, `#how`, `#trust`, `#download`.
+- `/assets/brand/...` (from `static/assets/brand/`), `/favicon.ico`, `/CNAME`.
+- Generated: `/sitemap.xml`, `/robots.txt` (which names the sitemap),
+  `/llms.txt`, `/llms-full.txt` and `/index.md`.
 
 The canonical URLs, Open Graph tags, `sitemap.xml` and `robots.txt` name
-`https://blowhorn.ai/`.
+`https://blowhorn.ai/`. A build with `HUGO_PREVIEW=true` marks every page
+`noindex, nofollow` and its `robots.txt` disallows everything.
+
+Docsy's own static files (Font Awesome webfonts, its favicons and a few
+scripts) are published too because Docsy is imported as a module, as in
+layer5io/docs; no page loads them.
 
 ## Local checks and evidence
 
 ```bash
-make check         # html-validate, link check, actionlint: what CI runs
-make site-serve    # http://localhost:8080
+make setup         # once: npm install
+make check         # production build, html-validate, link, third-party and contract checks, actionlint: what CI runs
+make site          # http://localhost:1313 with live reload
 ```
 
-Before a visual change ships, take screenshots at 390, 820 and 1440 px wide
-in both colour schemes and confirm there is no horizontal scroll from 320 to
-1440 px. With chrome-devtools-axi:
+Before a visual change ships, build for production and serve `public/`, then
+take screenshots at 390, 820 and 1440 px wide in both colour schemes and
+confirm there is no horizontal scroll from 320 to 1440 px. With
+chrome-devtools-axi:
 
 ```bash
+make build-production && python3 -m http.server 8080 --directory public
 chrome-devtools-axi open http://localhost:8080/
 chrome-devtools-axi resize 390 844
 chrome-devtools-axi emulate --color-scheme dark

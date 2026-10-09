@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{ partial "head.html" . }}
+    {{- block "head" . }}{{ end }}
+  </head>
+  <body>
+    <a class="skip-link ui" href="#main">Skip to content</a>
+    {{- block "sprite" . }}{{ end }}
+
+    {{ partial "header.html" . }}
+    {{- block "main" . }}{{ end }}
+
+    {{ partial "footer.html" . }}
+    {{- block "scripts" . }}{{ end }}
+  </body>
+</html>

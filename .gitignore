@@ -17,10 +17,13 @@
 # IDEs
 .vscode/*
 
-# Blowhorn site build output and local tools
-_site/
+# Hugo build output and caches, and local tools
+/public/
+/resources/
+.hugo_build.lock
 .bin/
 node_modules/
+__pycache__/
 
 # Never commit disk images; publish them as GitHub Release assets
 *.dmg

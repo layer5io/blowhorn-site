@@ -1,0 +1,18 @@
+{{- /* Privacy and terms (content/en/privacy.md, content/en/terms.md). The page
+  head comes from front matter: title is the label, heading the h1 and lead the
+  intro paragraph (Markdown). */ -}}
+{{ define "main" }}
+    <main id="main" class="page">
+      <div class="wrap">
+        <div class="page-head">
+          <p class="label">{{ .Title }}</p>
+          <h1 class="h1">{{ .Params.heading }}</h1>
+          <p class="body-lg muted">{{ .Params.lead | .RenderString }}</p>
+        </div>
+
+        <div class="prose">
+          {{ .Content }}
+        </div>
+      </div>
+    </main>
+{{- end }}

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Fail if any page or stylesheet in the site directory references a local file that does not exist.
+"""Fail if any page or stylesheet in the built site references a local file that does not exist.
 
 Checks href, src and srcset on every element of every HTML page, and every
-url(...) in every stylesheet. A root-relative reference ("/styles.css")
+url(...) in every stylesheet. A root-relative reference ("/css/site.css")
 resolves against the site root, which is how GitHub Pages serves blowhorn.ai;
 a relative one resolves against the directory of the page or stylesheet.
+Run it on the Hugo build output (`make check-links` builds and runs it).
 """
 
 import re
@@ -90,4 +91,4 @@ def main(root: Path) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main(Path(sys.argv[1] if len(sys.argv) > 1 else "site")))
+    sys.exit(main(Path(sys.argv[1] if len(sys.argv) > 1 else "public")))

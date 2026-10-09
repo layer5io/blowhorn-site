@@ -12,7 +12,7 @@ Pages hosts only the marketing site and small static files.
 
 | What | Where |
 |------|-------|
-| Marketing site | GitHub Pages from `site/`, at <https://blowhorn.ai> (see [deploy.md](deploy.md)) |
+| Marketing site | GitHub Pages, built by Hugo from this repo, at <https://blowhorn.ai> (see [deploy.md](deploy.md)) |
 | macOS DMG | Release asset on this repo |
 | Checksums | `SHA256SUMS.txt` attached to each release |
 | Update manifest (later) | Release asset next to the DMG (for example `latest-mac.yml` for electron-updater, or a Sparkle `appcast.xml`) |
@@ -34,7 +34,7 @@ Pages hosts only the marketing site and small static files.
   GitHub resolves `latest` to the newest published, non-draft, non-prerelease
   release. Until the first stable release exists, this URL returns 404 and the
   site says the first public build is on its way. The site's Download section
-  (`site/download.js`) reads the release list from GitHub's API in the
+  (`assets/js/download.js`) reads the release list from GitHub's API in the
   visitor's browser and shows a download button on the always-latest URL for
   the newest stable release, the "on its way" copy while there is none, and a
   "lookup failed" state with a link to the releases page on any error, so an
@@ -114,9 +114,8 @@ That plan is tracked with the product repo's productization work.
 ## Local checks
 
 ```bash
-make site-check                        # html-validate + local link check
-make site-build                        # writes _site/ (the Pages artifact)
-make site-serve                        # http://localhost:8080
+make site-check                        # production build into public/ (the Pages artifact), then its checks
+make site                              # http://localhost:1313
 make workflow-check                    # actionlint on this repo's workflows
 make dmg-check DMG=path/to/file.dmg    # UDIF sanity check before publishing
 ```
