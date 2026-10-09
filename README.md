@@ -1,51 +1,67 @@
-<p align="center"><img src="site/assets/blowhorn-lockup.svg" alt="Blowhorn" width="360"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="site/assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg">
+    <img alt="Blowhorn" src="site/assets/brand/logo/blowhorn-lockup-horizontal.svg" width="360">
+  </picture>
+</p>
 
 # Blowhorn site and downloads
 
-This repository holds two things for **Blowhorn**, a Layer5 product:
+This repository is two things for **Layer5 Blowhorn**:
 
-1. **The marketing site**, planned for [blowhorn.ai](https://blowhorn.ai) (the domain may not resolve yet). The source is a static site in [`site/`](site/), deployed with GitHub Pages.
-2. **Public downloads.** Signed and notarized macOS DMGs and other public artifacts are published as [GitHub Releases](https://github.com/layer5io/blowhorn-site/releases) on this repo. There are no public builds yet. Signed DMGs will arrive with the first release.
+1. **The marketing site** at [blowhorn.ai](https://blowhorn.ai). The source is the static site in [`site/`](site/), deployed to GitHub Pages by [`site.yml`](.github/workflows/site.yml). The Pages custom domain is already blowhorn.ai, so the project URL <https://layer5io.github.io/blowhorn-site/> only redirects there; the site is reachable once the domain's DNS points at Pages, as [`docs/deploy.md`](docs/deploy.md) describes.
+2. **Public downloads.** macOS disk images and their checksums are published as [GitHub Releases](https://github.com/layer5io/blowhorn-site/releases) on this repository. No release binary is committed here.
 
-Blowhorn is Layer5's automated megaphone for communities: one message in, broad reach across every social profile you run.
+Blowhorn is a social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot. One message. Many ears.
 
 ## Download
 
-Once the first stable release is out, this link always points to the newest macOS build:
+Once the first stable release is public, this link always points at the newest universal macOS build:
 
 ```
 https://github.com/layer5io/blowhorn-site/releases/latest/download/Blowhorn-mac.dmg
 ```
 
-Each release includes a `SHA256SUMS.txt` for verifying the download. The Chrome extension will ship through the Chrome Web Store (published with a [service account](https://developer.chrome.com/docs/webstore/service-accounts)), not from this repo.
+Every release carries a `SHA256SUMS.txt`. Check the image before you open it:
+
+```bash
+shasum -a 256 -c SHA256SUMS.txt
+```
+
+The Chrome extension ships through the Chrome Web Store, not from this repository.
 
 ## Where things live
 
 | | |
 |---|---|
-| Product source, issues, and build pipeline | Private: [`leecalcote/blowhorn`](https://github.com/leecalcote/blowhorn) |
-| Marketing site source | [`site/`](site/) in this repo |
-| Release binaries | [Releases](https://github.com/layer5io/blowhorn-site/releases) on this repo |
+| Site source | [`site/`](site/): hand-written HTML, CSS and a little JavaScript, no framework, no build step beyond copying |
+| Brand assets | [`site/assets/brand/`](site/assets/brand/): version 1 of the brand kit (logo system, Major Blowhorn, marketing art, `tokens.json`) and the three self-hosted fonts; attribution in [`LICENSES.md`](site/assets/brand/LICENSES.md) |
+| How the site deploys and how the domain is wired | [`docs/deploy.md`](docs/deploy.md) |
 | How releases are published | [`docs/distribution.md`](docs/distribution.md) |
+| Release binaries | [Releases](https://github.com/layer5io/blowhorn-site/releases) on this repository |
+| Product source and build pipeline | Private: [`leecalcote/blowhorn`](https://github.com/leecalcote/blowhorn) |
 
-Product questions and bugs belong in the product repo. Use this repo's issues for site content and download problems.
+**Reporting problems.** The product repository is private, so use [this repository's issues](https://github.com/layer5io/blowhorn-site/issues) for everything public: site content, a download that will not open, a wrong checksum, or a bug in the app. Maintainers triage app bugs into the product repository. The [Layer5 Slack](https://slack.layer5.io) works too.
 
 ## Working on the site
 
-The site is plain HTML and CSS with no build dependencies. You need `make`, Python 3, and Node.js (for `npx`).
+You need `make`, Python 3 and Node.js (for `npx`). Nothing is installed into the repository.
 
 ```bash
 make site-serve      # build into _site/ and serve at http://localhost:8080
-make site-check      # validate HTML and local links (same as CI)
-make workflow-check  # lint this repo's GitHub Actions workflows
+make site-check      # html-validate plus the local link, image and font check (same as CI)
+make workflow-check  # actionlint on this repository's workflows
+make check           # both checks
 ```
+
+The site follows the brand kit exactly: every colour, type style, spacing, radius and shadow in `site/styles.css` is a token from `site/assets/brand/tokens.json`, with light as the default theme and dark following the operating system. Brand SVGs are used as files and never recoloured. The one-to-many hero illustration and the platform marks are inline SVG drawn in `currentColor`.
 
 ### CI
 
 | Workflow | When | What it does |
 |---|---|---|
-| [`site.yml`](.github/workflows/site.yml) | Pull requests and pushes to `master` | Lints workflows, validates the site, and builds the Pages artifact. Deploys to Pages on `master` once Pages is enabled and the `PAGES_ENABLED` repo variable is `true`. |
-| [`publish-dmg.yml`](.github/workflows/publish-dmg.yml) | Manual, or `repository_dispatch` (`publish-dmg`) | Downloads a built DMG, validates it, optionally checks signing and notarization on macOS, then creates a release with versioned and always-latest assets and checksums. Creates a draft by default. |
+| [`site.yml`](.github/workflows/site.yml) | Pull requests, pushes to `master`, manual runs | Lints the workflows, validates the site and builds the Pages artifact. On `master` it deploys the artifact to GitHub Pages. |
+| [`publish-dmg.yml`](.github/workflows/publish-dmg.yml) | Manual, or `repository_dispatch` (`publish-dmg`) from product CI | Downloads a built DMG over HTTPS, checks it, verifies signing and notarization on a macOS runner (required for any public release), then creates the release with versioned assets, the `Blowhorn-mac.dmg` alias and checksums. Drafts by default; never overwrites. |
 
 <div>&nbsp;</div>
 

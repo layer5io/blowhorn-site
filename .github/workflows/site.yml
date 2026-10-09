@@ -1,5 +1,9 @@
 name: Site
 
+# Validates the site on every pull request and push to master, and deploys it
+# to GitHub Pages (Settings > Pages > Source: GitHub Actions) on master.
+# See docs/deploy.md.
+
 on:
   pull_request:
   push:
@@ -39,13 +43,10 @@ jobs:
         with:
           path: _site
 
-  # Deploys to GitHub Pages only after Pages is enabled for this repository
-  # (Settings > Pages > Source: GitHub Actions) and the repository variable
-  # PAGES_ENABLED is set to "true". Until then this job is skipped.
   deploy:
     name: Deploy to GitHub Pages
     needs: check
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master' && vars.PAGES_ENABLED == 'true'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     permissions:
       pages: write
