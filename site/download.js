@@ -1,8 +1,10 @@
 // Fills the Download section from the newest published GitHub Release on
-// layer5io/blowhorn-site. The releases list is read (not /releases/latest) so
-// that "no release yet" is an empty list rather than a 404 that the browser
-// logs as an error. The newest non-draft, non-prerelease release is what
-// GitHub's "latest" resolves to, so the always-latest URL and this card agree.
+// layer5io/blowhorn-site. The newest 100 releases are read first (not
+// /releases/latest) so that "no release yet" is an empty list rather than a 404
+// that the browser logs as an error. The newest non-draft, non-prerelease
+// release is what GitHub's "latest" resolves to, so the always-latest URL and
+// this card agree. Only when a full page of 100 holds no stable release (a
+// long prerelease train) is /releases/latest asked, where a 404 means none.
 //
 // States, in order of preference:
 //   1. A stable release carries the fixed-name alias (Blowhorn-mac.dmg): one
@@ -95,9 +97,22 @@
     replaceCard(children);
   }
 
-  fetch("https://api.github.com/repos/" + repo + "/releases?per_page=20", {
-    headers: { Accept: "application/vnd.github+json" },
-  })
+  var api = "https://api.github.com/repos/" + repo + "/releases";
+  var headers = { Accept: "application/vnd.github+json" };
+
+  function latestStable() {
+    return fetch(api + "/latest", { headers: headers }).then(function (res) {
+      if (res.status === 404) {
+        return null;
+      }
+      if (!res.ok) {
+        throw new Error("GitHub answered " + res.status);
+      }
+      return res.json();
+    });
+  }
+
+  fetch(api + "?per_page=100", { headers: headers })
     .then(function (res) {
       if (!res.ok) {
         throw new Error("GitHub answered " + res.status);
@@ -111,6 +126,12 @@
       var stable = releases.find(function (r) {
         return r && !r.draft && !r.prerelease;
       });
+      if (stable) {
+        return stable;
+      }
+      return releases.length === 100 ? latestStable() : null;
+    })
+    .then(function (stable) {
       if (stable) {
         showRelease(stable);
       }
