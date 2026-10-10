@@ -10,9 +10,9 @@ While this isn't an absolutely necessary step, if you plan on doing anything mor
 
 ## Add 'upstream' repo to list of remotes
 ```
-git remote add upstream https://github.com/layer5io/meshery.git
+git remote add upstream https://github.com/layer5io/blowhorn-site.git
 ``` 
-("meshery" is used as the example repo. Be sure to reference the _actual_ repo you're contributing to e.g. "meshery-linkerd").
+("blowhorn-site" is used as the example repo. Be sure to reference the _actual_ repo you're contributing to.)
 
 ## Verify the new remote named 'upstream'
 ```

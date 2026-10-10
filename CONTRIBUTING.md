@@ -13,7 +13,7 @@ Relevant coding style guidelines are the Go Code Review Comments and the Formatt
 
 # <a name="contributing">General Contribution Flow</a>
 
-In order to contribute to Meshery, please follow the fork-and-pull request workflow described [here](./CONTRIBUTING-gitflow.md).
+In order to contribute to the Blowhorn site, please follow the fork-and-pull request workflow described [here](./CONTRIBUTING-gitflow.md).
 
 ## <a name="commit-signing">Signing-off on Commits (Developer Certificate of Origin)</a>
 

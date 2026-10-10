@@ -15,7 +15,7 @@ Set `Title`, put the text in `Message Text`, and put the subreddit in
 `Destination` as `r/<sub>`:
 
 ```bash
-blowhorn content upsert --payload '{"Platform":"reddit","Profile":"kate","Title":"Meshery v0.9 is out","Message Text":"What is new in this release...","Destination":"r/meshery","Approved?":"yes"}'
+blowhorn content upsert --payload '{"Platform":"reddit","Profile":"kate","Title":"Our v2.0 release is out","Message Text":"What is new in this release...","Destination":"r/devops","Approved?":"yes"}'
 blowhorn post --platform reddit --profile kate --dry-run
 blowhorn post --platform reddit --profile kate
 ```
@@ -33,7 +33,7 @@ Put the text in `Message Text`. Past 300 characters the post splits into a
 thread at word boundaries:
 
 ```bash
-blowhorn content upsert --payload '{"Platform":"bluesky","Profile":"kate","Message Text":"Meshery v0.9 is out...","Approved?":"yes"}'
+blowhorn content upsert --payload '{"Platform":"bluesky","Profile":"kate","Message Text":"Our v2.0 release is out...","Approved?":"yes"}'
 blowhorn post --platform bluesky --profile kate --dry-run
 blowhorn post --platform bluesky --profile kate
 ```
@@ -50,7 +50,7 @@ A row with `Image URL` attaches that file. A comment on a post is a
 Put the post's Bluesky URL in `Amplify` and leave `Message Text` empty:
 
 ```bash
-blowhorn content upsert --payload '{"Platform":"bluesky","Profile":"kate","Amplify":"https://bsky.app/profile/meshery.bsky.social/post/abc","Approved?":"yes"}'
+blowhorn content upsert --payload '{"Platform":"bluesky","Profile":"kate","Amplify":"https://bsky.app/profile/yourproject.bsky.social/post/abc","Approved?":"yes"}'
 ```
 
 Unlike LinkedIn reposts, a Bluesky repost is not guarded against a second

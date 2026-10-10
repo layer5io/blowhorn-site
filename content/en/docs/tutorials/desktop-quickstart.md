@@ -43,7 +43,7 @@ Work down the rows:
    folder…** and select it.
 2. **python environment** - this should already be `ok` from the CLI tutorial.
 3. **store** - the database connection. If it is not configured yet, click
-   **import from meshery-cloud** and follow
+   its **import** action and follow
    Connect to the store.
 4. **background service** - nothing to do here: once the rows above are ok
    the app registers the service itself, and this row only reports it. You do
