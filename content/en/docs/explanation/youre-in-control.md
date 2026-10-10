@@ -11,6 +11,8 @@ autopilot. But the AI is never in control. You are. Even when you hand
 approval to an AI agent and let it run, the policies inside Blowhorn still
 decide what may happen, how fast, and when to stop.
 
+{{< major >}}You give the orders. I carry them out: one window, one profile, one platform at a time. Nobody types into two windows at once. Not in my unit.{{< /major >}}
+
 This page gathers every worry people bring to a tool that posts as them,
 and answers each with the control that handles it, where that control
 lives, and the page that documents it.
