@@ -10,6 +10,8 @@ What Blowhorn can do on each of the seven platforms, how it reaches
 each one, and the limits it honors. This page describes; the steps live
 in the how-to guides linked under Related.
 
+{{< major >}}Two hundred seventy-four characters before X wants a thread. I don't make the rules. I thread them.{{< /major >}}
+
 Four platforms drive your own signed-in Chrome through the extension:
 LinkedIn, X, Reddit, and Hacker News. Three post through their APIs
 above the browser: Slack, Bluesky, and GitHub. A platform is usable the

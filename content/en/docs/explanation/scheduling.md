@@ -11,6 +11,8 @@ Mac can share, and pauses that mean what they say. This page explains
 the arrangement; the words and commands are in
 [Job options and schedules](/docs/reference/jobs/).
 
+{{< major >}}One awake Mac, set up for the profile. That's all the schedule needs.{{< /major >}}
+
 One pass runs every ten minutes. It wakes, claims the rows that are
 due, runs them one at a time, writes the ledger, and sleeps again. A
 pass that finds nothing due costs nothing and changes nothing. The

@@ -21,6 +21,8 @@ from a content row. Put the URL in the row's `Amplify` column and set
 | Bluesky | post URL | empty | repost |
 | GitHub | issue or PR URL | ignored | all five reactions |
 
+{{< major >}}Your launch deserves more than nine likes. Fall in, profiles.{{< /major >}}
+
 ```bash
 blowhorn post --platform linkedin --profile marcus --dry-run
 blowhorn post --platform linkedin --profile marcus
