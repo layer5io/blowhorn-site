@@ -57,7 +57,7 @@ policies:
 
 ## Report a security issue
 
-If you think you have found a security vulnerability in Blowhorn, send the details to Layer5's private [security@layer5.io](mailto:security@layer5.io) mailing list rather than opening a public issue. Layer5 acknowledges and analyzes each report within 10 working days and keeps the reporter updated while it is addressed. The [security policy](https://github.com/layer5io/blowhorn-site/blob/master/SECURITY.md) explains what to report and how fixes are disclosed.
+If you think you have found a security vulnerability in Blowhorn, send the details privately to [security@blowhorn.ai](mailto:security@blowhorn.ai) rather than opening a public issue. Layer5 acknowledges and analyzes each report within 10 working days and keeps the reporter updated while it is addressed. The [security policy](https://github.com/layer5io/blowhorn-site/blob/master/SECURITY.md) explains what to report and how fixes are disclosed.
 
 ## Questions
 
