@@ -1,69 +1,56 @@
-{{- /* Three footers, as the site has always had: the full footer on the home
-  page, a bare strip on the 404 page, and a legal strip everywhere else (the
-  Trust Center at /legal/, its policies and the docs). */ -}}
+{{- /* Three footers: the full footer on the home page, a bare strip on the 404
+  page, and a legal strip everywhere else (the Trust Center at /legal/, its
+  policies and the docs). The status link mirrors the layer5.io footer's
+  "Layer5 Cloud Status" link (layer5io/layer5 src/sections/General/Footer):
+  a plain link to the Layer5 status page with a pulsing dot, no script and
+  no request to another host. */ -}}
 {{- $trust := (site.GetPage "/legal").RelPermalink -}}
 {{- $privacy := (site.GetPage "/legal/privacy").RelPermalink -}}
 {{- $terms := (site.GetPage "/legal/terms").RelPermalink -}}
+{{- $docs := (site.GetPage "/docs").RelPermalink -}}
 {{- $source := site.Params.github_repo -}}
+{{- $status := `<a class="status-link" href="https://layer5.statuspage.io/">Layer5 Cloud status <span class="pulse-dot" aria-hidden="true"></span></a>` -}}
 <footer class="site-footer">
       <div class="wrap">
         {{- if .IsHome }}
-        <div class="footer-grid">
+        <div class="footer-top">
           <div class="footer-brand">
             <picture>
               <source media="(prefers-color-scheme: dark)" srcset="{{ "assets/brand/logo/layer5-blowhorn-lockup-on-dark.svg" | relURL }}">
               <img src="{{ "assets/brand/logo/layer5-blowhorn-lockup.svg" | relURL }}" alt="Layer5 Blowhorn" width="220" height="60">
             </picture>
             <p>Blowhorn is made by Layer5. One message in, many ears out.</p>
-            {{ partial "newsletter.html" . }}
           </div>
-          <div class="footer-cols">
-            <nav class="footer-col" aria-label="Product">
-              <p class="label">Product</p>
-              <ul class="ui">
-                <li><a href="#platforms">Platforms</a></li>
-                <li><a href="#how">How you run it</a></li>
-                <li><a href="#download">Download</a></li>
-                <li><a href="{{ $source }}/releases">Releases</a></li>
-              </ul>
-            </nav>
-            <nav class="footer-col" aria-label="Layer5">
-              <p class="label">Layer5</p>
-              <ul class="ui">
-                <li><a href="https://layer5.io/">layer5.io</a></li>
-                <li><a href="https://github.com/layer5io">GitHub</a></li>
-                <li><a href="https://slack.layer5.io/">Slack</a></li>
-                <li><a href="https://layer5.io/community">Community</a></li>
-              </ul>
-            </nav>
-            <nav class="footer-col" aria-label="Legal">
-              <p class="label">Legal</p>
-              <ul class="ui">
-                <li><a href="{{ $trust }}">Trust Center</a></li>
-                <li><a href="{{ $privacy }}">Privacy</a></li>
-                <li><a href="{{ $terms }}">Terms</a></li>
-                <li><a href="mailto:security@blowhorn.ai">Security: security@blowhorn.ai</a></li>
-                <li><a href="https://layer5.io/company/legal/">Layer5 legal</a></li>
-              </ul>
-            </nav>
-          </div>
+          {{ partial "newsletter.html" . }}
         </div>
+        <nav class="footer-links ui" aria-label="Footer">
+          <a href="#platforms">Platforms</a>
+          <a href="#download">Download</a>
+          <a href="{{ $source }}/releases">Releases</a>
+          <a href="{{ $docs }}">Docs</a>
+          <a href="{{ $trust }}">Trust Center</a>
+          <a href="{{ $privacy }}">Privacy</a>
+          <a href="{{ $terms }}">Terms</a>
+          <a href="mailto:security@blowhorn.ai">Security</a>
+          <a href="https://layer5.io/">layer5.io</a>
+          <a href="https://layer5.io/community">Community</a>
+        </nav>
         <div class="footer-meta caption">
           <span>&copy; 2026 {{ site.Params.copyright }}</span>
-          <span>LinkedIn, X, Reddit, Hacker News, Slack, Bluesky and GitHub are trademarks of their respective owners. Blowhorn is not affiliated with or endorsed by any of them.</span>
-          <a href="{{ $source }}">Site source on GitHub</a>
+          {{ $status | safeHTML }}
+          <span class="footer-tm">LinkedIn, X, Reddit, Hacker News, Slack, Bluesky and GitHub are trademarks of their respective owners. Blowhorn is not affiliated with or endorsed by any of them.</span>
         </div>
         {{- else if eq .Kind "404" }}
         <div class="footer-meta caption">
           <span>&copy; 2026 {{ site.Params.copyright }}</span>
-          <a href="{{ $source }}">Site source on GitHub</a>
+          {{ $status | safeHTML }}
         </div>
         {{- else }}
         <div class="footer-meta caption">
           {{ partial "newsletter.html" . }}
           <span>&copy; 2026 {{ site.Params.copyright }}</span>
           <nav aria-label="Legal">
-            <a href="{{ $trust }}">Trust Center</a> &middot; <a href="{{ $privacy }}">Privacy</a> &middot; <a href="{{ $terms }}">Terms</a> &middot; <a href="mailto:security@blowhorn.ai">Security: security@blowhorn.ai</a> &middot; <a href="{{ $source }}">Site source on GitHub</a>
+            <a href="{{ $trust }}">Trust Center</a> &middot; <a href="{{ $privacy }}">Privacy</a> &middot; <a href="{{ $terms }}">Terms</a> &middot; <a href="mailto:security@blowhorn.ai">Security</a> &middot; {{ $status | safeHTML }}
           </nav>
         </div>
         {{- end }}

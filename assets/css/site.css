@@ -619,24 +619,51 @@ pre code { background: none; padding: 0; }
   padding-block: var(--space-12) var(--space-8);
   color: var(--ink-muted);
 }
-.footer-grid {
+.footer-top {
   display: grid;
   gap: var(--space-8);
+  align-items: end;
 }
 .footer-brand img { width: 220px; height: auto; }
 .footer-brand p { margin-top: var(--space-4); max-width: 30rem; }
-.footer-cols { display: grid; gap: var(--space-6); grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.footer-col ul { margin-top: var(--space-3); display: grid; gap: var(--space-2); }
-.footer-col a { color: var(--ink); text-decoration: none; }
-.footer-col a:hover { color: var(--link); text-decoration: underline; }
-.footer-meta {
-  margin-top: var(--space-8);
-  padding-top: var(--space-6);
-  border-top: var(--stroke-hairline) solid var(--line);
+.footer-links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2) var(--space-6);
-  justify-content: space-between;
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: var(--stroke-hairline) solid var(--line);
+}
+.footer-links a { color: var(--ink); text-decoration: none; }
+.footer-links a:hover { color: var(--link); text-decoration: underline; }
+.footer-meta {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-6);
+}
+.footer-tm { flex-basis: 100%; }
+/* Service status, as on the layer5.io footer: a link with a pulsing teal dot. */
+.status-link { display: inline-flex; align-items: center; gap: var(--space-2); }
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--teal-bright);
+  animation: status-pulse 1.5s infinite;
+}
+@keyframes status-pulse {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 var(--teal-bright); }
+  70% { transform: scale(1); box-shadow: 0 0 0 5px transparent; }
+  100% { transform: scale(0.9); box-shadow: 0 0 0 0 transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot { animation: none; }
+}
+@media (min-width: 720px) {
+  .footer-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .footer-top .newsletter { margin-top: 0; justify-self: end; width: 100%; }
 }
 /* Newsletter signup: a plain HTML form, no script. */
 .newsletter { margin-top: var(--space-6); max-width: 30rem; }
@@ -658,10 +685,6 @@ pre code { background: none; padding: 0; }
 .footer-meta .newsletter { margin-top: 0; flex-basis: 100%; }
 /* Secondary pages carry only the meta row; the footer's own top rule already separates it. */
 .footer-meta:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
-@media (min-width: 720px) {
-  .footer-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
-  .footer-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
 
 /* ---------- Secondary pages ---------- */
 .page { padding-block: var(--space-12); }
