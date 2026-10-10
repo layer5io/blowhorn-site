@@ -141,3 +141,4 @@ real visit by a real account, so Hacker News can rate-limit it like one.
   outcome, and limit.
 - [Reliability and anti-bot design](/docs/explanation/reliability-and-anti-bot-design/) -
   why these rules are strict.
+- [You're in control](/docs/explanation/youre-in-control/) - the limits on every platform.

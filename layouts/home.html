@@ -118,42 +118,42 @@
           <div class="section-head">
             <p class="label">Platforms</p>
             <h2 id="platforms-title" class="display">Say it once. Everywhere</h2>
-            <p class="body-lg muted">7 platforms, 1 queue. Each profile keeps its own timing and outreach, and one approved row goes out to every platform it names.</p>
+            <p class="body-lg muted">7 platforms, <a href="{{ (site.GetPage "/docs/reference/content-queue").RelPermalink }}">1 queue</a>. Each profile keeps <a href="{{ (site.GetPage "/docs/explanation/scheduling").RelPermalink }}">its own timing</a> and outreach, and one approved row goes out to every platform it names.</p>
           </div>
           <ul class="platforms section-body">
             <li class="platform">
               <span class="logo-tile"><img src="{{ "assets/platforms/linkedin-in-bug.png" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui">LinkedIn</span>
+              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#linkedin">LinkedIn</a></span>
               <span class="caption">Chrome extension</span>
             </li>
             <li class="platform">
               <span class="logo-tile"><img src="{{ "assets/platforms/x-logo-black.png" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui">X</span>
+              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#x-twitter">X</a></span>
               <span class="caption">Chrome extension</span>
             </li>
             <li class="platform">
               <span class="logo-tile"><img src="{{ "assets/platforms/reddit-logo.png" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui">Reddit</span>
+              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#reddit">Reddit</a></span>
               <span class="caption">Chrome extension</span>
             </li>
             <li class="platform">
               <span class="logo-tile"><img src="{{ "assets/platforms/hacker-news-y18.svg" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui">Hacker News</span>
+              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#hacker-news">Hacker News</a></span>
               <span class="caption">Chrome extension. Submit and comment, never a vote</span>
             </li>
             <li class="platform">
               <span class="logo-tile"><img src="{{ "assets/platforms/slack-mark.svg" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui">Slack</span>
+              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#slack">Slack</a></span>
               <span class="caption">API</span>
             </li>
             <li class="platform">
               <span class="logo-tile"><img src="{{ "assets/platforms/bluesky-butterfly-blue.svg" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui">Bluesky</span>
+              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#bluesky">Bluesky</a></span>
               <span class="caption">API</span>
             </li>
             <li class="platform">
               <span class="logo-tile"><img src="{{ "assets/platforms/github-invertocat-black.svg" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui">GitHub</span>
+              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#github">GitHub</a></span>
               <span class="caption">API</span>
             </li>
           </ul>
@@ -172,23 +172,23 @@
             <li class="card">
               <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-menubar"></use></svg></span>
               <h3 class="h3">Menu-bar app</h3>
-              <p>The popover shows what is due, running and about to post. The console covers jobs, content, runs, profiles, analytics, the service and settings.</p>
+              <p>The popover shows what is due, running and about to post. The console covers jobs, content, runs, profiles, analytics, the service and settings. See <a href="{{ (site.GetPage "/docs/reference/use-the-desktop-app").RelPermalink }}">the app, screen by screen</a>.</p>
             </li>
             <li class="card">
               <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-terminal"></use></svg></span>
               <h3 class="h3">CLI</h3>
-              <p>The engine behind everything. Each command carries its own help and a worked example, with the preview form first.</p>
+              <p>The engine behind everything. Each command carries its own help and a worked example, with the <a href="{{ (site.GetPage "/docs/how-to/publish/post-content").RelPermalink }}">preview form</a> first. See the <a href="{{ (site.GetPage "/docs/reference/cli").RelPermalink }}">documented CLI</a>.</p>
               <pre><code>blowhorn post --profile all --dry-run</code></pre>
             </li>
             <li class="card">
               <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-clock"></use></svg></span>
               <h3 class="h3">Background service</h3>
-              <p>A launchd service checks the queue every 10 minutes and runs what is due, with the app closed and nobody watching.</p>
+              <p>A launchd service checks the queue every 10 minutes and runs what is due, with the app closed and nobody watching. <a href="{{ (site.GetPage "/docs/how-to/schedule/background-service").RelPermalink }}">Keep posting when the app is closed</a>.</p>
             </li>
             <li class="card">
               <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-extension"></use></svg></span>
               <h3 class="h3">Chrome extension</h3>
-              <p>LinkedIn, X, Reddit and Hacker News actions run inside your own signed-in Chrome through the Blowhorn extension. GitHub, Bluesky and Slack go through their APIs.</p>
+              <p>LinkedIn, X, Reddit and Hacker News actions run inside your own signed-in Chrome through the <a href="{{ (site.GetPage "/docs/how-to/set-up/install-the-chrome-extension").RelPermalink }}">Blowhorn extension</a>. GitHub, Bluesky and Slack go through their APIs. <a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}">What it does on each platform</a>.</p>
             </li>
           </ul>
         </div>
@@ -226,18 +226,44 @@
           <ul class="grid grid-3 section-body">
             <li class="card">
               <h3 class="h3">Your LinkedIn, X, Reddit and Hacker News browser sessions stay on your Mac</h3>
-              <p>Those sessions stay in your own Chrome, where the Blowhorn extension acts for you. Credentials you give Blowhorn for GitHub and Hacker News, and a Slack workspace session you choose to link, are kept in your organization's store on Layer5 Cloud (see the <a href="{{ (site.GetPage "/legal/privacy").RelPermalink }}">privacy page</a>).</p>
+              <p>Those sessions stay in <a href="{{ (site.GetPage "/docs/explanation/your-own-chrome").RelPermalink }}">your own Chrome</a>, where the Blowhorn extension acts for you. Credentials you give Blowhorn for GitHub and Hacker News, and a Slack workspace session you choose to link, are kept in your organization's store on Layer5 Cloud (see the <a href="{{ (site.GetPage "/legal/privacy").RelPermalink }}">privacy page</a>).</p>
             </li>
             <li class="card">
               <h3 class="h3">Your organization's store, on Layer5 Cloud</h3>
-              <p>The queue, schedule, profiles, run ledger and platform tokens live in a database scoped to your organization on Layer5 Cloud. Every row carries your organization's id.</p>
+              <p>The queue, schedule, profiles, run ledger and platform tokens live in a database scoped to your organization on Layer5 Cloud. Every row carries your organization's id. See <a href="{{ (site.GetPage "/docs/explanation/your-data").RelPermalink }}">where your data lives</a>.</p>
             </li>
             <li class="card">
               <h3 class="h3">Hacker News: submit and comment only</h3>
-              <p>Blowhorn submits stories and posts comments on Hacker News. It never votes.</p>
+              <p>Blowhorn submits stories and posts comments on Hacker News. It never votes, and it holds each profile to 2 link submissions a day. <a href="{{ (site.GetPage "/docs/how-to/publish/post-to-hacker-news").RelPermalink }}">Post to Hacker News</a>.</p>
             </li>
           </ul>
           <p class="section-body"><a class="button button-secondary" href="{{ (site.GetPage "/legal").RelPermalink }}">Visit the Trust Center</a></p>
+        </div>
+      </section>
+
+      <section id="control" class="section" aria-labelledby="control-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Control</p>
+            <h2 id="control-title" class="display">You're in control</h2>
+            <p class="body-lg muted">Blowhorn is built for AI, but the AI is never in control. You are. Any given Blowhorn install only runs one automation on a given platform for a given profile at a time, because no human types into two browser windows at once.</p>
+          </div>
+          <ul class="grid grid-3 section-body">
+            <li class="card">
+              <h3 class="h3">Will I get banned?</h3>
+              <p>Nobody can promise that for any tool, and we won't. Blowhorn types and clicks at a human pace you choose, caps its own X follows and Hacker News submissions, and never solves a CAPTCHA for you. <a href="{{ (site.GetPage "/docs/explanation/reliability-and-anti-bot-design").RelPermalink }}">How Blowhorn paces itself</a>.</p>
+            </li>
+            <li class="card">
+              <h3 class="h3">Will it post twice?</h3>
+              <p>It clicks once per action and never retries a guess. A send it couldn't confirm is held for you, and each scheduled job runs on exactly one Mac. <a href="{{ (site.GetPage "/docs/explanation/never-twice").RelPermalink }}">Why Blowhorn never repeats a public action</a>.</p>
+            </li>
+            <li class="card">
+              <h3 class="h3">What if an AI agent is driving?</h3>
+              <p>Agents use the same queue and CLI you do, under the same built-in limits. Only approved rows go out, and a dry run or a pause is always one command away. <a href="{{ (site.GetPage "/docs/how-to/schedule/pause").RelPermalink }}">Pause and resume posting</a>.</p>
+            </li>
+          </ul>
+          {{- /* Video placeholder: "You're in control" explainer (60-90 s), embedded here once recorded. */}}
+          <p class="section-body"><a class="button button-secondary" href="{{ (site.GetPage "/docs/explanation/youre-in-control").RelPermalink }}">See every control</a></p>
         </div>
       </section>
 
@@ -262,6 +288,7 @@
                   <li>Google Chrome</li>
                   <li>As many social profiles as you want</li>
                 </ul>
+                <p><a href="{{ (site.GetPage "/docs/reference/requirements").RelPermalink }}">Full requirements</a></p>
               </div>
               <div class="card">
                 <h3 class="h3">The Blowhorn Chrome extension</h3>

@@ -45,3 +45,4 @@ why the run stops instead of carrying on.
 - [Messages and exit codes](/docs/reference/messages/) - what the sentences mean.
 - [Post to Hacker News](/docs/how-to/publish/post-to-hacker-news/) - permanence first.
 - [How Blowhorn paces itself](/docs/explanation/reliability-and-anti-bot-design/) - why no retry click.
+- [You're in control](/docs/explanation/youre-in-control/) - every safety control in one place.

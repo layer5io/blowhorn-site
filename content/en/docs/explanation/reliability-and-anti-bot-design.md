@@ -48,3 +48,4 @@ limiter.
 - [Platforms](/docs/reference/platforms/) - per-platform limits.
 - [Why Blowhorn never repeats a public action](/docs/explanation/never-twice/) - one click per run.
 - [Change your defaults](/docs/how-to/settings/defaults/) - the pace default.
+- [You're in control](/docs/explanation/youre-in-control/) - every safety control in one place.

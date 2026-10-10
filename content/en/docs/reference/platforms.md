@@ -46,6 +46,9 @@ accounts with `blowhorn follow`. Analytics appends a
 follower and following trend row per run. Sign-in is your X username in
 your Chrome, by hand; the credential Blowhorn checks is `X_USERNAME`.
 
+Follows: at most 400 per profile a day and 15 in any 15 minutes,
+counted from that profile's follow log on this Mac.
+
 ### X (Twitter) replies
 
 Replying is a post row addressed at the conversation, not a separate
@@ -265,3 +268,5 @@ submit lands on does.
 - [Messages and exit codes](/docs/reference/messages/) - what a refusal means.
 - [Who can post as whom](/docs/explanation/eligibility/) - why a credential is permission.
 - [Why Blowhorn uses your own Chrome](/docs/explanation/your-own-chrome/) - browser versus API.
+- [You're in control](/docs/explanation/youre-in-control/) - every safety control in one place.
+- [Send a Slack message](/docs/how-to/publish/send-a-slack-message/) - Slack, worked.
