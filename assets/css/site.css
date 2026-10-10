@@ -671,22 +671,42 @@ pre code { background: none; padding: 0; }
   gap: var(--space-2) var(--space-6);
 }
 .footer-tm { flex-basis: 100%; }
-/* Service status, as on the layer5.io footer: a link with a pulsing teal dot. */
-.status-link { display: inline-flex; align-items: center; gap: var(--space-2); }
-.pulse-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-pill);
-  background: var(--teal-bright);
-  animation: status-pulse 1.5s infinite;
+/* Service status: ported from the layer5.io footer (layer5io/layer5
+   src/sections/General/Footer/footer.style.js, .status-link and .pulse-icon). */
+.status-link {
+  background-color: #484848;
+  display: inline-flex;
+  gap: 0.2rem;
+  height: 1.15rem;
+  border-radius: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  padding-inline: 0.4rem;
+  padding-block: 0.2rem;
+  font-size: 0.8rem;
+  line-height: 1;
+  color: #CCCCCC;
+  text-decoration: none;
 }
-@keyframes status-pulse {
-  0% { transform: scale(0.9); box-shadow: 0 0 0 0 var(--teal-bright); }
-  70% { transform: scale(1); box-shadow: 0 0 0 5px transparent; }
-  100% { transform: scale(0.9); box-shadow: 0 0 0 0 transparent; }
+.status-link:hover { color: var(--teal-bright); text-decoration: none; }
+.pulse-icon {
+  display: block;
+  width: 0.62rem;
+  height: 0.62rem;
+  border: none;
+  border-radius: 50%;
+  background: rgb(0, 211, 169);
+  box-shadow: 0 0 0 0 rgba(0, 211, 169, 0.5);
+  animation: pulse 1.5s infinite;
+}
+.pulse-icon:hover { animation: none; }
+@keyframes pulse {
+  0% { transform: scale(0.9); }
+  70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(0, 211, 169, 0); }
+  100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(153, 237, 220, 0); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .pulse-dot { animation: none; }
+  .pulse-icon { animation: none; }
 }
 @media (min-width: 720px) {
   .footer-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
@@ -694,21 +714,21 @@ pre code { background: none; padding: 0; }
 }
 /* Newsletter signup: a plain HTML form, no script. */
 .newsletter { margin-top: var(--space-6); max-width: 30rem; }
-.newsletter .label { display: block; }
+.newsletter .label { display: block; font-family: inherit; font-size: 1rem; line-height: 1.5; font-weight: 400; letter-spacing: normal; text-transform: none; color: var(--ink); }
 .newsletter-row { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
 .newsletter input {
   flex: 1 1 14rem;
   min-width: 0;
-  min-height: 44px;
-  padding: var(--space-2) var(--space-3);
-  border: var(--stroke-hairline) solid var(--line-strong);
-  border-radius: var(--radius-md);
+  height: 3.5rem;
+  padding: 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.25rem;
   background: var(--surface);
   color: var(--ink);
   font: inherit;
 }
 .newsletter input::placeholder { color: var(--ink-muted); }
-.newsletter .caption { margin-top: var(--space-2); }
+.newsletter .button { height: 3.5rem; border-radius: 0.25rem; }
 .footer-meta .newsletter { margin-top: 0; flex-basis: 100%; }
 /* Secondary pages carry only the meta row; the footer's own top rule already separates it. */
 .footer-meta:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
