@@ -10,6 +10,8 @@ Stop Blowhorn from claiming scheduled work without stopping the service. Reach
 for this when a platform challenges a sign-in, when a session expires, or on
 any day you want nothing to go out.
 
+{{< major >}}Whole unit standing down. Your call. Unpause when you're ready.{{< /major >}}
+
 ## Pause this machine
 
 ```bash
