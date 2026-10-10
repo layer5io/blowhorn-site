@@ -11,6 +11,8 @@ Blowhorn therefore clicks once per run and records exactly what it
 read: posted where it read a confirmation, clicked where it did not,
 and never "not sent" once the control was clicked.
 
+{{< major >}}Once. Exactly once. If I'm not sure it landed, I report it and wait for you.{{< /major >}}
+
 Preview first. `--check-queue` lists what a run would do, and
 `--dry-run` walks it end to end, without publishing, following, or
 writing anything. A Hacker News row gets both before its first real

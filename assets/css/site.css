@@ -420,26 +420,27 @@ pre code { background: none; padding: 0; }
 .fan .bubble-bright { fill: var(--teal-bright); color: var(--on-teal); }
 .fan .bubble-yellow { fill: var(--yellow); color: var(--on-yellow); }
 .fan .bubble-raised { fill: var(--surface-raised); color: var(--ink); stroke: var(--line-strong); stroke-width: 1.5; }
-.fan .mark { fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+/* Each platform's official logo sits on its own white chip, never straight on a brand colour. */
+.fan .chip { fill: var(--white); }
 
-@keyframes fan-pop {
-  from { opacity: 0; transform: translateX(-6px) scale(0.96); }
-  to { opacity: 1; transform: none; }
+/* The lines draw outward from the message. The logos themselves never move:
+   Bluesky's and X's guidelines say not to animate their marks. */
+@keyframes fan-draw {
+  from { stroke-dashoffset: 320; }
+  to { stroke-dashoffset: 0; }
 }
-.fan .bubble {
-  transform-box: fill-box;
-  transform-origin: left center;
-  animation: fan-pop 480ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+.fan .fan-line {
+  stroke-dasharray: 320;
+  animation: fan-draw 640ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
-.fan .bubble:nth-of-type(2) { animation-delay: 120ms; }
-.fan .bubble:nth-of-type(3) { animation-delay: 200ms; }
-.fan .bubble:nth-of-type(4) { animation-delay: 280ms; }
-.fan .bubble:nth-of-type(5) { animation-delay: 360ms; }
-.fan .bubble:nth-of-type(6) { animation-delay: 440ms; }
-.fan .bubble:nth-of-type(7) { animation-delay: 520ms; }
-.fan .bubble:nth-of-type(8) { animation-delay: 600ms; }
+.fan .fan-line:nth-of-type(2) { animation-delay: 80ms; }
+.fan .fan-line:nth-of-type(3) { animation-delay: 160ms; }
+.fan .fan-line:nth-of-type(4) { animation-delay: 240ms; }
+.fan .fan-line:nth-of-type(5) { animation-delay: 320ms; }
+.fan .fan-line:nth-of-type(6) { animation-delay: 400ms; }
+.fan .fan-line:nth-of-type(7) { animation-delay: 480ms; }
 @media (prefers-reduced-motion: reduce) {
-  .fan .bubble { animation: none; }
+  .fan .fan-line { animation: none; stroke-dasharray: none; }
   html { scroll-behavior: auto; }
   .button { transition: none; }
 }
@@ -498,10 +499,27 @@ pre code { background: none; padding: 0; }
   background: var(--surface-raised);
   min-height: 132px;
 }
-.platform svg { width: 28px; height: 28px; color: var(--ink); fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.platform .logo-tile { margin-bottom: var(--space-2); }
 .platform .ui { color: var(--ink); margin-top: auto; }
 .platform .caption { color: var(--ink-muted); }
 .platform-note { margin-top: var(--space-6); color: var(--ink-muted); max-width: 48rem; }
+
+/* Platform logos: each platform's official file, unmodified, on a white tile in both
+   themes, since LinkedIn, Slack, X, GitHub and Reddit all ask for a white or light ground. */
+.logo-tile {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  flex: none;
+  background: var(--white);
+  border: var(--stroke-hairline) solid var(--line);
+  border-radius: var(--radius-md);
+}
+.logo-tile img { width: 28px; height: 28px; object-fit: contain; }
+/* The docs landing fits all seven in the narrower content column. */
+.docs-landing .logo-tile { width: 44px; height: 44px; }
+.docs-landing .logo-tile img { width: 24px; height: 24px; }
 
 /* Major Blowhorn marketing card */
 .major-card {
@@ -573,6 +591,33 @@ pre code { background: none; padding: 0; }
   .speech::after { left: -14px; bottom: auto; top: 32px; transform: rotate(135deg) skew(10deg, 10deg); }
 }
 
+.major-gripes { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); max-width: 36rem; }
+.major-gripes li { color: var(--ink); }
+.major-gripes .label { display: block; color: var(--ink-muted); }
+
+/* "The Major says" docs callout (layouts/_partials/major-says.html) */
+.major-says {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: 48rem;
+  margin: var(--space-6) 0;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--surface-tint);
+}
+.major-says-art {
+  flex: none;
+  width: 56px;
+  height: auto;
+  padding: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--cream);
+}
+.major-says-copy > * { margin: 0; }
+.major-says .label { color: var(--ink-muted); }
+.major-says-line { color: var(--ink-wordmark); margin-top: var(--space-1); }
+
 /* Download */
 .download-card {
   background: var(--surface-raised);
@@ -588,6 +633,9 @@ pre code { background: none; padding: 0; }
 .download-card .meta span + span::before { content: "\00b7"; margin-inline: var(--space-2); }
 .download-aside { display: grid; gap: var(--space-4); align-content: start; }
 .download-aside .card > * + * { margin-top: var(--space-2); }
+.checklist li + li { margin-top: var(--space-1); }
+.download-verify a { color: var(--ink-muted); }
+.download-verify a:hover { color: var(--link); }
 @media (min-width: 900px) {
   .download-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--space-6); }
 }
@@ -598,31 +646,72 @@ pre code { background: none; padding: 0; }
   padding-block: var(--space-12) var(--space-8);
   color: var(--ink-muted);
 }
-.footer-grid {
+.footer-top {
   display: grid;
   gap: var(--space-8);
+  align-items: end;
 }
 .footer-brand img { width: 220px; height: auto; }
 .footer-brand p { margin-top: var(--space-4); max-width: 30rem; }
-.footer-cols { display: grid; gap: var(--space-6); grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.footer-col ul { margin-top: var(--space-3); display: grid; gap: var(--space-2); }
-.footer-col a { color: var(--ink); text-decoration: none; }
-.footer-col a:hover { color: var(--link); text-decoration: underline; }
-.footer-meta {
-  margin-top: var(--space-8);
-  padding-top: var(--space-6);
-  border-top: var(--stroke-hairline) solid var(--line);
+.footer-links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2) var(--space-6);
-  justify-content: space-between;
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: var(--stroke-hairline) solid var(--line);
 }
+.footer-links a { color: var(--ink); text-decoration: none; }
+.footer-links a:hover { color: var(--link); text-decoration: underline; }
+.footer-meta {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-6);
+}
+.footer-tm { flex-basis: 100%; }
+/* Service status, as on the layer5.io footer: a link with a pulsing teal dot. */
+.status-link { display: inline-flex; align-items: center; gap: var(--space-2); }
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--teal-bright);
+  animation: status-pulse 1.5s infinite;
+}
+@keyframes status-pulse {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 var(--teal-bright); }
+  70% { transform: scale(1); box-shadow: 0 0 0 5px transparent; }
+  100% { transform: scale(0.9); box-shadow: 0 0 0 0 transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot { animation: none; }
+}
+@media (min-width: 720px) {
+  .footer-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .footer-top .newsletter { margin-top: 0; justify-self: end; width: 100%; }
+}
+/* Newsletter signup: a plain HTML form, no script. */
+.newsletter { margin-top: var(--space-6); max-width: 30rem; }
+.newsletter .label { display: block; }
+.newsletter-row { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+.newsletter input {
+  flex: 1 1 14rem;
+  min-width: 0;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: var(--stroke-hairline) solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+.newsletter input::placeholder { color: var(--ink-muted); }
+.newsletter .caption { margin-top: var(--space-2); }
+.footer-meta .newsletter { margin-top: 0; flex-basis: 100%; }
 /* Secondary pages carry only the meta row; the footer's own top rule already separates it. */
 .footer-meta:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
-@media (min-width: 720px) {
-  .footer-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
-  .footer-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
 
 /* ---------- Secondary pages ---------- */
 .page { padding-block: var(--space-12); }

@@ -26,9 +26,27 @@ static instances at the weights `tokens.json` names.
 - JetBrains Mono: Copyright 2020 The JetBrains Mono Project Authors
   (https://github.com/JetBrains/JetBrainsMono)
 
-## Platform marks
+## Platform logos (`../platforms/`)
 
-The LinkedIn, X, Reddit, Slack, Bluesky, Hacker News and GitHub marks inlined
-in `index.html` are the Blowhorn console's own monoline `currentColor`
-drawings, not the platforms' trademarked logos. Each is shown with the
-platform's name as its label.
+The site shows each platform's own published logo, unmodified, so readers
+recognize the platforms Blowhorn works with. The files in
+`static/assets/platforms/` are byte-identical copies of what each owner
+publishes, downloaded on 9 October 2026. They are never recoloured, redrawn,
+cropped, outlined or animated; each sits alone on a white tile with the
+platform's name as its label, and the home page, docs landing and footer
+carry the trademark line below.
+
+| File | Owner | Source |
+| --- | --- | --- |
+| `linkedin-in-bug.png` | LinkedIn Corporation | `LI-In-Bug.png` from `in-logo.zip`, https://brand.linkedin.com/downloads (guidelines: https://brand.linkedin.com/in-logo) |
+| `x-logo-black.png` | X Corp. | `logo-black.png` from https://about.x.com/content/dam/about-twitter/x/brand-toolkit/x-logo.zip (toolkit: https://about.x.com/en/who-we-are/brand-toolkit) |
+| `reddit-logo.png` | Reddit, Inc. | `Reddit_Logo.png` from the Reddit brand page, https://redditinc.com/brand (brand system: https://redditbrand.lingoapp.com/s/Logo-d9x3n2/) |
+| `hacker-news-y18.svg` | Y Combinator | `y18.svg` as served by https://news.ycombinator.com/ (no published logo kit) |
+| `slack-mark.svg` | Slack Technologies, LLC (Salesforce) | The Slack mark slack.com serves, https://a.slack-edge.com/9cc0056/marketing/img/nav/logo.svg (media kit: https://slack.com/media-kit) |
+| `bluesky-butterfly-blue.svg` | Bluesky Social, PBC | `bluesky_media_kit_logo_transparent_1.svg`, https://bsky.social/about/support/icons (guidelines: https://bsky.social/about/support/branding) |
+| `github-invertocat-black.svg` | GitHub, Inc. | `SVG/GitHub_Invertocat_Black.svg` from https://brand.github.com/GitHub_Logos.zip (guidelines: https://brand.github.com/foundations/logo) |
+
+LinkedIn, X, Reddit, Hacker News, Slack, Bluesky and GitHub are trademarks of
+their respective owners. Blowhorn is not affiliated with or endorsed by any of
+them. The logos are used only to name the platforms Blowhorn works with, under
+each owner's brand guidelines, and are not licensed for any other use.

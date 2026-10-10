@@ -57,6 +57,11 @@ class CheckThirdPartyTest(unittest.TestCase):
             "site.css": '@import "https://fonts.example/f.css";',
         }, "fonts.example")
 
+    def test_newsletter_form_action_is_the_one_allowed_form_host(self):
+        self.assert_passes({"index.html": page(body='<form method="post" action="https://calcotestudios.us15.list-manage.com/subscribe/post?u=a&amp;id=b"><input name="EMAIL"></form>')})
+        self.assert_fails_naming({"index.html": page(body='<form method="post" action="https://forms.example/post"></form>')}, "forms.example")
+        self.assert_fails_naming({"index.html": page(body='<img src="https://calcotestudios.us15.list-manage.com/x.png" alt="">')}, "list-manage.com")
+
     def test_inline_script_request_fails(self):
         self.assert_fails_naming({"index.html": page(body='<script>fetch("https://tracker.example/hit")</script>')},
                                  "tracker.example")

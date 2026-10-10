@@ -10,6 +10,8 @@ Blowhorn acts at human speed, and stops at the first thing it cannot
 confirm. Both are deliberate: speed and retries are what get an
 account flagged.
 
+{{< major >}}Nobody can promise you won't get flagged. I can promise I won't rush, won't repeat myself and won't touch your CAPTCHA.{{< /major >}}
+
 Typing arrives keystroke by keystroke with a computed delay between
 keys, and actions are separated by random pauses of a few seconds,
 scaled by the run's pace. `--pace` sets it: `fast`, `normal`, `slow`,

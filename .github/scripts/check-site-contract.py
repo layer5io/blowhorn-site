@@ -20,8 +20,7 @@ from pathlib import Path
 # pages link to, and the sprite symbols and labels the page itself references.
 PAGES = {
     "index.html": [
-        "mark-linkedin", "mark-x", "mark-reddit", "mark-hn", "mark-slack", "mark-bluesky",
-        "mark-github", "glyph-menubar", "glyph-terminal", "glyph-clock", "glyph-extension",
+        "glyph-menubar", "glyph-terminal", "glyph-clock", "glyph-extension",
         "glyph-download", "main", "hero-title", "fan-title", "platforms", "platforms-title", "how",
         "how-title", "trust", "trust-title", "download", "download-title", "download-status",
     ],
