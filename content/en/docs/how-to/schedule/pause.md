@@ -62,3 +62,4 @@ the pause: held rows read `held` rather than `would-run`.
 - [Find out why a job did not run](/docs/how-to/schedule/why-not-run/) - see which scope holds a row
 - [Keep posting when the app is closed](/docs/how-to/schedule/background-service/) - the service that keeps ticking while paused
 - [Change your defaults](/docs/how-to/settings/defaults/) - pace, excluded profiles, logs
+- [You're in control](/docs/explanation/youre-in-control/) - every other safety control

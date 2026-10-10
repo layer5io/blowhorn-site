@@ -47,3 +47,4 @@ or needs you.
 - [What runs when the app is closed](/docs/explanation/distribution/) - the service behind the passes.
 - [The Blowhorn app, screen by screen](/docs/reference/use-the-desktop-app/) - the "jobs" screen.
 - [Collect and read your analytics](/docs/how-to/measure/analytics/) - read what the passes produced.
+- [You're in control](/docs/explanation/youre-in-control/) - pause, one job at a time, one Mac per job.

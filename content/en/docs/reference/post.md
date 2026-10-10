@@ -73,3 +73,4 @@ blowhorn post --platform slack --profile your-profile --target "#general" --mess
 - [Platforms](/docs/reference/platforms/) - per-platform actions and limits.
 - [CLI reference](/docs/reference/cli/) - every command and flag.
 - [Why Blowhorn never repeats a public action](/docs/explanation/never-twice/) - one click per run.
+- [You're in control](/docs/explanation/youre-in-control/) - dry run, pace and the built-in limits.

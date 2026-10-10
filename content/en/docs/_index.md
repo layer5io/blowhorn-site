@@ -26,15 +26,17 @@ Blowhorn is a social media console that takes one message and broadcasts, repost
     <span class="h3">Install Blowhorn</span>
     <span>Download, verify, and open the app on your Mac. The full guide lands with the first public build.</span>
   </a>
-  <a class="card docs-card" href="tutorials/">
+  <a class="card docs-card" href="how-to/publish/post-content/">
     <span class="h3">Your first post</span>
     <span>Connect Chrome, add a profile, queue a post, and preview it with a dry run. Nothing goes out until you say so.</span>
   </a>
-  <a class="card docs-card" href="reference/">
+  <a class="card docs-card" href="reference/platforms/">
     <span class="h3">What Blowhorn can do on each platform</span>
     <span>LinkedIn, X, Reddit, Hacker News, Slack, Bluesky, and GitHub: actions, limits, and sign-in.</span>
   </a>
 </div>
+
+<p class="docs-note">Worried about bans, mistakes or double posts? <a href="explanation/youre-in-control/">You're in control</a> gathers every safety control in one place.</p>
 
 ## Find your kind of page {#quadrants}
 
@@ -101,4 +103,4 @@ Blowhorn is a social media console that takes one message and broadcasts, repost
   </a>
 </div>
 
-<p class="docs-note">Something not working? Start with <a href="how-to/troubleshoot/">Troubleshooting</a> and <a href="reference/">Messages and exit codes</a>.</p>
+<p class="docs-note">Something not working? Start with <a href="how-to/troubleshoot/">Troubleshooting</a> and <a href="reference/messages/">Messages and exit codes</a>.</p>
