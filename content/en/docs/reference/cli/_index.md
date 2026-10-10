@@ -86,7 +86,7 @@ Blowhorn administrator sets up the token and organization id.
 `blowhorn store` is a single command, not a group: it reports whether this
 machine can reach the Blowhorn database and why not, opens the bastion tunnel
 when nothing is listening, and with `--import` fills the connection once from
-meshery-cloud. It exits 3, a code nothing else uses, when the store is
+your Layer5 Cloud configuration. It exits 3, a code nothing else uses, when the store is
 unavailable. During early access the connection is set up by your Blowhorn
 administrator. `blowhorn config get
 <key>` reads one option and says which document holds it.

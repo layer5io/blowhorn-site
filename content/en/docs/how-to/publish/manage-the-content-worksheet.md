@@ -65,7 +65,7 @@ blowhorn content list --platform x
 blowhorn content get 12 --json
 
 # Create a row: it takes the next row number, which is never reused.
-blowhorn content upsert --payload '{"Platform":"linkedin","Profile":"kate","Message Text":"Meshery v0.9 is out","Approved?":"yes"}'
+blowhorn content upsert --payload '{"Platform":"linkedin","Profile":"kate","Message Text":"Our v2.0 release is out","Approved?":"yes"}'
 
 # Update in place: the payload is merged over the row; columns it does not
 # name are left as they were.

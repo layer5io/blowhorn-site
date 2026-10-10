@@ -40,7 +40,7 @@ is one of those subcommands.
 
 Blowhorn keeps its queue, schedule and profiles in a database on Layer5 Cloud, so
 before it can read anything it needs the connection. On a machine with a
-meshery-cloud checkout that is two commands; either way, `blowhorn store` then
+Layer5 Cloud checkout that is two commands; either way, `blowhorn store` then
 opens the tunnel and reports rung by rung:
 
 ```bash
