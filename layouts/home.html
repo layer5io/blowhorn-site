@@ -5,7 +5,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Blowhorn">
     <meta property="og:title" content="Blowhorn: one message, many ears">
-    <meta property="og:description" content="A social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot.">
+    <meta property="og:description" content="Stop pasting the same post into seven tabs. One queue. Every profile. Posted as you, from your own Chrome.">
     <meta property="og:url" content="{{ partial "canonical.html" . }}">
     <meta property="og:image" content="{{ "assets/brand/marketing/blowhorn-social-banner-16x9.png" | absURL }}">
     <meta property="og:image:width" content="1600">
@@ -13,7 +13,7 @@
     <meta property="og:image:alt" content="Major Blowhorn, a rooster drill sergeant, crows through a megaphone beside the Blowhorn wordmark and the tagline One message. Many ears.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Blowhorn: one message, many ears">
-    <meta name="twitter:description" content="A social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot.">
+    <meta name="twitter:description" content="Stop pasting the same post into seven tabs. One queue. Every profile. Posted as you, from your own Chrome.">
     <meta name="twitter:image" content="{{ "assets/brand/marketing/blowhorn-social-banner-16x9.png" | absURL }}">
     <script type="application/ld+json">
       {
@@ -24,7 +24,7 @@
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "macOS 13 or newer",
         "url": "https://blowhorn.ai/",
-        "description": "A social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot.",
+        "description": "Stop pasting the same post into seven tabs. One queue. Every profile. Posted as you, from your own Chrome.",
         "author": { "@type": "Organization", "name": "Layer5, Inc.", "url": "https://layer5.io/" },
         "downloadUrl": "https://github.com/layer5io/blowhorn-site/releases/latest"
       }
@@ -41,8 +41,8 @@
         <div class="wrap hero-grid">
           <div class="hero-copy">
             <p class="label">Layer5 Blowhorn · for macOS</p>
-            <h1 id="hero-title" class="display-xl">One message. Many ears</h1>
-            <p class="body-lg">Blowhorn is a social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot.</p>
+            <h1 id="hero-title" class="display-xl">Stop pasting the same post into seven tabs.</h1>
+            <p class="body-lg">One queue. Every profile. Posted as you, from your own Chrome.</p>
             <div class="hero-actions">
               <a class="button button-primary button-pop" href="#download">
                 <svg aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#glyph-download"></use></svg>
@@ -88,7 +88,7 @@
       </g>
       <g class="fan-tile"><title>LinkedIn</title>
         <rect x="350.7" y="-10.0" width="52" height="52" rx="13"></rect>
-        <image href="{{ "assets/platforms/linkedin-in-bug.png" | relURL }}" x="364.4" y="3.7" width="28.8" height="24.6" preserveAspectRatio="xMidYMid meet"></image>
+        <image href="{{ "assets/platforms/linkedin-in-bug.png" | relURL }}" x="363.9" y="3.2" width="25.6" height="25.6" preserveAspectRatio="xMidYMid meet"></image>
       </g>
       <g class="fan-tile"><title>X</title>
         <rect x="387.3" y="60.0" width="52" height="52" rx="13"></rect>
@@ -125,46 +125,52 @@
           <div class="section-head">
             <p class="label">Platforms</p>
             <h2 id="platforms-title" class="display">Say it once. Everywhere</h2>
-            <p class="body-lg muted">7 platforms, <a href="{{ (site.GetPage "/docs/reference/content-queue").RelPermalink }}">1 queue</a>. Each profile keeps <a href="{{ (site.GetPage "/docs/explanation/scheduling").RelPermalink }}">its own timing</a> and outreach, and one approved post goes out to every platform it names.</p>
+            <p class="body-lg muted">Seven platforms. One queue. As many Macs as you've got.</p>
           </div>
           <ul class="platforms section-body">
-            <li class="platform">
-              <span class="logo-tile"><img src="{{ "assets/platforms/linkedin-in-bug.png" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#linkedin">LinkedIn</a></span>
-              <span class="caption">Chrome extension</span>
+            <li>
+              <a class="platform" href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#linkedin">
+                <span class="logo-tile"><img src="{{ "assets/platforms/linkedin-in-bug.png" | relURL }}" alt="" width="28" height="28"></span>
+                <span class="ui">LinkedIn</span>
+              </a>
             </li>
-            <li class="platform">
-              <span class="logo-tile"><img src="{{ "assets/platforms/x-logo-black.png" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#x-twitter">X</a></span>
-              <span class="caption">Chrome extension</span>
+            <li>
+              <a class="platform" href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#x-twitter">
+                <span class="logo-tile"><img src="{{ "assets/platforms/x-logo-black.png" | relURL }}" alt="" width="28" height="28"></span>
+                <span class="ui">X</span>
+              </a>
             </li>
-            <li class="platform">
-              <span class="logo-tile"><img src="{{ "assets/platforms/reddit-logo.png" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#reddit">Reddit</a></span>
-              <span class="caption">Chrome extension</span>
+            <li>
+              <a class="platform" href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#reddit">
+                <span class="logo-tile"><img src="{{ "assets/platforms/reddit-logo.png" | relURL }}" alt="" width="28" height="28"></span>
+                <span class="ui">Reddit</span>
+              </a>
             </li>
-            <li class="platform">
-              <span class="logo-tile"><img src="{{ "assets/platforms/hacker-news-y18.svg" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#hacker-news">Hacker News</a></span>
-              <span class="caption">Chrome extension, never votes</span>
+            <li>
+              <a class="platform" href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#hacker-news">
+                <span class="logo-tile"><img src="{{ "assets/platforms/hacker-news-y18.svg" | relURL }}" alt="" width="28" height="28"></span>
+                <span class="ui">Hacker News</span>
+              </a>
             </li>
-            <li class="platform">
-              <span class="logo-tile"><img src="{{ "assets/platforms/slack-mark.svg" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#slack">Slack</a></span>
-              <span class="caption">API</span>
+            <li>
+              <a class="platform" href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#slack">
+                <span class="logo-tile"><img src="{{ "assets/platforms/slack-mark.svg" | relURL }}" alt="" width="28" height="28"></span>
+                <span class="ui">Slack</span>
+              </a>
             </li>
-            <li class="platform">
-              <span class="logo-tile"><img src="{{ "assets/platforms/bluesky-butterfly-blue.svg" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#bluesky">Bluesky</a></span>
-              <span class="caption">API</span>
+            <li>
+              <a class="platform" href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#bluesky">
+                <span class="logo-tile"><img src="{{ "assets/platforms/bluesky-butterfly-blue.svg" | relURL }}" alt="" width="28" height="28"></span>
+                <span class="ui">Bluesky</span>
+              </a>
             </li>
-            <li class="platform">
-              <span class="logo-tile"><img src="{{ "assets/platforms/github-invertocat-black.svg" | relURL }}" alt="" width="28" height="28"></span>
-              <span class="ui"><a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#github">GitHub</a></span>
-              <span class="caption">API</span>
+            <li>
+              <a class="platform" href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}#github">
+                <span class="logo-tile"><img src="{{ "assets/platforms/github-invertocat-black.svg" | relURL }}" alt="" width="28" height="28"></span>
+                <span class="ui">GitHub</span>
+              </a>
             </li>
           </ul>
-          <p class="platform-note caption">LinkedIn, X, Reddit, Hacker News, Slack, Bluesky and GitHub are trademarks of their respective owners, shown here with their official logos. Blowhorn is not affiliated with or endorsed by any of them.</p>
         </div>
       </section>
 
@@ -173,29 +179,36 @@
           <div class="section-head">
             <p class="label">How you run it</p>
             <h2 id="how-title" class="display">Amplify on autopilot</h2>
-            <p class="body-lg muted">3 ways in, 1 engine. Every command has a read-only or dry-run form, so you rehearse a run before anything is published.</p>
+            <p class="body-lg muted">3 ways in, 1 engine. Rehearse any run before anything is published.</p>
           </div>
           <ul class="grid grid-4 section-body">
-            <li class="card">
-              <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-menubar"></use></svg></span>
-              <h3 class="h3">Menu-bar app</h3>
-              <p>The popover shows what is due, running and about to post. The console covers jobs, content, runs, profiles, analytics, the service and settings. See <a href="{{ (site.GetPage "/docs/reference/use-the-desktop-app").RelPermalink }}">the app, screen by screen</a>.</p>
+            <li>
+              <a class="card card-link" href="{{ (site.GetPage "/docs/reference/use-the-desktop-app").RelPermalink }}">
+                <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-menubar"></use></svg></span>
+                <h3 class="h3">Menu-bar app</h3>
+                <p>See what is due, running and about to post.</p>
+              </a>
             </li>
-            <li class="card">
-              <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-terminal"></use></svg></span>
-              <h3 class="h3">CLI</h3>
-              <p>The engine behind everything. Each command carries its own help and a worked example, with the <a href="{{ (site.GetPage "/docs/how-to/publish/post-content").RelPermalink }}">preview form</a> first. See the <a href="{{ (site.GetPage "/docs/reference/cli").RelPermalink }}">documented CLI</a>.</p>
-              <pre><code>blowhorn post --profile all --dry-run</code></pre>
+            <li>
+              <a class="card card-link" href="{{ (site.GetPage "/docs/reference/cli").RelPermalink }}">
+                <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-terminal"></use></svg></span>
+                <h3 class="h3">CLI</h3>
+                <p>Every action is a command, with a dry run first.</p>
+              </a>
             </li>
-            <li class="card">
-              <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-clock"></use></svg></span>
-              <h3 class="h3">Background service</h3>
-              <p>A background service checks the queue every 10 minutes and runs what is due, with the app closed and nobody watching. <a href="{{ (site.GetPage "/docs/how-to/schedule/background-service").RelPermalink }}">Keep posting when the app is closed</a>.</p>
+            <li>
+              <a class="card card-link" href="{{ (site.GetPage "/docs/how-to/schedule/background-service").RelPermalink }}">
+                <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-clock"></use></svg></span>
+                <h3 class="h3">Background service</h3>
+                <p>Keeps posting on schedule with the app closed.</p>
+              </a>
             </li>
-            <li class="card">
-              <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-extension"></use></svg></span>
-              <h3 class="h3">Chrome extension</h3>
-              <p>LinkedIn, X, Reddit and Hacker News actions run inside your own signed-in Chrome through the <a href="{{ (site.GetPage "/docs/how-to/set-up/install-the-chrome-extension").RelPermalink }}">Blowhorn extension</a>. GitHub, Bluesky and Slack go through their APIs. <a href="{{ (site.GetPage "/docs/reference/platforms").RelPermalink }}">What it does on each platform</a>.</p>
+            <li>
+              <a class="card card-link" href="{{ (site.GetPage "/docs/how-to/set-up/install-the-chrome-extension").RelPermalink }}">
+                <span class="card-icon"><svg aria-hidden="true" focusable="false"><use href="#glyph-extension"></use></svg></span>
+                <h3 class="h3">Chrome extension</h3>
+                <p>Acts for you in your own signed-in Chrome.</p>
+              </a>
             </li>
           </ul>
         </div>
@@ -253,20 +266,26 @@
           <div class="section-head">
             <p class="label">Control</p>
             <h2 id="control-title" class="display">You're in control</h2>
-            <p class="body-lg muted">Blowhorn is built for AI, but the AI is never in control. You are. Any given Blowhorn install only runs one automation on a given platform for a given profile at a time, because no human types into two browser windows at once.</p>
+            <p class="body-lg muted">Blowhorn is built for AI, but the AI is never in control. You are.</p>
           </div>
           <ul class="grid grid-3 section-body">
-            <li class="card">
-              <h3 class="h3">Will I get banned?</h3>
-              <p>Nobody can promise that for any tool, and we won't. Blowhorn types and clicks at a human pace you choose, caps its own X follows and Hacker News submissions, and never solves a CAPTCHA for you. <a href="{{ (site.GetPage "/docs/explanation/reliability-and-anti-bot-design").RelPermalink }}">How Blowhorn paces itself</a>.</p>
+            <li>
+              <a class="card card-link" href="{{ (site.GetPage "/docs/explanation/reliability-and-anti-bot-design").RelPermalink }}">
+                <h3 class="h3">Will I get banned?</h3>
+                <p>Blowhorn works at a human pace you choose and never solves a CAPTCHA for you.</p>
+              </a>
             </li>
-            <li class="card">
-              <h3 class="h3">Will it post twice?</h3>
-              <p>It clicks once per action. Within a run, Blowhorn doesn't retry a failed post; it moves on to the next item. If a post goes out but Blowhorn can't record it, it stops that profile's queue rather than risk posting twice. Scheduled jobs only re-run a failure if you turn on retries, and they're off by default. A send it couldn't confirm is held for you. Your Macs coordinate through one queue, so the same post isn't sent from two of them. <a href="{{ (site.GetPage "/docs/explanation/never-twice").RelPermalink }}">How Blowhorn avoids repeat posts</a>.</p>
+            <li>
+              <a class="card card-link" href="{{ (site.GetPage "/docs/explanation/never-twice").RelPermalink }}">
+                <h3 class="h3">Will it post twice?</h3>
+                <p>Your Macs coordinate through one queue, so the same post isn't sent from two of them.</p>
+              </a>
             </li>
-            <li class="card">
-              <h3 class="h3">What if an AI agent is driving?</h3>
-              <p>Agents use the same queue and CLI you do, under the same built-in limits. Only approved posts go out, and a dry run or a pause is always one command away. <a href="{{ (site.GetPage "/docs/how-to/schedule/pause").RelPermalink }}">Pause and resume posting</a>.</p>
+            <li>
+              <a class="card card-link" href="{{ (site.GetPage "/docs/how-to/schedule/pause").RelPermalink }}">
+                <h3 class="h3">What if an AI agent is driving?</h3>
+                <p>Agents get the same queue and limits you do. Only approved posts go out.</p>
+              </a>
             </li>
           </ul>
           {{- /* Video placeholder: "You're in control" explainer (60-90 s), embedded here once recorded. */}}
