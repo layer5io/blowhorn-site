@@ -24,7 +24,7 @@ glance:
     link: /legal/privacy/#this-website
     linkText: What this website does
   - title: One store for your queue, analytics and credentials
-    text: Your organization's store on Layer5 Cloud holds the content queue, schedule, profiles, run history, analytics and platform credentials. That is what lets you install Blowhorn on any number of Macs, yours or your teammates', and run them as one. Every Mac works from the same queue, nothing posts twice, and analytics show the complete picture. Every row is scoped to your organization's id, and Layer5's privacy policy governs that data.
+    text: Your organization's store on Layer5 Cloud holds the content queue, schedule, profiles, run history, analytics and platform credentials. That is what lets you install Blowhorn on any number of Macs, yours or your teammates', and run them as one. Every Mac works from the same queue, and the Macs coordinate through it, so the same post isn't sent from two of them. Analytics show the complete picture. Every row is scoped to your organization's id, and Layer5's privacy policy governs that data.
     link: /legal/privacy/#in-your-organizations-store-on-layer5-cloud
     linkText: What your organization's store holds
   - title: You approve what goes out

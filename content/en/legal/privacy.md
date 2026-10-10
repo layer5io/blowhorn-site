@@ -42,7 +42,7 @@ The extension works only for the Blowhorn app on your Mac, over Chrome's native 
 
 ### In your organization's store on Layer5 Cloud
 
-Keeping this in one store is what lets you install Blowhorn on any number of Macs, your own or your teammates', and run them as one. Every Mac works from the same queue, so nothing posts twice under the same profile, and your analytics cover every Mac. Your content still goes out as long as one of those Macs is awake. The store holds:
+Keeping this in one store is what lets you install Blowhorn on any number of Macs, your own or your teammates', and run them as one. Every Mac works from the same queue, and the Macs coordinate through it, so the same post isn't sent from two of them. Your analytics cover every Mac. Your content still goes out as long as one of those Macs is awake. The store holds:
 
 - The content queue, schedule, profiles, run history and analytics. Every row is scoped to your organization's id.
 - Platform credentials, in the credentials table of your Layer5 Cloud organization: GitHub tokens, Hacker News passwords, and Slack tokens and workspace sessions. For profiles set up before October 2026, it also holds the LinkedIn, X, Reddit and Bluesky passwords copied in when those profiles moved to the store. Blowhorn reads these credentials when it checks which profile may act on which platform. GitHub, Hacker News and Slack runs sign in with the stored value; for Slack that is the workspace session captured from your Chrome, or a Slack app token you enter. LinkedIn, X, Reddit and Bluesky runs sign in with the copy in the local `config.yaml` above.
