@@ -59,7 +59,7 @@ Blowhorn is a social media console that takes one message and broadcasts, repost
   <a class="card docs-card" href="explanation/">
     <span class="label">Explanation</span>
     <span class="h3">Understand why</span>
-    <span>Context and trade-offs, no procedures. Most used: How Blowhorn works, Where your data lives, Why Blowhorn never repeats a public action.</span>
+    <span>Context and trade-offs, no procedures. Most used: How Blowhorn works, Where your data lives, How Blowhorn avoids repeat posts.</span>
   </a>
 </div>
 

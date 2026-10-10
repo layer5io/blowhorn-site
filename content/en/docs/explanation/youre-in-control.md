@@ -61,9 +61,7 @@ stop instead of guessing:
   per day, and at most 400 X follows per profile a day and 15 in any 15
   minutes. `--limit` caps how many people a follow or accept run
   takes on, and how many jobs a scheduler pass runs.
-- **It stops instead of guessing.** A failure fails its row and never
-  earns a retry click. When Blowhorn can't record that a post landed, it
-  stops the run rather than risk a duplicate on the next row.
+- **It doesn't retry blindly.** Within a run, Blowhorn doesn't retry a failed post; it moves on to the next item. If a post goes out but Blowhorn can't record it, it stops that profile's queue rather than risk posting twice. Scheduled jobs only re-run a failure if you turn on retries, and they're off by default.
 - **It never solves a CAPTCHA or a 2FA prompt.** When a platform asks for
   one, Blowhorn stops and leaves it for you. In a visible window it can
   wait while you finish it; unattended, the run stops.
@@ -102,7 +100,7 @@ and [Why flagged invitations are skipped](/docs/explanation/invitation-safety/).
 - **Done is recorded per profile.** `Date Promoted` records when each
   profile published a row, so the next run skips it.
 
-Read more in [Why Blowhorn never repeats a public action](/docs/explanation/never-twice/).
+Read more in [How Blowhorn avoids repeat posts](/docs/explanation/never-twice/).
 
 ## Will it embarrass me?
 
@@ -142,9 +140,9 @@ explicit `--ignore-pause` on a single run.
 | Run size | Caps how many people a follow or accept run takes on, and how many jobs a pass runs | `--limit` on `follow`, `accept` and `schedule tick` | [CLI reference](/docs/reference/cli/) |
 | Excluded profiles | Leaves profiles out of `--profile all` | `--exclude`; `defaults.exclude`; Settings in the app | [Change your defaults](/docs/how-to/settings/defaults/) |
 | Rate caps | 2 Hacker News submissions per profile per day; 400 X follows per profile a day and 15 per 15 minutes | Built in | [Platforms](/docs/reference/platforms/) |
-| Stop instead of retry | A failed row is never retried by a second click; a post Blowhorn can't record stops the run | Built in | [How Blowhorn paces itself](/docs/explanation/reliability-and-anti-bot-design/) |
+| No blind retries | Within a run, Blowhorn doesn't retry a failed post; it moves on to the next item. If a post goes out but Blowhorn can't record it, it stops that profile's queue rather than risk posting twice. Scheduled jobs only re-run a failure if you turn on retries, and they're off by default. | Built in; scheduled-job retries are opt-in | [How Blowhorn paces itself](/docs/explanation/reliability-and-anti-bot-design/) |
 | One automation per platform per profile | A second run for the same profile and platform on this Mac is refused | Built in | [Chrome reference](/docs/reference/chrome/) |
-| One send per action | The send control is clicked once; an unread outcome is held for you | Built in | [Why Blowhorn never repeats a public action](/docs/explanation/never-twice/) |
+| One send per action | The send control is clicked once; an unread outcome is held for you | Built in | [How Blowhorn avoids repeat posts](/docs/explanation/never-twice/) |
 | One Mac per job | A scheduled job is claimed by one Mac at a time | Built in, through your organization's store | [How scheduling works](/docs/explanation/scheduling/) |
 | CAPTCHA and 2FA | Left for you; never solved | Built in | [Fix sign-in problems](/docs/how-to/troubleshoot/sign-in-problems/) |
 
@@ -163,7 +161,7 @@ one choice.
 ## Related
 
 - [How Blowhorn paces itself](/docs/explanation/reliability-and-anti-bot-design/) - human pacing and the no-retry rule.
-- [Why Blowhorn never repeats a public action](/docs/explanation/never-twice/) - one click per run.
+- [How Blowhorn avoids repeat posts](/docs/explanation/never-twice/) - one click per run.
 - [Why flagged invitations are skipped](/docs/explanation/invitation-safety/) - walking away from warnings.
 - [Pause and resume posting](/docs/how-to/schedule/pause/) - the three pause scopes.
 - [Change your defaults](/docs/how-to/settings/defaults/) - pace, exclusions and dry run.
