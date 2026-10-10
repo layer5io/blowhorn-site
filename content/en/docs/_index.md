@@ -65,40 +65,42 @@ Blowhorn is a social media console that takes one message and broadcasts, repost
 
 <div class="platforms">
   <a class="platform" href="reference/">
-    <svg aria-hidden="true" focusable="false"><use href="#mark-linkedin"></use></svg>
+    <span class="logo-tile"><img src="../assets/platforms/linkedin-in-bug.png" alt="" width="28" height="28"></span>
     <span class="ui">LinkedIn</span>
     <span class="caption">Chrome extension</span>
   </a>
   <a class="platform" href="reference/">
-    <svg aria-hidden="true" focusable="false"><use href="#mark-x"></use></svg>
+    <span class="logo-tile"><img src="../assets/platforms/x-logo-black.png" alt="" width="28" height="28"></span>
     <span class="ui">X</span>
     <span class="caption">Chrome extension</span>
   </a>
   <a class="platform" href="reference/">
-    <svg aria-hidden="true" focusable="false"><use href="#mark-reddit"></use></svg>
+    <span class="logo-tile"><img src="../assets/platforms/reddit-logo.png" alt="" width="28" height="28"></span>
     <span class="ui">Reddit</span>
     <span class="caption">Chrome extension</span>
   </a>
   <a class="platform" href="reference/">
-    <svg aria-hidden="true" focusable="false"><use href="#mark-hn"></use></svg>
+    <span class="logo-tile"><img src="../assets/platforms/hacker-news-y18.svg" alt="" width="28" height="28"></span>
     <span class="ui">Hacker News</span>
     <span class="caption">Chrome extension</span>
   </a>
   <a class="platform" href="reference/">
-    <svg aria-hidden="true" focusable="false"><use href="#mark-slack"></use></svg>
+    <span class="logo-tile"><img src="../assets/platforms/slack-mark.svg" alt="" width="28" height="28"></span>
     <span class="ui">Slack</span>
     <span class="caption">API</span>
   </a>
   <a class="platform" href="reference/">
-    <svg aria-hidden="true" focusable="false"><use href="#mark-bluesky"></use></svg>
+    <span class="logo-tile"><img src="../assets/platforms/bluesky-butterfly-blue.svg" alt="" width="28" height="28"></span>
     <span class="ui">Bluesky</span>
     <span class="caption">API</span>
   </a>
   <a class="platform" href="reference/">
-    <svg aria-hidden="true" focusable="false"><use href="#mark-github"></use></svg>
+    <span class="logo-tile"><img src="../assets/platforms/github-invertocat-black.svg" alt="" width="28" height="28"></span>
     <span class="ui">GitHub</span>
     <span class="caption">API</span>
   </a>
 </div>
+
+<p class="docs-note">LinkedIn, X, Reddit, Hacker News, Slack, Bluesky and GitHub are trademarks of their respective owners, shown here with their official logos. Blowhorn is not affiliated with or endorsed by any of them.</p>
 
 <p class="docs-note">Something not working? Start with <a href="how-to/troubleshoot/">Troubleshooting</a> and <a href="reference/">Messages and exit codes</a>.</p>

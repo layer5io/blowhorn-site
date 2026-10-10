@@ -15,11 +15,11 @@ sitemap:
 
 ## This website
 
-blowhorn.ai is a static site served by GitHub Pages. It sets no cookies, runs no analytics and loads no fonts, images, styles or scripts from third parties: they are all served from this site. Its one request to another host is the Download section's release lookup, described below.
+blowhorn.ai is a static site served by GitHub Pages. It sets no cookies, runs no analytics and loads no fonts, images, styles or scripts from third parties: they are all served from this site. Its one request to another host is the Download section's release lookup, described below. The newsletter form sends nothing unless you submit it.
 
 - GitHub serves the pages and keeps its own server logs. Those are covered by the [GitHub privacy statement](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement).
 - The Download section asks GitHub's public API for the newest release from your browser. That request reaches GitHub like any other request your browser makes, with your IP address and the usual request headers. With JavaScript off, no request is made and the page links to the releases page instead.
-- The site has no forms and collects nothing you type.
+- The site has one form, the newsletter signup in the footer. It is the same Layer5 newsletter signup as on layer5.io. When you submit it, your browser sends the email address you typed to Layer5's newsletter list on Mailchimp and opens Mailchimp's confirmation page. [Layer5's privacy policy](https://layer5.io/company/legal/privacy/) covers that list. The site collects nothing else you type.
 
 ## The Blowhorn app
 

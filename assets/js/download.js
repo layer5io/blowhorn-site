@@ -57,7 +57,7 @@
     var actions = el("p", null, { class: "actions" });
     actions.appendChild(el("a", "See releases on GitHub", { class: "button button-secondary", href: releasesUrl }));
     replaceCard([
-      el("p", "The release check did not go through.", { class: "h3" }),
+      el("p", "The release check did not go through", { class: "h3" }),
       el("p", "GitHub did not answer the version lookup just now. The releases page always lists the newest build.", { class: "meta" }),
       actions,
     ]);
