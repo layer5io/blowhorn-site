@@ -1,0 +1,49 @@
+{{- /* The Trust Center hub at /legal/ (content/en/legal/_index.md), modeled on
+  Layer5's https://layer5.io/company/legal/: plain-language summaries of the
+  trust posture (front matter `glance`), a card per policy (`policies`), then
+  the page body (security contact, questions, changes). Every summary restates
+  a policy or a public doc: never add a claim the policies do not make. */ -}}
+{{ define "main" }}
+    <main id="main" class="page">
+      <div class="wrap">
+        <div class="page-head">
+          <p class="label">{{ .Title }}</p>
+          <h1 class="h1">{{ .Params.heading }}</h1>
+          <p class="body-lg muted">{{ .Params.lead | .RenderString }}</p>
+        </div>
+
+        <section class="section-body" aria-labelledby="glance">
+          <h2 id="glance" class="h2">How Blowhorn handles your data</h2>
+          <ul class="grid grid-3 trust-grid">
+            {{- range .Params.glance }}
+            <li class="card">
+              <h3 class="h3">{{ .title }}</h3>
+              <p>{{ .text }}</p>
+              <p class="ui"><a href="{{ .link | relURL }}">{{ .linkText }}</a></p>
+            </li>
+            {{- end }}
+          </ul>
+        </section>
+
+        <section class="section-body" aria-labelledby="policies">
+          <h2 id="policies" class="h2">Policies</h2>
+          <ul class="grid grid-3 trust-grid">
+            {{- range .Params.policies }}
+            {{- $url := .url }}{{ if not (strings.HasPrefix $url "https://") }}{{ $url = $url | relURL }}{{ end }}
+            <li class="card policy-card">
+              <h3 class="h3"><a href="{{ $url }}">{{ .title }}</a></h3>
+              {{- with .status }}
+              <p class="caption policy-status">{{ . }}</p>
+              {{- end }}
+              <p>{{ .summary }}</p>
+            </li>
+            {{- end }}
+          </ul>
+        </section>
+
+        <div class="prose trust-body">
+          {{ .Content }}
+        </div>
+      </div>
+    </main>
+{{- end }}

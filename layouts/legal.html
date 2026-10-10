@@ -1,12 +1,14 @@
-{{- /* Privacy and terms (content/en/privacy.md, content/en/terms.md). The page
-  head comes from front matter: title is the label, heading the h1, lead the
-  intro paragraph (Markdown) and the optional notice a callout above the lead
-  (Markdown), for a status the reader must see first, such as a draft. */ -}}
+{{- /* The policies of the Trust Center (content/en/legal/privacy.md,
+  content/en/legal/terms.md), served at /legal/<name>/. The page head comes
+  from front matter: title is the label, heading the h1, lead the intro
+  paragraph (Markdown) and the optional notice a callout above the lead
+  (Markdown), for a status the reader must see first, such as a draft. The
+  label leads back to the Trust Center hub (content/en/legal/_index.md). */ -}}
 {{ define "main" }}
     <main id="main" class="page">
       <div class="wrap">
         <div class="page-head">
-          <p class="label">{{ .Title }}</p>
+          <p class="label"><a href="{{ (site.GetPage "/legal").RelPermalink }}">Trust Center</a> <span aria-hidden="true">/</span> {{ .Title }}</p>
           <h1 class="h1">{{ .Params.heading }}</h1>
           {{- with .Params.notice }}
           <p class="notice" role="note">{{ . | $.RenderString }}</p>

@@ -1,8 +1,9 @@
-{{- /* Legal pages keep the markup they had before the Hugo migration: the brand
-  type-scale class (h2, h3) and no generated id. Every other page renders
-  Hugo's default heading, attributes and id included. */ -}}
+{{- /* Legal pages (layout: legal, under /legal/) use the brand type-scale class
+  (h2, h3) and Hugo's generated id, so the Trust Center at /legal/ can link to
+  a section. Every other page renders Hugo's default heading, attributes and
+  id included. */ -}}
 {{- if eq .Page.Layout "legal" -}}
-<h{{ .Level }} class="h{{ .Level }}">{{ .Text }}</h{{ .Level }}>
+<h{{ .Level }} id="{{ .Anchor }}" class="h{{ .Level }}">{{ .Text }}</h{{ .Level }}>
 {{- else -}}
 <h{{ .Level }}{{ range $key, $value := .Attributes }}{{ printf " %s=%q" $key (string $value) | safeHTMLAttr }}{{ end }}>{{ .Text }}</h{{ .Level }}>
 {{- end -}}

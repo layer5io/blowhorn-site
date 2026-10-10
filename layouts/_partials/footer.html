@@ -1,7 +1,9 @@
 {{- /* Three footers, as the site has always had: the full footer on the home
-  page, a legal strip on the legal pages and a bare strip on the 404 page. */ -}}
-{{- $privacy := (site.GetPage "/privacy").RelPermalink -}}
-{{- $terms := (site.GetPage "/terms").RelPermalink -}}
+  page, a bare strip on the 404 page, and a legal strip everywhere else (the
+  Trust Center at /legal/, its policies and the docs). */ -}}
+{{- $trust := (site.GetPage "/legal").RelPermalink -}}
+{{- $privacy := (site.GetPage "/legal/privacy").RelPermalink -}}
+{{- $terms := (site.GetPage "/legal/terms").RelPermalink -}}
 {{- $source := site.Params.github_repo -}}
 <footer class="site-footer">
       <div class="wrap">
@@ -36,6 +38,7 @@
             <nav class="footer-col" aria-label="Legal">
               <p class="label">Legal</p>
               <ul class="ui">
+                <li><a href="{{ $trust }}">Trust Center</a></li>
                 <li><a href="{{ $privacy }}">Privacy</a></li>
                 <li><a href="{{ $terms }}">Terms</a></li>
                 <li><a href="mailto:security@blowhorn.ai">Security: security@blowhorn.ai</a></li>
@@ -57,7 +60,7 @@
         <div class="footer-meta caption">
           <span>&copy; 2026 {{ site.Params.copyright }}</span>
           <nav aria-label="Legal">
-            <a href="{{ $privacy }}">Privacy</a> &middot; <a href="{{ $terms }}">Terms</a> &middot; <a href="mailto:security@blowhorn.ai">Security: security@blowhorn.ai</a> &middot; <a href="{{ $source }}">Site source on GitHub</a>
+            <a href="{{ $trust }}">Trust Center</a> &middot; <a href="{{ $privacy }}">Privacy</a> &middot; <a href="{{ $terms }}">Terms</a> &middot; <a href="mailto:security@blowhorn.ai">Security: security@blowhorn.ai</a> &middot; <a href="{{ $source }}">Site source on GitHub</a>
           </nav>
         </div>
         {{- end }}

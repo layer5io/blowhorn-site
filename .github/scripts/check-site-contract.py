@@ -4,9 +4,10 @@
 blowhorn.ai's URLs and the home page's section anchors are linked from the
 README, the app, release notes and other sites, so they are a contract:
 moving one breaks those links silently. The list below is every URL and
-anchor the hand-written site published before the Hugo migration. Add to it
-when a new public URL or anchor ships; remove an entry only together with a
-redirect (`aliases:` front matter) for the old URL.
+anchor the hand-written site published before the Hugo migration, and the
+Trust Center under /legal/. Add to it when a new public URL or anchor ships;
+remove an entry only together with a redirect (`aliases:` front matter) for
+the old URL, and list that redirect in REDIRECTS.
 
 Usage: check-site-contract.py BUILD_DIR
 """
@@ -24,11 +25,15 @@ PAGES = {
         "glyph-download", "main", "hero-title", "fan-title", "platforms", "platforms-title", "how",
         "how-title", "trust", "trust-title", "download", "download-title", "download-status",
     ],
-    "privacy.html": [
-        "main",
+    "legal/index.html": [
+        "main", "glance", "policies",
     ],
-    "terms.html": [
-        "main",
+    "legal/privacy/index.html": [
+        "main", "this-website", "on-your-mac", "in-chrome-through-the-blowhorn-extension",
+        "in-your-organizations-store-on-layer5-cloud",
+    ],
+    "legal/terms/index.html": [
+        "main", "your-accounts", "downloads",
     ],
     "404.html": [
         "main", "missing-title",
@@ -76,6 +81,13 @@ PAGES = {
         "main",
     ],
 }
+# Moved pages: old published path -> the URL its redirect page must point to.
+# GitHub Pages serves no server-side redirects, so each old path is a Hugo
+# alias page (layouts/alias.html): a meta refresh plus a canonical link.
+REDIRECTS = {
+    "privacy.html": "https://blowhorn.ai/legal/privacy/",
+    "terms.html": "https://blowhorn.ai/legal/terms/",
+}
 # Other files that must be published at these paths.
 FILES = [
     "CNAME",
@@ -90,6 +102,38 @@ FILES = [
     "assets/brand/logo/blowhorn-favicon-32.svg",
     "assets/brand/logo/blowhorn-apple-touch-icon-180.png",
 ]
+
+
+class RedirectCollector(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.refresh = None
+        self.canonical = None
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "meta" and (attrs.get("http-equiv") or "").lower() == "refresh":
+            content = attrs.get("content") or ""
+            _, _, url = content.partition("url=")
+            self.refresh = url.strip()
+        elif tag == "link" and attrs.get("rel") == "canonical":
+            self.canonical = attrs.get("href")
+
+
+def check_redirects(root: Path) -> list:
+    missing = []
+    for page, target in REDIRECTS.items():
+        path = root / page
+        if not path.is_file():
+            missing.append(f"/{page} is not published (it must redirect to {target})")
+            continue
+        collector = RedirectCollector()
+        collector.feed(path.read_text(encoding="utf-8"))
+        if collector.refresh != target:
+            missing.append(f"/{page} does not redirect to {target} (refresh: {collector.refresh})")
+        if collector.canonical != target:
+            missing.append(f"/{page} does not name {target} as canonical (canonical: {collector.canonical})")
+    return missing
 
 
 class IdCollector(HTMLParser):
@@ -113,6 +157,7 @@ def main(root: Path) -> int:
         collector = IdCollector()
         collector.feed(path.read_text(encoding="utf-8"))
         missing += [f"/{page}#{anchor} is gone" for anchor in ids if anchor not in collector.ids]
+    missing += check_redirects(root)
     missing += [f"/{name} is not published" for name in FILES if not (root / name).is_file()]
     cname = root / "CNAME"
     if cname.is_file() and cname.read_text(encoding="utf-8").strip() != "blowhorn.ai":
@@ -120,7 +165,10 @@ def main(root: Path) -> int:
     for item in missing:
         print(f"site contract: {item}", file=sys.stderr)
     anchors = sum(len(ids) for ids in PAGES.values())
-    print(f"checked {len(PAGES)} page(s), {anchors} anchor(s) and {len(FILES)} file(s), {len(missing)} broken")
+    print(
+        f"checked {len(PAGES)} page(s), {anchors} anchor(s), {len(REDIRECTS)} redirect(s)"
+        f" and {len(FILES)} file(s), {len(missing)} broken"
+    )
     return 1 if missing else 0
 
 

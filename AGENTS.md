@@ -12,7 +12,8 @@ fails without the pinned toolchain; run `make setup` once (npm install), then `m
 `make check` is exactly what CI runs. Go must be on PATH: Hugo fetches Docsy through it.
 
 The marketing and legal pages do not use Docsy's templates: they render through
-`layouts/home.html`, `layouts/legal.html` and `layouts/404.html` inside
+`layouts/home.html`, `layouts/trust-center.html` (the Trust Center hub at `/legal/`),
+`layouts/legal.html` (each policy at `/legal/<name>/`) and `layouts/404.html` inside
 `layouts/baseof.html`, with the header, footer and icon sprite in `layouts/_partials/`.
 
 ## Rules the site holds
@@ -40,18 +41,25 @@ the workflow, and list it in the README's target table. `make ci` reproduces sit
 
 ## Keeping URLs and anchors alive
 
-`/`, `/privacy.html`, `/terms.html`, `/assets/brand/...` and the home page's anchors
-(`#platforms`, `#how`, `#trust`, `#download`) are linked from outside this repo.
-`.github/scripts/check-site-contract.py` lists every one and fails the build when one
-disappears. When a page moves, add the dead path to the page's `aliases:` front matter
-rather than leaving a 404, and keep a renamed heading's old anchor with
+`/`, `/legal/`, `/legal/privacy/`, `/legal/terms/`, `/assets/brand/...` and the home
+page's anchors (`#platforms`, `#how`, `#trust`, `#download`) are linked from outside this
+repo, and the old `/privacy.html` and `/terms.html` must keep redirecting to their
+`/legal/` pages. `.github/scripts/check-site-contract.py` lists every one and fails the
+build when one disappears. When a page moves, add the dead path to the page's `aliases:`
+front matter rather than leaving a 404 (GitHub Pages has no server redirects, so an alias
+is a meta refresh with a canonical link) and list it in the script's `REDIRECTS`, and keep a renamed heading's old anchor with
 `### New Wording {#old-anchor-slug}`. To prove nothing was lost, build master and your
 branch to separate directories and diff the `id=` attributes across both trees.
 
 Do not give a page in `content/en/` a `url:` ending in `.html`: `url` names one path for
 every output format, so the page's Markdown output (`index.md` format) overwrites its HTML.
-Top-level pages get their `.html` URL from `uglyURLs` in `hugo.toml` instead, and the home
-page's public URL comes from `layouts/_partials/canonical.html`.
+New pages go in a section (such as `content/en/legal/`), which gets pretty URLs; `uglyURLs`
+in `hugo.toml` applies only to top-level pages, and the home page's public URL comes from
+`layouts/_partials/canonical.html`.
+
+The Trust Center's summaries (front matter of `content/en/legal/_index.md`) restate what
+the policies and public docs already say. Never add a certification, sub-processor,
+retention period, encryption detail or compliance claim that a policy does not make.
 
 ## Verifying a change
 
