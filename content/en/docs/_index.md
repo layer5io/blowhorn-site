@@ -66,37 +66,37 @@ Blowhorn is a social media console that takes one message and broadcasts, repost
 ## Platforms {#platforms}
 
 <div class="platforms">
-  <a class="platform" href="reference/">
+  <a class="platform" href="reference/platforms/#linkedin">
     <span class="logo-tile"><img src="../assets/platforms/linkedin-in-bug.png" alt="" width="28" height="28"></span>
     <span class="ui">LinkedIn</span>
     <span class="caption">Chrome extension</span>
   </a>
-  <a class="platform" href="reference/">
+  <a class="platform" href="reference/platforms/#x-twitter">
     <span class="logo-tile"><img src="../assets/platforms/x-logo-black.png" alt="" width="28" height="28"></span>
     <span class="ui">X</span>
     <span class="caption">Chrome extension</span>
   </a>
-  <a class="platform" href="reference/">
+  <a class="platform" href="reference/platforms/#reddit">
     <span class="logo-tile"><img src="../assets/platforms/reddit-logo.png" alt="" width="28" height="28"></span>
     <span class="ui">Reddit</span>
     <span class="caption">Chrome extension</span>
   </a>
-  <a class="platform" href="reference/">
+  <a class="platform" href="reference/platforms/#hacker-news">
     <span class="logo-tile"><img src="../assets/platforms/hacker-news-y18.svg" alt="" width="28" height="28"></span>
     <span class="ui">Hacker News</span>
     <span class="caption">Chrome extension</span>
   </a>
-  <a class="platform" href="reference/">
+  <a class="platform" href="reference/platforms/#slack">
     <span class="logo-tile"><img src="../assets/platforms/slack-mark.svg" alt="" width="28" height="28"></span>
     <span class="ui">Slack</span>
     <span class="caption">API</span>
   </a>
-  <a class="platform" href="reference/">
+  <a class="platform" href="reference/platforms/#bluesky">
     <span class="logo-tile"><img src="../assets/platforms/bluesky-butterfly-blue.svg" alt="" width="28" height="28"></span>
     <span class="ui">Bluesky</span>
     <span class="caption">API</span>
   </a>
-  <a class="platform" href="reference/">
+  <a class="platform" href="reference/platforms/#github">
     <span class="logo-tile"><img src="../assets/platforms/github-invertocat-black.svg" alt="" width="28" height="28"></span>
     <span class="ui">GitHub</span>
     <span class="caption">API</span>
