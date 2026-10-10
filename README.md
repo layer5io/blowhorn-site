@@ -35,8 +35,8 @@ The Chrome extension ships through the Chrome Web Store, not from this repositor
 | | |
 |---|---|
 | Site configuration | [`hugo.toml`](hugo.toml); the pinned toolchain is [`go.mod`](go.mod) (Docsy as a Hugo module), [`package.json`](package.json) (Hugo extended, postcss) and [`.nvmrc`](.nvmrc) (Node.js) |
-| Pages | [`content/en/`](content/en/): the home page's front matter, the privacy and terms pages, and the [`docs/`](content/en/docs/) section scaffold (landing, quadrant, group, and CLI indexes) in Markdown |
-| Templates | [`layouts/`](layouts/): the home page ([`home.html`](layouts/home.html)), the shared shell ([`baseof.html`](layouts/baseof.html)), the legal pages ([`legal.html`](layouts/legal.html)), the 404 page, the header, footer and icon sprite partials, the `llms.txt` and Markdown outputs, and the Docsy-based docs shell ([`layouts/docs/`](layouts/docs/)) |
+| Pages | [`content/en/`](content/en/): the home page's front matter, the Trust Center and its privacy and terms pages ([`legal/`](content/en/legal/)), and the [`docs/`](content/en/docs/) section scaffold (landing, quadrant, group, and CLI indexes) in Markdown |
+| Templates | [`layouts/`](layouts/): the home page ([`home.html`](layouts/home.html)), the shared shell ([`baseof.html`](layouts/baseof.html)), the Trust Center hub ([`trust-center.html`](layouts/trust-center.html)), the legal pages ([`legal.html`](layouts/legal.html)), the 404 page, the header, footer and icon sprite partials, the `llms.txt` and Markdown outputs, and the Docsy-based docs shell ([`layouts/docs/`](layouts/docs/)) |
 | Styles and script | [`assets/css/site.css`](assets/css/site.css) and [`assets/js/download.js`](assets/js/download.js) (the Download section); Hugo minifies and fingerprints both. The docs section's Blowhorn skin over Docsy is [`assets/scss/`](assets/scss/), with its sidebar toggle and offline search in [`assets/js/`](assets/js/) |
 | Brand assets | [`static/assets/brand/`](static/assets/brand/), served at `/assets/brand/`: version 1 of the brand kit (logo system, Major Blowhorn, marketing art, `tokens.json`) and the three self-hosted fonts; attribution in [`LICENSES.md`](static/assets/brand/LICENSES.md) |
 | How the site deploys and how the domain is wired | [`docs/deploy.md`](docs/deploy.md) |
@@ -81,7 +81,7 @@ The site follows the brand kit exactly: every colour, type style, spacing, radiu
 
 Nothing on the site loads from another host: no CDN, no web fonts from elsewhere, no analytics. The one request to another host is the Download section's release lookup on GitHub's API (`assets/js/download.js`), which the [privacy page](https://blowhorn.ai/privacy.html) discloses. `make site-check` fails a build that loads anything else from another host. The public URLs (`/`, `/privacy.html`, `/terms.html`, `/assets/brand/...`) and the home page's anchors (`#platforms`, `#how`, `#trust`, `#download`) are linked from outside this repository; the same check fails a build that loses one.
 
-The site also publishes [`/llms.txt`](https://blowhorn.ai/llms.txt), [`/llms-full.txt`](https://blowhorn.ai/llms-full.txt) and a Markdown copy of every page (`/privacy.md`), as docs.layer5.io does.
+The site also publishes [`/llms.txt`](https://blowhorn.ai/llms.txt), [`/llms-full.txt`](https://blowhorn.ai/llms-full.txt) and a Markdown copy of every page (`/legal/privacy/index.md`), as docs.layer5.io does.
 
 ### CI
 

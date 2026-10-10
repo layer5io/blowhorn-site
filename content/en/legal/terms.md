@@ -2,9 +2,12 @@
 title: Terms
 heading: Blowhorn terms of service
 description: The terms between you and Layer5, Inc. for the Blowhorn website, the Blowhorn app for macOS and the Blowhorn Chrome extension.
-notice: "**Draft, pending legal review.** A lawyer has not yet reviewed these terms. They may change before they are final, and the [history of this page](https://github.com/layer5io/blowhorn-site/commits/master/content/en/terms.md) records every change."
-lead: Last updated 9 October 2026. These terms are an agreement between you and Layer5, Inc., which makes Blowhorn and operates this site. Read them together with the [Blowhorn privacy page](/privacy.html).
+notice: "**Draft, pending legal review.** A lawyer has not yet reviewed these terms. They may change before they are final, and the [history of this page](https://github.com/layer5io/blowhorn-site/commits/master/content/en/legal/terms.md) records every change."
+lead: Last updated 9 October 2026. These terms are an agreement between you and Layer5, Inc., which makes Blowhorn and operates this site. Read them together with the [Blowhorn privacy page](/legal/privacy/).
 layout: legal
+weight: 20
+aliases:
+  - /terms.html
 lastmod: 2026-10-09
 sitemap:
   changefreq: yearly
@@ -39,7 +42,7 @@ During early access Blowhorn is free. There are no plans or tiers to choose betw
 
 ## Downloads
 
-- The official Blowhorn app downloads are the signed disk images linked from blowhorn.ai, published as assets on the [releases page](https://github.com/layer5io/blowhorn-site/releases) of this site's repository, and the updates the Blowhorn app installs itself from Layer5's release channel, as the [privacy page](/privacy.html) describes. Nothing else is an official copy. Verify each disk image you download from blowhorn.ai against the `SHA256SUMS.txt` published with it before you open it.
+- The official Blowhorn app downloads are the signed disk images linked from blowhorn.ai, published as assets on the [releases page](https://github.com/layer5io/blowhorn-site/releases) of this site's repository, and the updates the Blowhorn app installs itself from Layer5's release channel, as the [privacy page](/legal/privacy/) describes. Nothing else is an official copy. Verify each disk image you download from blowhorn.ai against the `SHA256SUMS.txt` published with it before you open it.
 - The only official Blowhorn extension is the Chrome Web Store item named above.
 - The Blowhorn software, meaning the app for macOS, the `blowhorn` command-line tool, the background service and the Chrome extension, is licensed under the [GNU Affero General Public License, version 3](https://www.gnu.org/licenses/agpl-3.0.html) (AGPL-3.0). Each release ships a copy of that licence. Read it before you install. Where the licence and these terms differ about the software itself, the licence decides.
 - Releases are never replaced in place. A fix ships as a new version.
@@ -61,7 +64,7 @@ The posts, comments, messages, profiles and other content you put into Blowhorn 
 - The extension is a companion to the Blowhorn app on your Mac. It is not a standalone social client and does nothing without that app.
 - It talks only to the Blowhorn app on your Mac, over Chrome's native messaging. It acts only on the sites Blowhorn supports, only in the Chrome profile you install it in, and only when the app asks.
 - On those sites it opens or finds tabs, sends the clicks and keystrokes a queued action needs, reads page state, takes a screenshot when an action needs a person to check it, catches an export you asked for, and reads a sign-in cookie when the app needs to reuse a session you already have.
-- It hands what it reads to the Blowhorn app and to nothing else. What the app keeps and sends is described on the [privacy page](/privacy.html).
+- It hands what it reads to the Blowhorn app and to nothing else. What the app keeps and sends is described on the [privacy page](/legal/privacy/).
 - Because the extension acts in your own signed-in session, an action it takes at your instruction is taken by you, on your account.
 
 ## Acceptable use
@@ -121,7 +124,7 @@ You and Layer5 may bring claims against each other only individually, and not as
 
 ## Changes
 
-Layer5 may change these terms. The current version replaces every earlier one, and the date at the top of this page says when it last changed. Every edit to this page is recorded in the [site repository's history](https://github.com/layer5io/blowhorn-site/commits/master/content/en/terms.md).
+Layer5 may change these terms. The current version replaces every earlier one, and the date at the top of this page says when it last changed. Every edit to this page is recorded in the [site repository's history](https://github.com/layer5io/blowhorn-site/commits/master/content/en/legal/terms.md).
 
 ## Contact
 

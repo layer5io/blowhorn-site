@@ -633,6 +633,19 @@ pre code { background: none; padding: 0; }
 .page th, .page td { text-align: left; vertical-align: top; padding: var(--space-3) var(--space-3) var(--space-3) 0; border-bottom: var(--stroke-hairline) solid var(--line); }
 .page th { font-weight: 600; color: var(--ink-wordmark); }
 /* A status the reader must see before the page, such as a draft: surface-tint is the brand's callout ground. */
+/* Trust Center (/legal/) */
+.page .section-body > .h2 + .grid { margin-top: var(--space-6); }
+.policy-card .h3 a { color: var(--ink); text-decoration: none; }
+.policy-card .h3 a:hover { color: var(--link); text-decoration: underline; }
+.policy-status {
+  display: inline-block;
+  background: var(--surface-tint);
+  color: var(--ink);
+  border-radius: var(--radius-md);
+  padding: var(--space-1) var(--space-2);
+}
+.page .trust-body { margin-top: var(--space-12); }
+
 .notice {
   background: var(--surface-tint);
   color: var(--ink);

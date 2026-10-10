@@ -4,6 +4,9 @@ heading: What Blowhorn stores, and where
 description: What the Blowhorn website and the Blowhorn app store, where they store it, and what the app sends.
 lead: Last updated 9 October 2026. This page covers this website, the Layer5 Blowhorn app and its Chrome extension. Layer5's own [privacy policy](https://layer5.io/company/legal/privacy/) covers Layer5 Cloud and every other Layer5 service.
 layout: legal
+weight: 10
+aliases:
+  - /privacy.html
 lastmod: 2026-10-09
 sitemap:
   changefreq: yearly

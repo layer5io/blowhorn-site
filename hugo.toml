@@ -2,9 +2,10 @@
 # layer5io/docs (https://github.com/layer5io/docs/blob/master/hugo.toml).
 #
 # The marketing and legal pages render through Blowhorn's own layouts
-# (layouts/home.html, layouts/baseof.html, layouts/legal.html, layouts/404.html);
+# (layouts/home.html, layouts/baseof.html, layouts/trust-center.html,
+# layouts/legal.html, layouts/404.html);
 # Docsy is imported for the /docs/ section. Never add analytics or anything
-# loaded from another host: the privacy page (content/en/privacy.md) promises
+# loaded from another host: the privacy page (content/en/legal/privacy.md) promises
 # no cookies, no analytics and no assets from third parties (the Download
 # section's GitHub release lookup is the one disclosed outside request), and
 # `make site-check` fails the build when a page loads from another host.
@@ -30,11 +31,13 @@ enableGitInfo = true
 # The site has no taxonomies and no feeds.
 disableKinds = ["taxonomy", "term", "rss"]
 
-# Pages at the top of content/en/ keep the URLs the hand-written site had
-# (/privacy.html, /terms.html), and their Markdown output lands beside them
-# (/privacy.md). A `url:` front matter value would not do: it names one path
-# for every output format, so the .md output would overwrite the .html page.
-# Sections such as /docs/ keep pretty URLs.
+# Pages at the top of content/en/ get ugly URLs (the home page is /index.html;
+# layouts/_partials/canonical.html gives it the site root as its public URL).
+# The legal pages, once /privacy.html and /terms.html, now live in the legal
+# section at /legal/privacy/ and /legal/terms/, with `aliases:` redirects from
+# the old paths. Sections such as /legal/ and /docs/ keep pretty URLs. A `url:`
+# front matter value ending in .html would not do: it names one path for every
+# output format, so the .md output would overwrite the .html page.
 [uglyURLs]
   "" = true
 

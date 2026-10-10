@@ -164,9 +164,14 @@ served under that path in production.
 
 The public URLs are a contract, checked by `make site-check`:
 
-- `/`, `/privacy.html` and `/terms.html`. The privacy and terms pages live in
-  `content/en/` and keep their `.html` URLs through `uglyURLs` in
-  `hugo.toml`; their Markdown copies are `/privacy.md` and `/terms.md`.
+- `/`, and the Trust Center: `/legal/`, `/legal/privacy/` and `/legal/terms/`
+  (`content/en/legal/`), with Markdown copies at `/legal/index.md`,
+  `/legal/privacy/index.md` and `/legal/terms/index.md`.
+- The old `/privacy.html` and `/terms.html` redirect to their `/legal/` pages.
+  GitHub Pages cannot send a server redirect, so each is a Hugo alias page (the
+  pages' `aliases:` front matter, rendered by `layouts/alias.html`): a meta refresh
+  plus a canonical link to the new URL. `/privacy.md` and `/terms.md` are
+  static notes pointing at the new Markdown copies.
 - The home page's anchors: `#platforms`, `#how`, `#trust`, `#download`.
 - `/assets/brand/...` (from `static/assets/brand/`), `/favicon.ico`, `/CNAME`.
 - Generated: `/sitemap.xml`, `/robots.txt` (which names the sitemap),
