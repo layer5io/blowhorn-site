@@ -15,6 +15,11 @@ discloses its one outside request. This check holds the build to it:
   <link href> whose rel values all name without fetching (canonical,
   alternate, ...), cite, itemtype, itemid, itemprop, xmlns and xmlns:*, and
   <meta content>, except the url= of <meta http-equiv="refresh">.
+  One reviewed exception: <form action> may name a host in FORM_ACTION_HOSTS.
+  A form loads nothing; it sends only what the reader types, and only when
+  they submit it. The footer's newsletter signup posts to Layer5's Mailchimp
+  list, the same endpoint as the layer5.io footer, and the privacy page
+  discloses it. Every other form host fails.
 - CSS: every url(...) and @import in each stylesheet a page loads.
 - JavaScript: every absolute URL in each script a page loads. The Download section's script
   (assets/js/download.js) asks GitHub's public API for the newest release, a
@@ -37,6 +42,8 @@ from urllib.parse import urlparse
 FIRST_PARTY = "blowhorn.ai"
 # Hosts a script may name. Each one must be disclosed on the privacy page.
 SCRIPT_HOSTS = {"api.github.com", "github.com"}
+# Hosts a <form action> may post to. Each one must be disclosed on the privacy page.
+FORM_ACTION_HOSTS = {"calcotestudios.us15.list-manage.com"}
 # <link rel> values that name a URL without the browser fetching it.
 NON_FETCHING_RELS = {"canonical", "alternate", "author", "license", "me", "help"}
 # <script type> values that hold data, not code the browser runs.
@@ -91,6 +98,8 @@ class FetchCollector(HTMLParser):
             if name in ("href", "xlink:href") and (
                 tag in NAVIGATION_TAGS or (tag == "link" and rels and rels <= NON_FETCHING_RELS)
             ):
+                continue
+            if tag == "form" and name == "action" and host_of(value) in FORM_ACTION_HOSTS:
                 continue
             if name == "style":
                 self.refs += [(tag, "style", ref) for ref in css_refs(value)]

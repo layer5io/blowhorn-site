@@ -15,6 +15,7 @@
               <img src="{{ "assets/brand/logo/layer5-blowhorn-lockup.svg" | relURL }}" alt="Layer5 Blowhorn" width="220" height="60">
             </picture>
             <p>Blowhorn is made by Layer5. One message in, many ears out.</p>
+            {{ partial "newsletter.html" . }}
           </div>
           <div class="footer-cols">
             <nav class="footer-col" aria-label="Product">
@@ -49,6 +50,7 @@
         </div>
         <div class="footer-meta caption">
           <span>&copy; 2026 {{ site.Params.copyright }}</span>
+          <span>LinkedIn, X, Reddit, Hacker News, Slack, Bluesky and GitHub are trademarks of their respective owners. Blowhorn is not affiliated with or endorsed by any of them.</span>
           <a href="{{ $source }}">Site source on GitHub</a>
         </div>
         {{- else if eq .Kind "404" }}
@@ -58,6 +60,7 @@
         </div>
         {{- else }}
         <div class="footer-meta caption">
+          {{ partial "newsletter.html" . }}
           <span>&copy; 2026 {{ site.Params.copyright }}</span>
           <nav aria-label="Legal">
             <a href="{{ $trust }}">Trust Center</a> &middot; <a href="{{ $privacy }}">Privacy</a> &middot; <a href="{{ $terms }}">Terms</a> &middot; <a href="mailto:security@blowhorn.ai">Security: security@blowhorn.ai</a> &middot; <a href="{{ $source }}">Site source on GitHub</a>

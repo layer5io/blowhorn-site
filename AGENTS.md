@@ -20,13 +20,15 @@ The marketing and legal pages do not use Docsy's templates: they render through
 
 - **No third parties.** The privacy page promises no cookies, no analytics and no asset
   loaded from another host; the only outside request is the Download section's disclosed
-  release lookup on api.github.com. Never add an analytics id, a CDN script or stylesheet, or web
+  release lookup on api.github.com, and the footer newsletter form may post only to the Mailchimp host in
+  `FORM_ACTION_HOSTS`. Never add an analytics id, a CDN script or stylesheet, or web
   fonts from elsewhere; never copy layer5io/docs' head, navbar, footer or its
   `[services.googleAnalytics]` block. `.github/scripts/check-third-party.py` fails the build.
 - **Brand tokens only.** Every colour, type style, radius and shadow in
   `assets/css/site.css` is a token from `static/assets/brand/tokens.json`. Light is the
   default; dark follows the OS with no JavaScript. Brand SVGs are used as files, never
-  recoloured.
+  recoloured. Platform logos are the owners' own files in `static/assets/platforms/`, unmodified, on white
+  tiles (sources in `static/assets/brand/LICENSES.md`).
 - **The product name is Blowhorn.** "Outbox" is the product's old internal name; never put
   it on a public page.
 - **The product repository is private.** Never link its files, issues or pull requests
